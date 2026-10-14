@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Disney's income statement FY2023–FY2025 drawn as an interactive Sankey diagram: year scrubber, segment P&L drill-downs, and every figure linked to its highlighted source page in the Form 10-K.">
+<meta property="og:title" content="Disney FY2025 P&L Sankey">
+<meta property="og:description" content="How $94.4 billion of revenue became $12.4 billion of net income — an interactive flow of Disney's income statement, with every figure traced to its page in the 10-K.">
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Disney FY2025 P&L Sankey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one reading column (max 1200px); the flow diagram is the hero and scrolls sideways on phones; year scrubber and view controls in one toolbar row; notes in a wrapping grid; tables collapsed below. */
+  :root {
+    --bg: #f3f4f7;
+    --surface: #fdfdfe;
+    --surface-2: #f7f8fa;
+    --fg: #14171c;
+    --fg-2: #4b525d;
+    --muted: #7a8290;
+    --line: #e1e4ea;
+    --rev: #2a78d6;
+    --profit: #008300;
+    --cost: #e34948;
+    --inflow: #6250d6;
+    --neutral: #7c8491;
+    --good-text: #006300;
+    --link-a: 0.42;
+    --link-dim: 0.08;
+    --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1114; --surface: #181b20; --surface-2: #1e2228; --fg: #eef0f3; --fg-2: #b7bcc6; --muted: #868d99; --line: #2a2f37;
+      --rev: #3987e5; --profit: #008300; --cost: #e66767; --inflow: #9085e9; --neutral: #8a919c; --good-text: #0ca30c;
+      --link-a: 0.55; --link-dim: 0.1;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1114; --surface: #181b20; --surface-2: #1e2228; --fg: #eef0f3; --fg-2: #b7bcc6; --muted: #868d99; --line: #2a2f37;
+    --rev: #3987e5; --profit: #008300; --cost: #e66767; --inflow: #9085e9; --neutral: #8a919c; --good-text: #0ca30c;
+    --link-a: 0.55; --link-dim: 0.1;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1200px; margin: 0 auto; padding-block: 40px 56px; padding-inline: 20px; display: grid; gap: 28px; }
+  .page > * { min-width: 0; }
+  .tables > * { min-width: 0; }
+
+  header { display: grid; gap: 10px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.12; margin: 0; letter-spacing: -0.015em; text-wrap: balance; max-width: 22ch; }
+  .lede { margin: 0; max-width: 68ch; color: var(--fg-2); }
+
+  .figures { display: flex; flex-wrap: wrap; gap: 12px 36px; padding-block: 6px; }
+  .figure { display: grid; gap: 2px; }
+  .figure .k { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
+  .figure .v { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.1; }
+  .figure .d { font-size: 13px; color: var(--fg-2); min-height: 1.4em; }
+  .figure .d.up { color: var(--good-text); font-weight: 500; }
+  .figure .d.down { color: var(--cost); font-weight: 500; }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 3px; gap: 2px; }
+  .seg button, .btn { font: inherit; font-size: 13px; font-weight: 500; color: var(--fg-2); background: transparent; border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+  .seg button:focus-visible, .btn:focus-visible, .ticks button:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; }
+  .btn { border: 1px solid var(--line); background: var(--surface); }
+  .btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+  .years { display: flex; align-items: center; gap: 12px; }
+  .yr-track { display: grid; gap: 2px; width: 200px; }
+  .yr-track input[type="range"] { width: 100%; margin: 0; accent-color: var(--fg); cursor: pointer; }
+  .yr-track input[type="range"]:focus-visible { outline: 2px solid var(--rev); outline-offset: 4px; border-radius: 4px; }
+  .ticks { display: flex; justify-content: space-between; }
+  .ticks button { font: inherit; font-size: 12px; font-weight: 500; color: var(--muted); background: none; border: 0; padding: 2px 0; cursor: pointer; border-radius: 4px; }
+  .ticks button[aria-current="true"] { color: var(--fg); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--fg-2); margin-left: auto; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 18px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .chart-wrap { position: relative; padding: 18px 8px 10px; }
+  .chart-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px; padding: 0 12px 4px; font-size: 13px; color: var(--muted); }
+  .chart-head b { color: var(--fg-2); font-weight: 600; }
+  .year-note { margin: 0; padding: 0 12px 10px; font-size: 14px; color: var(--fg-2); max-width: 90ch; }
+  .chart-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+  svg.sankey { display: block; width: 100%; min-width: 1000px; height: auto; font-family: var(--font-body); }
+  svg.sankey.drill { min-width: 820px; }
+  .scroll-hint { display: none; padding: 8px 12px 2px; font-size: 12px; color: var(--muted); }
+  @media (max-width: 1040px) { .scroll-hint { display: block; } }
+
+  .node rect { stroke: none; }
+  .node { cursor: default; outline: none; }
+  .node.drill, .label.drill { cursor: pointer; }
+  .node:focus-visible rect { stroke: var(--fg); stroke-width: 2px; }
+  .link { fill: none; opacity: var(--link-a); }
+  .hit { fill: none; stroke: transparent; cursor: default; }
+  .label .name { font-size: 13px; font-weight: 600; fill: var(--fg); paint-order: stroke; stroke: var(--surface); stroke-width: 3.5px; stroke-linejoin: round; }
+  .label .val { font-size: 12px; fill: var(--fg-2); paint-order: stroke; stroke: var(--surface); stroke-width: 3.5px; stroke-linejoin: round; font-variant-numeric: tabular-nums; }
+  .label.drill .val { fill: var(--rev); font-weight: 500; }
+  .colhead { font-size: 11px; fill: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+  .is-zero { opacity: 0 !important; pointer-events: none; }
+  .is-dim .link { opacity: var(--link-dim); }
+  .is-dim .link.on { opacity: 0.85; }
+  .is-dim .node rect { opacity: 0.3; }
+  .is-dim .node.on rect { opacity: 1; }
+  .is-dim .label { opacity: 0.35; }
+  .is-dim .label.on { opacity: 1; }
+  .fill-rev { fill: var(--rev); } .fill-profit { fill: var(--profit); } .fill-cost { fill: var(--cost); } .fill-inflow { fill: var(--inflow); } .fill-neutral { fill: var(--neutral); }
+  .stroke-rev { stroke: var(--rev); } .stroke-profit { stroke: var(--profit); } .stroke-cost { stroke: var(--cost); } .stroke-inflow { stroke: var(--inflow); } .stroke-neutral { stroke: var(--neutral); }
+  @media (prefers-reduced-motion: no-preference) { .link, .node, .node rect, .label { transition: opacity 240ms ease; } }
+
+  .tip { position: absolute; z-index: 5; pointer-events: none; min-width: 200px; max-width: 300px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.14); padding: 10px 12px; font-size: 13px; line-height: 1.4; }
+  .tip[hidden] { display: none; }
+  .tip .t { font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .tip .t i { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+  .tip .big { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.2; margin-top: 2px; }
+  .tip .row { color: var(--fg-2); font-variant-numeric: tabular-nums; }
+  .tip .note { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); color: var(--fg-2); font-size: 12.5px; }
+  .tip .act { margin-top: 6px; color: var(--rev); font-weight: 500; font-size: 12.5px; }
+  .tip .up { color: var(--good-text); font-weight: 500; } .tip .down { color: var(--cost); font-weight: 500; }
+
+  .notes-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: -14px; }
+  .notes-head h2 { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+  .notes-head span { font-size: 13px; color: var(--muted); }
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .note { padding: 18px 20px; display: grid; gap: 6px; align-content: start; }
+  .note h3 { margin: 0; font-family: var(--font-display); font-size: 17px; font-weight: 700; line-height: 1.25; text-wrap: balance; }
+  .note p { margin: 0; color: var(--fg-2); font-size: 14px; }
+  .note .tag { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+
+  details.tbl { padding: 0 20px; }
+  details.tbl summary { cursor: pointer; padding: 16px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  details.tbl summary::-webkit-details-marker { display: none; }
+  details.tbl summary::after { content: "Show"; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  details.tbl[open] summary::after { content: "Hide"; }
+  details.tbl summary:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; border-radius: 4px; }
+  .tables { display: grid; gap: 28px; padding-bottom: 20px; }
+  .tables h4 { margin: 0 0 8px; font-size: 13px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+  .tscroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 14px; }
+  th, td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  th { font-weight: 500; color: var(--muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  th:first-child, td:first-child { text-align: left; white-space: normal; min-width: 220px; }
+  tr.sum td { font-weight: 600; }
+  tr.derived td:first-child::after { content: " †"; color: var(--muted); }
+  tr.sub td:first-child { padding-left: 24px; color: var(--fg-2); }
+  td.neg { color: var(--cost); } td.pos { color: var(--good-text); }
+  .tfoot { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+
+  /* Source drawer: the report page with the figure highlighted */
+  .src-backdrop { position: fixed; inset: 0; background: rgba(10,12,16,0.45); z-index: 40; }
+  .src { position: fixed; top: 0; right: 0; bottom: 0; width: min(880px, 100vw); background: var(--surface); color: var(--fg); z-index: 41; display: grid; grid-template-rows: auto 1fr; box-shadow: -12px 0 40px rgba(0,0,0,0.25); padding-top: env(safe-area-inset-top, 0px); }
+  .src-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+  .src-head .row1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .src-head .eyebrow { margin: 0; }
+  .src-head h2 { margin: 0; font-family: var(--font-display); font-size: 20px; font-weight: 700; line-height: 1.2; }
+  .src-head .amt { font-size: 14px; color: var(--fg-2); }
+  .src-head .cite { font-size: 13.5px; color: var(--fg-2); max-width: 80ch; }
+  .src-head .cite b { color: var(--fg); font-weight: 600; }
+  .src-head .where { font-size: 13px; color: var(--muted); max-width: 80ch; }
+  .src-tools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding-top: 4px; }
+  .src-tools .seg { padding: 2px; }
+  .src-tools .seg button { padding: 4px 10px; font-size: 12.5px; }
+  .src-tools .lbl { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  .src-close { font: inherit; font-size: 13px; font-weight: 500; color: var(--fg-2); background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; cursor: pointer; flex: none; }
+  .src-close:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; }
+  .src-view { overflow: auto; background: #d9dce2; padding: 16px; }
+  :root[data-theme="dark"] .src-view { background: #0a0b0d; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .src-view { background: #0a0b0d; } }
+  .src-page { position: relative; aspect-ratio: 1238 / 1613; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.25); margin: 0 auto; }
+  .src-page img { display: block; width: 100%; height: 100%; }
+  .src-page .hl { position: absolute; border: 2px solid #e8731a; background: rgba(255, 214, 0, 0.38); border-radius: 3px; box-shadow: 0 0 0 6px rgba(255, 214, 0, 0.18); }
+  @media (prefers-reduced-motion: no-preference) { .src-page .hl { animation: hlpulse 1.6s ease-in-out 3; } }
+  @keyframes hlpulse { 0%, 100% { box-shadow: 0 0 0 6px rgba(255, 214, 0, 0.18); } 50% { box-shadow: 0 0 0 14px rgba(255, 214, 0, 0.0); } }
+  .src-ext { padding: 24px 20px; display: grid; gap: 12px; align-content: start; font-size: 14px; color: var(--fg-2); }
+  .src-ext a { color: var(--rev); font-weight: 500; }
+  .src-ext .box { border: 1px dashed var(--line); border-radius: 8px; padding: 14px 16px; }
+
+  footer { font-size: 13px; color: var(--muted); max-width: 80ch; }
+  footer p { margin: 0 0 6px; }
+  @media (max-width: 600px) {
+    .page { padding-block: 28px 40px; padding-inline: 16px; gap: 22px; }
+    .figure .v { font-size: 22px; }
+    .legend { margin-left: 0; }
+  }
+</style>
+
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">The Walt Disney Company · Form 10-K · <span id="h-fy">fiscal year ended September 27, 2025</span></div>
+    <h1>How <span id="h-rev">$94.4 billion</span> of revenue became <span id="h-ni">$12.4 billion</span> of net income</h1>
+    <p class="lede">Disney's consolidated income statement drawn as a flow, for fiscal 2023 through 2025. Band width is proportional to dollars on one scale across all three years. Scrub the year to watch the bands move, hover any band for the exact figure, click a block to see the page of the 10-K it comes from with the number highlighted, and click a segment block to open that segment's own P&amp;L.</p>
+    <div class="figures" aria-label="Key figures">
+      <div class="figure"><span class="k">Total revenues</span><span class="v" id="f-rev">$94.4B</span><span class="d" id="f-rev-d"></span></div>
+      <div class="figure"><span class="k">Income before taxes</span><span class="v" id="f-ptx">$12.0B</span><span class="d" id="f-ptx-d"></span></div>
+      <div class="figure"><span class="k">Net income to Disney</span><span class="v" id="f-dis">$12.4B</span><span class="d" id="f-dis-d"></span></div>
+      <div class="figure"><span class="k">Diluted EPS</span><span class="v" id="f-eps">$6.85</span><span class="d" id="f-eps-d"></span></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="Revenue detail level" id="detail-group">
+      <button type="button" id="mode-seg" data-mode="seg" aria-pressed="true">By segment</button>
+      <button type="button" id="mode-line" data-mode="line" aria-pressed="false">By business line</button>
+    </div>
+    <button type="button" class="btn" id="back" hidden>← All segments</button>
+    <div class="years">
+      <button type="button" class="btn" id="play" aria-pressed="false">▶ Play FY23→25</button>
+      <div class="yr-track">
+        <input type="range" id="year" min="0" max="2" step="1" value="2" aria-label="Fiscal year" aria-valuetext="FY2025">
+        <div class="ticks" aria-hidden="true">
+          <button type="button" data-y="2023" tabindex="-1">FY2023</button>
+          <button type="button" data-y="2024" tabindex="-1">FY2024</button>
+          <button type="button" data-y="2025" tabindex="-1" aria-current="true">FY2025</button>
+        </div>
+      </div>
+    </div>
+    <div class="legend" aria-label="Color key">
+      <span><i style="background:var(--rev)"></i>Revenue</span>
+      <span><i style="background:var(--profit)"></i>Profit carried forward</span>
+      <span><i style="background:var(--cost)"></i>Costs &amp; expenses</span>
+      <span><i style="background:var(--inflow)"></i>Non-operating additions</span>
+      <span><i style="background:var(--neutral)"></i>Eliminations &amp; minority share</span>
+    </div>
+  </div>
+
+  <section class="card chart-wrap" aria-label="Sankey diagram of Disney's income statement">
+    <div class="chart-head"><span><b id="chart-title">FY2025 income statement</b> · $ in millions</span><span id="chart-sub">Click a segment block to open its P&amp;L</span></div>
+    <p class="year-note" id="year-note"></p>
+    <div class="chart-scroll"><svg class="sankey" id="sankey" viewBox="0 0 1240 640" role="img" aria-labelledby="sankey-title"><title id="sankey-title">Sankey diagram of Disney's FY2025 income statement</title></svg></div>
+    <div class="scroll-hint">Scroll sideways to see the whole flow.</div>
+    <div class="tip" id="tip" hidden role="status" aria-live="polite"></div>
+  </section>
+
+  <div class="src-backdrop" id="src-backdrop" hidden></div>
+  <aside class="src" id="src" hidden role="dialog" aria-modal="true" aria-labelledby="src-title">
+    <div class="src-head">
+      <div class="row1">
+        <div>
+          <p class="eyebrow">Source in the report</p>
+          <h2 id="src-title">Theme park admissions</h2>
+          <div class="amt" id="src-amt">FY2025 · $11,707M</div>
+        </div>
+        <button type="button" class="src-close" id="src-close">Close ✕</button>
+      </div>
+      <div class="cite" id="src-cite"></div>
+      <div class="where" id="src-where"></div>
+      <div class="src-tools" id="src-tools">
+        <span class="lbl">Shown in</span>
+        <div class="seg" id="src-alts" role="group" aria-label="Source location"></div>
+        <span class="lbl">Zoom</span>
+        <div class="seg" role="group" aria-label="Zoom">
+          <button type="button" data-z="1" aria-pressed="false">Fit page</button>
+          <button type="button" data-z="1.4" aria-pressed="true">140%</button>
+          <button type="button" data-z="2.2" aria-pressed="false">220%</button>
+          <button type="button" data-z="3.2" aria-pressed="false">320%</button>
+        </div>
+      </div>
+    </div>
+    <div class="src-view" id="src-view">
+      <div class="src-page" id="src-page"><img id="src-img" alt="" src=""></div>
+    </div>
+    <div class="src-ext" id="src-ext" hidden></div>
+  </aside>
+
+  <div class="notes-head"><h2>Reading notes</h2><span>FY2025 results and the three-year arc</span></div>
+  <section class="notes" aria-label="Reading notes">
+    <article class="card note">
+      <span class="tag">Why FY2025 net income exceeds pre-tax income</span>
+      <h3>Taxes added $1.4B instead of taking it away</h3>
+      <p>FY2025 income taxes were a $1,428M benefit (effective rate −11.9%). When Disney completed the NBCU buyout, Hulu's U.S. income tax classification changed and produced a non-cash benefit of about $3.3B. FY2024 carried a $1,796M expense at a 23.7% rate; FY2023, $1,379M at 28.9%.</p>
+    </article>
+    <article class="card note">
+      <span class="tag">Where the profit comes from</span>
+      <h3>Experiences is 38% of revenue and 57% of segment profit</h3>
+      <p>Parks, cruises and consumer products earned $9,995M of the $17,551M in FY2025 segment operating income, at a 27.6% margin that has held near 27% for all three years. Entertainment brought 44% of segment revenue for 27% of the profit; Sports 18% for 16%. Click Experiences to see its cost structure.</p>
+    </article>
+    <article class="card note">
+      <span class="tag">The three-year arc</span>
+      <h3>Net income to Disney went $2.4B → $5.0B → $12.4B</h3>
+      <p>Restructuring and impairment charges fell from $3.9B to $3.6B to $0.8B. Direct-to-Consumer operating income went from a $2.5B loss to $143M to $1.3B while Linear Networks slid from $4.1B to $3.0B. Revenue grew only 6% over the two years; the profit recovery came from below the revenue line.</p>
+    </article>
+    <article class="card note">
+      <span class="tag">How this chart defines its layers</span>
+      <h3>Gross profit and operating income are derived, not reported</h3>
+      <p>Disney's statement has no gross-profit line. Here gross profit is revenue less cost of services and products, and operating income is gross profit less SG&amp;A, depreciation and amortization, and restructuring. Equity income from investees, other income and tax benefits enter as separate additions; the segment views use the costs Disney reports for each segment.</p>
+    </article>
+  </section>
+
+  <details class="card tbl" id="table-view">
+    <summary>Table view: consolidated income statement, segment results and segment expenses, FY2023–FY2025</summary>
+    <div class="tables">
+      <div>
+        <h4>Consolidated statement of income · $ millions</h4>
+        <div class="tscroll">
+          <table>
+            <thead><tr><th>Line item</th><th>FY2025</th><th>FY2024</th><th>FY2023</th><th>FY25 vs FY24</th></tr></thead>
+            <tbody>
+              <tr><td>Services revenue</td><td>84,588</td><td>81,841</td><td>79,562</td><td class="pos">+3.4%</td></tr>
+              <tr><td>Products revenue</td><td>9,837</td><td>9,520</td><td>9,336</td><td class="pos">+3.3%</td></tr>
+              <tr class="sum"><td>Total revenues</td><td>94,425</td><td>91,361</td><td>88,898</td><td class="pos">+3.4%</td></tr>
+              <tr><td>Cost of services (excl. D&amp;A)</td><td>(52,677)</td><td>(52,509)</td><td>(53,139)</td><td>+0.3%</td></tr>
+              <tr><td>Cost of products (excl. D&amp;A)</td><td>(6,089)</td><td>(6,189)</td><td>(6,062)</td><td>−1.6%</td></tr>
+              <tr class="sum derived"><td>Gross profit</td><td>35,659</td><td>32,663</td><td>29,697</td><td class="pos">+9.2%</td></tr>
+              <tr><td>Selling, general, administrative and other</td><td>(16,501)</td><td>(15,759)</td><td>(15,336)</td><td>+4.7%</td></tr>
+              <tr><td>Depreciation and amortization</td><td>(5,326)</td><td>(4,990)</td><td>(5,369)</td><td>+6.7%</td></tr>
+              <tr><td>Restructuring and impairment charges</td><td>(819)</td><td>(3,595)</td><td>(3,892)</td><td>−77.2%</td></tr>
+              <tr class="sum derived"><td>Operating income</td><td>13,013</td><td>8,319</td><td>5,100</td><td class="pos">+56.4%</td></tr>
+              <tr><td>Other income (expense), net</td><td>—</td><td>(65)</td><td>96</td><td>—</td></tr>
+              <tr><td>Interest expense, net</td><td>(1,305)</td><td>(1,260)</td><td>(1,209)</td><td>+3.6%</td></tr>
+              <tr><td>Equity in the income of investees</td><td>295</td><td>575</td><td>782</td><td class="neg">−48.7%</td></tr>
+              <tr class="sum"><td>Income before income taxes</td><td>12,003</td><td>7,569</td><td>4,769</td><td class="pos">+58.6%</td></tr>
+              <tr><td>Income taxes: benefit / (expense)</td><td>1,428</td><td>(1,796)</td><td>(1,379)</td><td>—</td></tr>
+              <tr class="sum"><td>Net income</td><td>13,431</td><td>5,773</td><td>3,390</td><td class="pos">+132.7%</td></tr>
+              <tr><td>Attributable to noncontrolling interests</td><td>(1,027)</td><td>(801)</td><td>(1,036)</td><td>+28.2%</td></tr>
+              <tr class="sum"><td>Net income attributable to Disney</td><td>12,404</td><td>4,972</td><td>2,354</td><td class="pos">+149.5%</td></tr>
+              <tr><td>Diluted EPS ($)</td><td>6.85</td><td>2.72</td><td>1.29</td><td class="pos">+151.8%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tfoot">† Derived for this chart; Disney does not report these subtotals. Operating income here excludes equity in the income of investees, which Disney includes in segment operating income.</p>
+      </div>
+      <div>
+        <h4>Segment revenue and operating income · $ millions</h4>
+        <div class="tscroll">
+          <table>
+            <thead><tr><th>Segment / revenue line</th><th>Rev FY2025</th><th>Rev FY2024</th><th>Rev FY2023</th><th>OI FY2025</th><th>OI FY2024</th><th>OI FY2023</th></tr></thead>
+            <tbody>
+              <tr class="sum"><td>Entertainment</td><td>42,466</td><td>41,186</td><td>40,635</td><td>4,674</td><td>3,923</td><td>1,444</td></tr>
+              <tr class="sub"><td>Linear Networks</td><td>9,364</td><td>10,692</td><td>11,701</td><td>2,955</td><td>3,452</td><td>4,119</td></tr>
+              <tr class="sub"><td>Direct-to-Consumer</td><td>24,614</td><td>22,776</td><td>19,886</td><td>1,327</td><td>143</td><td>(2,496)</td></tr>
+              <tr class="sub"><td>Content Sales/Licensing and Other</td><td>8,488</td><td>7,718</td><td>9,048</td><td>392</td><td>328</td><td>(179)</td></tr>
+              <tr class="sum"><td>Sports</td><td>17,672</td><td>17,619</td><td>17,111</td><td>2,882</td><td>2,406</td><td>2,465</td></tr>
+              <tr class="sub"><td>Affiliate and subscription fees</td><td>11,944</td><td>12,068</td><td>12,107</td><td></td><td></td><td></td></tr>
+              <tr class="sub"><td>Advertising</td><td>4,444</td><td>4,388</td><td>3,920</td><td></td><td></td><td></td></tr>
+              <tr class="sub"><td>Other (TV/VOD distribution, sub-licensing, intersegment fees)</td><td>1,284</td><td>1,163</td><td>1,084</td><td></td><td></td><td></td></tr>
+              <tr class="sum"><td>Experiences</td><td>36,156</td><td>34,151</td><td>32,549</td><td>9,995</td><td>9,272</td><td>8,954</td></tr>
+              <tr class="sub"><td>Theme park admissions</td><td>11,707</td><td>11,171</td><td>10,423</td><td></td><td></td><td></td></tr>
+              <tr class="sub"><td>Resorts and vacations</td><td>9,210</td><td>8,375</td><td>7,949</td><td></td><td></td><td></td></tr>
+              <tr class="sub"><td>Retail and wholesale sales of merchandise, food and beverage</td><td>9,642</td><td>9,204</td><td>8,921</td><td></td><td></td><td></td></tr>
+              <tr class="sub"><td>Merchandise licensing</td><td>3,236</td><td>3,142</td><td>2,509</td><td></td><td></td><td></td></tr>
+              <tr class="sub"><td>Parks licensing and other (FY2023 incl. $4M advertising)</td><td>2,361</td><td>2,259</td><td>2,747</td><td></td><td></td><td></td></tr>
+              <tr><td>Intersegment eliminations</td><td>(1,869)</td><td>(1,595)</td><td>(1,397)</td><td>—</td><td>—</td><td>—</td></tr>
+              <tr class="sum"><td>Total</td><td>94,425</td><td>91,361</td><td>88,898</td><td>17,551</td><td>15,601</td><td>12,863</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tfoot">Revenue lines follow the revenue note (Note 3) so the three years are on one basis; the MD&amp;A groups part of retail sales with merchandise licensing. FY2023 Entertainment line detail is from the fiscal 2024 earnings release (recast basis). Segment operating income includes equity in the income of investees and is before corporate and unallocated shared expenses, TFCF and Hulu acquisition amortization, restructuring and impairment charges, and the India joint-venture loss.</p>
+      </div>
+      <div>
+        <h4>Segment expenses as reported · $ millions</h4>
+        <div class="tscroll">
+          <table>
+            <thead><tr><th>Segment / expense</th><th>FY2025</th><th>FY2024</th><th>FY2023</th></tr></thead>
+            <tbody>
+              <tr class="sum"><td>Entertainment</td><td>38,231</td><td>37,792</td><td>39,876</td></tr>
+              <tr class="sub"><td>Programming and production costs</td><td>22,273</td><td>22,385</td><td>23,912</td></tr>
+              <tr class="sub"><td>Other segment operating expenses</td><td>5,400</td><td>5,347</td><td>5,804</td></tr>
+              <tr class="sub"><td>Selling, general, administrative and other</td><td>9,733</td><td>9,326</td><td>9,404</td></tr>
+              <tr class="sub"><td>Depreciation and amortization</td><td>825</td><td>734</td><td>756</td></tr>
+              <tr class="sub"><td>Equity in the income of investees (added to OI)</td><td>439</td><td>529</td><td>685</td></tr>
+              <tr class="sum"><td>Sports</td><td>14,857</td><td>15,271</td><td>14,701</td></tr>
+              <tr class="sub"><td>Programming and production costs</td><td>12,492</td><td>12,983</td><td>12,373</td></tr>
+              <tr class="sub"><td>Other segment operating expenses</td><td>986</td><td>951</td><td>941</td></tr>
+              <tr class="sub"><td>Selling, general, administrative and other</td><td>1,331</td><td>1,298</td><td>1,314</td></tr>
+              <tr class="sub"><td>Depreciation and amortization</td><td>48</td><td>39</td><td>73</td></tr>
+              <tr class="sub"><td>Equity in the income of investees (added to OI)</td><td>67</td><td>58</td><td>55</td></tr>
+              <tr class="sum"><td>Experiences</td><td>26,161</td><td>24,879</td><td>23,593</td></tr>
+              <tr class="sub"><td>Operating labor</td><td>8,948</td><td>8,392</td><td>7,550</td></tr>
+              <tr class="sub"><td>Infrastructure costs</td><td>3,511</td><td>3,363</td><td>3,127</td></tr>
+              <tr class="sub"><td>Costs of goods sold and distribution costs</td><td>3,253</td><td>3,319</td><td>3,357</td></tr>
+              <tr class="sub"><td>Other segment operating expenses</td><td>3,512</td><td>3,282</td><td>3,095</td></tr>
+              <tr class="sub"><td>Selling, general, administrative and other</td><td>4,114</td><td>3,944</td><td>3,675</td></tr>
+              <tr class="sub"><td>Depreciation and amortization</td><td>2,823</td><td>2,579</td><td>2,789</td></tr>
+              <tr class="sub"><td>Equity in the loss of investees (deducted from OI)</td><td>—</td><td>—</td><td>(2)</td></tr>
+              <tr><td>Intersegment eliminations</td><td>(1,869)</td><td>(1,595)</td><td>(1,397)</td></tr>
+              <tr><td>Corporate and unallocated shared expenses</td><td>1,646</td><td>1,435</td><td>1,147</td></tr>
+              <tr><td>TFCF and Hulu acquisition amortization</td><td>1,567</td><td>1,665</td><td>1,986</td></tr>
+              <tr class="sum"><td>Total costs and expenses</td><td>80,593</td><td>79,447</td><td>79,906</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <footer>
+    <p>Source: The Walt Disney Company 2025 Annual Report (Form 10-K), Consolidated Statements of Income (p. 71), segment information (pp. 79–81), revenue note (p. 89) and MD&amp;A (pp. 37–45); FY2023 Entertainment line detail from the fiscal 2024 fourth-quarter earnings release. All figures in U.S. dollars, millions, as reported.</p>
+    <p>Clicking a block opens the page of the report that the figure comes from, with the figure highlighted; the page images are the report's own pages. FY2023 Entertainment line figures link to the fiscal 2024 earnings release instead.</p>
+    <p>Segment revenues are shown gross; intersegment fees removed in consolidation flow to their own block so the segments add up to consolidated revenue. Segment P&amp;Ls use the expense categories Disney reports for each segment; segment operating income is before corporate costs, acquisition amortization and restructuring.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Data ($ millions): FY2023, FY2024, FY2025 ----------
+  const YEARS = [2023, 2024, 2025];
+  const V = (a, b, c) => ({ 2023: a, 2024: b, 2025: c });
+  const FY_END = { 2023: 'September 30, 2023', 2024: 'September 28, 2024', 2025: 'September 27, 2025' };
+  const EPS = { 2023: 1.29, 2024: 2.72, 2025: 6.85 };
+  const YEAR_NOTE = {
+    consol: {
+      2023: 'Restructuring and impairment charges of $3.9B and a $2.5B Direct-to-Consumer operating loss held income before taxes to $4.8B.',
+      2024: 'Direct-to-Consumer turned a small profit ($143M), but $3.6B of impairments (Star India $1.5B, linear-network goodwill $1.3B, retail assets $0.3B) absorbed 43% of operating income.',
+      2025: 'Impairments fell to $0.8B, operating income rose 56%, and a $1.4B Hulu-related tax benefit lifted net income above pre-tax income.'
+    },
+    ent: {
+      2023: 'Direct-to-Consumer lost $2.5B and Content Sales/Licensing lost $179M; Linear Networks\u2019 $4.1B carried the segment to $1.4B of operating income.',
+      2024: 'Programming and production costs fell $1.5B and Direct-to-Consumer reached breakeven; segment operating income nearly tripled to $3.9B.',
+      2025: 'Direct-to-Consumer earned $1.3B as subscription revenue grew 11%; Linear Networks slipped to $3.0B. Segment margin 11.0%.'
+    },
+    spo: {
+      2023: 'Segment operating income $2.5B, a 14.4% margin; programming and production costs took 72% of revenue.',
+      2024: 'Programming costs rose 5% and Star India lost $636M; segment operating income slipped to $2.4B.',
+      2025: 'Star India moved into the joint venture and ESPN domestic advertising rose 14%; operating income grew 20% to $2.9B, a 16.3% margin.'
+    },
+    exp: {
+      2023: 'Revenue $32.5B at a 27.5% margin; operating labor ($7.6B) is the largest cost at 23% of revenue.',
+      2024: 'Revenue grew 5% while operating labor rose 11% to $8.4B; the margin held at 27.2% as depreciation eased from its FY2023 peak.',
+      2025: 'Revenue up 6% to $36.2B with the Disney Treasure\u2019s first year of sailing; operating labor +7% to $8.9B; margin 27.6%.'
+    }
+  };
+
+  const NODES = {
+    // Business lines
+    lin: { name: 'Linear Networks', role: 'rev', v: V(11701, 10692, 9364), note: V('Operating income $4,119M.', 'Operating income $3,452M (−16%).', 'Affiliate fees $6,348M, advertising $2,856M. Operating income $2,955M (−14%).') },
+    dtc: { name: 'Direct-to-Consumer', role: 'rev', v: V(19886, 22776, 24614), note: V('Operating loss of $2,496M.', 'Operating income $143M, the first profitable year.', 'Subscription fees $20,772M, advertising $3,684M. Operating income $1,327M.') },
+    csl: { name: 'Content Sales/Licensing', role: 'rev', v: V(9048, 7718, 8488), full: 'Content Sales/Licensing and Other', note: V('Operating loss of $179M.', 'Operating income $328M.', 'TV/VOD and home entertainment $3,458M, theatrical $2,592M, other $2,438M. Operating income $392M.') },
+    saf: { name: 'Affiliate & subscription fees', role: 'rev', v: V(12107, 12068, 11944), full: 'Sports affiliate and subscription fees', note: V(null, null, 'ESPN domestic $10,837M, ESPN international $1,076M, Star India $31M.') },
+    sad: { name: 'Sports advertising', role: 'rev', v: V(3920, 4388, 4444), note: V(null, null, 'ESPN domestic advertising $4,273M (+14%), helped by four additional College Football Playoff games.') },
+    sot: { name: 'Sports other revenue', role: 'rev', v: V(1084, 1163, 1284), note: 'TV/VOD distribution, sub-licensing fees and fees from Entertainment for sports programming on Disney+ and ABC.' },
+    tpa: { name: 'Theme park admissions', role: 'rev', v: V(10423, 11171, 11707), note: V(null, null, 'Up 5% on higher per-capita ticket revenue.') },
+    rv: { name: 'Resorts & vacations', role: 'rev', v: V(7949, 8375, 9210), note: V(null, null, 'Hotels, Disney Vacation Club and the cruise line (Disney Treasure launched in FY2025).') },
+    mfb: { name: 'Merchandise, food & beverage', role: 'rev', v: V(8921, 9204, 9642), full: 'Retail and wholesale sales of merchandise, food and beverage', note: 'Sales at the parks and resorts plus Disney Store retail; the MD&A groups the retail part with merchandise licensing.' },
+    ml: { name: 'Merchandise licensing', role: 'rev', v: V(2509, 3142, 3236) },
+    plo: { name: 'Parks licensing & other', role: 'rev', v: V(2747, 2259, 2361), note: V('Includes $4M of advertising revenue.', null, 'Sponsorship and co-branding, real estate sales and Tokyo Disney Resort royalties.') },
+    // Segments
+    ent: { name: 'Entertainment', role: 'rev', v: V(40635, 41186, 42466), drill: 'ent', note: V('Segment operating income $1,444M. Includes $377M of intersegment revenue.', 'Segment operating income $3,923M. Includes $411M of intersegment revenue.', 'Segment operating income $4,674M (+19%). Includes $448M of intersegment revenue.') },
+    spo: { name: 'Sports', role: 'rev', v: V(17111, 17619, 17672), drill: 'spo', note: V('Segment operating income $2,465M. Includes $1,020M of intersegment revenue.', 'Segment operating income $2,406M. Includes $1,184M of intersegment revenue.', 'Segment operating income $2,882M (+20%). Includes $1,421M of intersegment revenue, mostly fees from Hulu and the Entertainment networks.') },
+    exp: { name: 'Experiences', role: 'rev', v: V(32549, 34151, 36156), drill: 'exp', note: V('Segment operating income $8,954M, a 27.5% margin.', 'Segment operating income $9,272M, a 27.2% margin.', 'Segment operating income $9,995M (+8%), a 27.6% margin.') },
+    // Consolidated
+    total: { name: 'Total revenues', role: 'rev', v: V(88898, 91361, 94425), note: V('Services $79,562M and products $9,336M.', 'Services $81,841M and products $9,520M.', 'Services $84,588M and products $9,837M.') },
+    elim: { name: 'Eliminations', role: 'neutral', v: V(1397, 1595, 1869), full: 'Intersegment eliminations', note: 'Fees paid between segments (Hulu to ESPN and the linear networks; ABC and Disney+ to ESPN), removed in consolidation.' },
+    gp: { name: 'Gross profit', role: 'profit', v: V(29697, 32663, 35659), note: 'Derived: total revenues less cost of services and cost of products. Disney does not report this line.' },
+    cos: { name: 'Cost of services', role: 'cost', v: V(53139, 52509, 52677), note: 'Excludes depreciation and amortization. Mostly programming and production costs and operating labor.' },
+    cop: { name: 'Cost of products', role: 'cost', v: V(6062, 6189, 6089), note: 'Excludes depreciation and amortization.' },
+    eq: { name: 'Equity income', role: 'inflow', v: V(782, 575, 295), full: 'Equity in the income of investees', note: V('A+E and other investees, including the Company’s $56M share of an A+E gain.', 'A+E and other investees.', 'A+E and other investees ($506M) less the India joint-venture loss ($202M) and related amortization.') },
+    othin: { name: 'Other income, net', role: 'inflow', v: V(96, 0, 0), full: 'Other income (expense), net', note: 'Includes a $169M gain on the DraftKings investment and a $101M charge from a legal ruling.' },
+    oi: { name: 'Operating income', role: 'profit', v: V(5100, 8319, 13013), note: V('Derived: gross profit less SG&A, D&A and restructuring. Total segment operating income was $12,863M.', 'Derived: gross profit less SG&A, D&A and restructuring. Total segment operating income was $15,601M.', 'Derived: gross profit less SG&A, D&A and restructuring. Disney reports total segment operating income of $17,551M before corporate costs and acquisition amortization.') },
+    sga: { name: 'SG&A and other', role: 'cost', v: V(15336, 15759, 16501), full: 'Selling, general, administrative and other' },
+    da: { name: 'Depreciation & amortization', role: 'cost', v: V(5369, 4990, 5326) },
+    restr: { name: 'Restructuring & impairment', role: 'cost', v: V(3892, 3595, 819), note: V('Mostly content impairments and severance from the 2023 reorganization.', 'Star India $1,545M, linear-network goodwill $1,287M, retail assets $328M, content $187M, equity investments $165M, severance $83M.', 'Equity investment impairments $635M (A+E, Tata Play), Star India $143M, content $109M, less $68M of other items.') },
+    tax: { name: 'Tax benefit', role: 'inflow', v: V(0, 0, 1428), full: 'Income taxes (benefit)', note: 'A benefit, not an expense: Hulu’s U.S. tax classification changed at the close of the NBCU buyout, producing a ~$3.3B non-cash benefit. Effective rate −11.9%.' },
+    ptx: { name: 'Pre-tax income', role: 'profit', v: V(4769, 7569, 12003), full: 'Income before income taxes', note: 'Operating income less net interest expense, plus equity income from investees and other income (expense).' },
+    int: { name: 'Interest, net', role: 'cost', v: V(1209, 1260, 1305), full: 'Interest expense, net' },
+    othout: { name: 'Other expense, net', role: 'cost', v: V(0, 65, 0), full: 'Other income (expense), net', note: 'A $65M charge related to a legal ruling.' },
+    ni: { name: 'Net income', role: 'profit', v: V(3390, 5773, 13431) },
+    taxexp: { name: 'Income taxes', role: 'cost', v: V(1379, 1796, 0), note: V('Effective tax rate 28.9%.', 'Effective tax rate 23.7%, including about 6 points from non-deductible impairments.', null) },
+    dis: { name: 'Net income to Disney', role: 'profit', v: V(2354, 4972, 12404), full: 'Net income attributable to Disney', note: V('Diluted EPS $1.29.', 'Diluted EPS $2.72.', 'Diluted EPS $6.85 vs $2.72.') },
+    nci: { name: 'Noncontrolling interests', role: 'neutral', v: V(1036, 801, 1027), full: 'Net income attributable to noncontrolling interests', note: V('Mainly NBCU’s share of Hulu and other partners’ interests.', 'Mainly NBCU’s share of Hulu and other partners’ interests.', 'Includes a $0.4B incremental payment to NBCU for its share of Hulu above the guaranteed floor.') },
+    // Entertainment P&L
+    eqE: { name: 'Equity income', role: 'inflow', v: V(685, 529, 439), full: 'Equity in the income of investees', note: 'Mostly A+E; included in segment operating income.' },
+    entR: { name: 'Entertainment revenue', role: 'rev', v: V(40635, 41186, 42466), note: 'Gross of intersegment revenue.' },
+    entOI: { name: 'Segment operating income', role: 'profit', v: V(1444, 3923, 4674), note: V('Margin 3.6%.', 'Margin 9.5%.', 'Margin 11.0%.') },
+    ppc: { name: 'Programming & production', role: 'cost', v: V(23912, 22385, 22273), note: 'Amortization of produced and licensed content, including sports rights paid to ESPN for ABC and Disney+.' },
+    oox: { name: 'Other operating expenses', role: 'cost', v: V(5804, 5347, 5400), note: 'Technology support, distribution costs and cost of goods sold.' },
+    esga: { name: 'SG&A and other', role: 'cost', v: V(9404, 9326, 9733) },
+    eda: { name: 'Depreciation & amortization', role: 'cost', v: V(756, 734, 825) },
+    // Sports P&L
+    eqS: { name: 'Equity income', role: 'inflow', v: V(55, 58, 67), full: 'Equity in the income of investees', note: 'Included in segment operating income.' },
+    spoR: { name: 'Sports revenue', role: 'rev', v: V(17111, 17619, 17672), note: 'Gross of intersegment revenue.' },
+    spoOI: { name: 'Segment operating income', role: 'profit', v: V(2465, 2406, 2882), note: V('Margin 14.4%.', 'Margin 13.7%.', 'Margin 16.3%.') },
+    sppc: { name: 'Programming & production', role: 'cost', v: V(12373, 12983, 12492), note: 'Sports rights amortization and production; ESPN domestic $11,240M in FY2025.' },
+    sox: { name: 'Other operating expenses', role: 'cost', v: V(941, 951, 986), note: 'Technology support and distribution costs.' },
+    ssga: { name: 'SG&A and other', role: 'cost', v: V(1314, 1298, 1331) },
+    sda: { name: 'Depreciation & amortization', role: 'cost', v: V(73, 39, 48) },
+    // Experiences P&L
+    expR: { name: 'Experiences revenue', role: 'rev', v: V(32549, 34151, 36156) },
+    expOI: { name: 'Segment operating income', role: 'profit', v: V(8954, 9272, 9995), note: V('Margin 27.5%.', 'Margin 27.2%.', 'Margin 27.6%.') },
+    xlab: { name: 'Operating labor', role: 'cost', v: V(7550, 8392, 8948), note: 'Cast member wages and benefits; the largest Experiences cost.' },
+    xinf: { name: 'Infrastructure costs', role: 'cost', v: V(3127, 3363, 3511), note: 'Maintenance, utilities and property costs for the parks, resorts and ships.' },
+    xcogs: { name: 'Cost of goods sold & distribution', role: 'cost', v: V(3357, 3319, 3253), note: 'Merchandise, food and beverage cost of sales.' },
+    xoth: { name: 'Other operating expenses', role: 'cost', v: V(3095, 3282, 3512), note: 'Supplies, commissions and entertainment offerings.' },
+    xsga: { name: 'SG&A and other', role: 'cost', v: V(3675, 3944, 4114) },
+    xda: { name: 'Depreciation & amortization', role: 'cost', v: V(2789, 2579, 2823) },
+    xeql: { name: 'Equity in loss of investees', role: 'cost', v: V(2, 0, 0) }
+  };
+
+  // Links: value spec is 's' (source node value), 't' (target node value) or a per-year object.
+  const LINKS = [
+    ['lin', 'ent', 's'], ['dtc', 'ent', 's'], ['csl', 'ent', 's'],
+    ['saf', 'spo', 's'], ['sad', 'spo', 's'], ['sot', 'spo', 's'],
+    ['tpa', 'exp', 's'], ['rv', 'exp', 's'], ['mfb', 'exp', 's'], ['ml', 'exp', 's'], ['plo', 'exp', 's'],
+    ['ent', 'total', V(40258, 40775, 42018)], ['ent', 'elim', V(377, 411, 448)],
+    ['spo', 'total', V(16091, 16435, 16251)], ['spo', 'elim', V(1020, 1184, 1421)],
+    ['exp', 'total', 's'],
+    ['total', 'gp', 't'], ['total', 'cos', 't'], ['total', 'cop', 't'],
+    ['gp', 'oi', 't'], ['gp', 'sga', 't'], ['gp', 'da', 't'], ['gp', 'restr', 't'],
+    ['eq', 'ptx', 's'], ['othin', 'ptx', 's'], ['oi', 'ptx', V(3891, 6994, 11708)], ['oi', 'int', 't'], ['oi', 'othout', 't'],
+    ['tax', 'ni', 's'], ['ptx', 'ni', V(3390, 5773, 12003)], ['ptx', 'taxexp', 't'],
+    ['ni', 'dis', 't'], ['ni', 'nci', 't'],
+    // Entertainment P&L
+    ['lin', 'entR', 's'], ['dtc', 'entR', 's'], ['csl', 'entR', 's'],
+    ['eqE', 'entOI', 's'], ['entR', 'entOI', V(759, 3394, 4235)], ['entR', 'ppc', 't'], ['entR', 'oox', 't'], ['entR', 'esga', 't'], ['entR', 'eda', 't'],
+    // Sports P&L
+    ['saf', 'spoR', 's'], ['sad', 'spoR', 's'], ['sot', 'spoR', 's'],
+    ['eqS', 'spoOI', 's'], ['spoR', 'spoOI', V(2410, 2348, 2815)], ['spoR', 'sppc', 't'], ['spoR', 'sox', 't'], ['spoR', 'ssga', 't'], ['spoR', 'sda', 't'],
+    // Experiences P&L
+    ['tpa', 'expR', 's'], ['rv', 'expR', 's'], ['mfb', 'expR', 's'], ['ml', 'expR', 's'], ['plo', 'expR', 's'],
+    ['expR', 'expOI', 't'], ['expR', 'xlab', 't'], ['expR', 'xinf', 't'], ['expR', 'xcogs', 't'], ['expR', 'xoth', 't'], ['expR', 'xsga', 't'], ['expR', 'xda', 't'], ['expR', 'xeql', 't']
+  ];
+
+  const CONSOL_COLS = [
+    { ids: ['total', 'elim'], spine: 'total' },
+    { ids: ['gp', 'cos', 'cop'], spine: 'gp' },
+    { ids: ['eq', 'othin', 'oi', 'sga', 'da', 'restr'], spine: 'oi' },
+    { ids: ['tax', 'ptx', 'int', 'othout'], spine: 'ptx' },
+    { ids: ['ni', 'taxexp'], spine: 'ni' },
+    { ids: ['dis', 'nci'], spine: 'dis' }
+  ];
+  const GEOM = {
+    seg:   { W: 1240, H: 640, mL: 176, mR: 195, mT: 52, mB: 18, pad: 18 },
+    line:  { W: 1340, H: 700, mL: 240, mR: 195, mT: 52, mB: 18, pad: 12 },
+    drill: { W: 1160, H: 560, mL: 300, mR: 330, mT: 52, mB: 18, pad: 16 }
+  };
+  const VIEWS = {
+    seg:  { geom: GEOM.seg,  base: 'total', title: 'income statement', cols: [{ ids: ['ent', 'spo', 'exp'], head: 'Segments' }].concat(CONSOL_COLS) },
+    line: { geom: GEOM.line, base: 'total', title: 'income statement', cols: [{ ids: ['lin', 'dtc', 'csl', 'saf', 'sad', 'sot', 'tpa', 'rv', 'mfb', 'ml', 'plo'], head: 'Business lines' }, { ids: ['ent', 'spo', 'exp'], head: 'Segments' }].concat(CONSOL_COLS) },
+    ent:  { geom: GEOM.drill, base: 'entR', title: 'Entertainment segment P&L', cols: [{ ids: ['lin', 'dtc', 'csl'], head: 'Revenue lines' }, { ids: ['eqE', 'entR'], spine: 'entR' }, { ids: ['entOI', 'ppc', 'oox', 'esga', 'eda'], spine: 'entOI' }] },
+    spo:  { geom: GEOM.drill, base: 'spoR', title: 'Sports segment P&L', cols: [{ ids: ['saf', 'sad', 'sot'], head: 'Revenue lines' }, { ids: ['eqS', 'spoR'], spine: 'spoR' }, { ids: ['spoOI', 'sppc', 'sox', 'ssga', 'sda'], spine: 'spoOI' }] },
+    exp:  { geom: GEOM.drill, base: 'expR', title: 'Experiences segment P&L', cols: [{ ids: ['tpa', 'rv', 'mfb', 'ml', 'plo'], head: 'Revenue lines' }, { ids: ['expR'], spine: 'expR' }, { ids: ['expOI', 'xlab', 'xinf', 'xcogs', 'xoth', 'xsga', 'xda', 'xeql'], spine: 'expOI' }] }
+  };
+  const SUB = {
+    seg: 'Click any block to see its page in the 10-K · click a segment block to open its P&L',
+    line: 'Click any block to see its page in the 10-K · click a segment block to open its P&L',
+    drill: 'Revenue lines → segment revenue → the expense categories Disney reports → segment operating income · click any block for its source page'
+  };
+
+  const SOURCES = {"report":"2025 Annual Report (Form 10-K)","pages":{"41":{"file":"pages/p041.jpg","printed":37,"label":"MD&A · Entertainment segment results","short":"MD&A p. 37"},"47":{"file":"pages/p047.jpg","printed":43,"label":"MD&A · Sports segment results","short":"MD&A p. 43"},"49":{"file":"pages/p049.jpg","printed":45,"label":"MD&A · Experiences segment results","short":"MD&A p. 45"},"75":{"file":"pages/p075.jpg","printed":71,"label":"Consolidated Statements of Income","short":"Income statement p. 71"},"83":{"file":"pages/p083.jpg","printed":79,"label":"Note 1 · Segment revenues and operating income","short":"Segment note p. 79"},"84":{"file":"pages/p084.jpg","printed":80,"label":"Note 1 · Significant segment expenses","short":"Segment note p. 80"},"93":{"file":"pages/p093.jpg","printed":89,"label":"Note 3 · Revenues by segment and major source (2025 and 2024)","short":"Note 3 p. 89"},"94":{"file":"pages/p094.jpg","printed":90,"label":"Note 3 · Revenues by segment and major source (2023)","short":"Note 3 p. 90"}},"src":{"total":{"2025":[{"page":75,"rects":[[0.6312,0.1581,0.0447,0.0166]],"what":"Line “Total revenues”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7513,0.1582,0.0447,0.0166]],"what":"Line “Total revenues”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8713,0.1582,0.0447,0.0166]],"what":"Line “Total revenues”, FY2023 column"}]},"cos":{"2025":[{"page":75,"rects":[[0.6268,0.1904,0.0535,0.0166]],"what":"Line “Cost of services”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7469,0.1905,0.0535,0.0166]],"what":"Line “Cost of services”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8669,0.1905,0.0535,0.0166]],"what":"Line “Cost of services”, FY2023 column"}]},"cop":{"2025":[{"page":75,"rects":[[0.6334,0.2065,0.0469,0.0166]],"what":"Line “Cost of products”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7535,0.2066,0.0469,0.0166]],"what":"Line “Cost of products”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8735,0.2066,0.0469,0.0166]],"what":"Line “Cost of products”, FY2023 column"}]},"sga":{"2025":[{"page":75,"rects":[[0.6268,0.2227,0.0535,0.0166]],"what":"Line “Selling, general, administrative and other”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7469,0.2228,0.0535,0.0166]],"what":"Line “Selling, general, administrative and other”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8669,0.2228,0.0535,0.0166]],"what":"Line “Selling, general, administrative and other”, FY2023 column"}]},"da":{"2025":[{"page":75,"rects":[[0.6334,0.2388,0.0469,0.0166]],"what":"Line “Depreciation and amortization”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7535,0.2389,0.0469,0.0166]],"what":"Line “Depreciation and amortization”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8735,0.2389,0.0469,0.0166]],"what":"Line “Depreciation and amortization”, FY2023 column"}]},"restr":{"2025":[{"page":75,"rects":[[0.6433,0.2711,0.037,0.0166]],"what":"Line “Restructuring and impairment charges”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7535,0.2712,0.0469,0.0166]],"what":"Line “Restructuring and impairment charges”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8735,0.2712,0.0469,0.0166]],"what":"Line “Restructuring and impairment charges”, FY2023 column"}]},"int":{"2025":[{"page":75,"rects":[[0.6334,0.3034,0.0469,0.0166]],"what":"Line “Interest expense, net”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7535,0.3035,0.0469,0.0166]],"what":"Line “Interest expense, net”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8735,0.3035,0.0469,0.0166]],"what":"Line “Interest expense, net”, FY2023 column"}]},"eq":{"2025":[{"page":75,"rects":[[0.6477,0.3195,0.0282,0.0166]],"what":"Line “Equity in the income of investees”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7677,0.3196,0.0282,0.0166]],"what":"Line “Equity in the income of investees”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8878,0.3196,0.0282,0.0166]],"what":"Line “Equity in the income of investees”, FY2023 column"}]},"ptx":{"2025":[{"page":75,"rects":[[0.6312,0.3357,0.0447,0.0166]],"what":"Line “Income before income taxes”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7579,0.3358,0.0381,0.0166]],"what":"Line “Income before income taxes”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8779,0.3358,0.0381,0.0166]],"what":"Line “Income before income taxes”, FY2023 column"}]},"ni":{"2025":[{"page":75,"rects":[[0.6312,0.368,0.0447,0.0166]],"what":"Line “Net income”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7579,0.3681,0.0381,0.0166]],"what":"Line “Net income”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8779,0.3681,0.0381,0.0166]],"what":"Line “Net income”, FY2023 column"}]},"nci":{"2025":[{"page":75,"rects":[[0.6334,0.3841,0.0469,0.0166]],"what":"Line “Net income attributable to noncontrolling and redeemable noncontrolling interests”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7634,0.3842,0.037,0.0166]],"what":"Line “Net income attributable to noncontrolling and redeemable noncontrolling interests”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8735,0.3842,0.0469,0.0166]],"what":"Line “Net income attributable to noncontrolling and redeemable noncontrolling interests”, FY2023 column"}]},"dis":{"2025":[{"page":75,"rects":[[0.6312,0.4005,0.0447,0.0166]],"what":"Line “Net income attributable to The Walt Disney Company”, FY2025 column"}],"2024":[{"page":75,"rects":[[0.7579,0.4005,0.0381,0.0166]],"what":"Line “Net income attributable to The Walt Disney Company”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8779,0.4005,0.0381,0.0166]],"what":"Line “Net income attributable to The Walt Disney Company”, FY2023 column"}]},"othin":{"2023":[{"page":75,"rects":[[0.8944,0.2873,0.0216,0.0166]],"what":"Line “Other income (expense), net”, FY2023 column"}]},"othout":{"2024":[{"page":75,"rects":[[0.77,0.2873,0.0304,0.0166]],"what":"Line “Other income (expense), net”, FY2024 column"}]},"tax":{"2025":[{"page":75,"rects":[[0.6378,0.3518,0.0381,0.0166]],"what":"Line “Income taxes”, FY2025 column: a positive figure, so a benefit"}]},"taxexp":{"2024":[{"page":75,"rects":[[0.7535,0.3519,0.0469,0.0166]],"what":"Line “Income taxes”, FY2024 column"}],"2023":[{"page":75,"rects":[[0.8735,0.3519,0.0469,0.0166]],"what":"Line “Income taxes”, FY2023 column"}]},"gp":{"2025":[{"page":75,"rects":[[0.6312,0.1581,0.0447,0.0166],[0.6268,0.1904,0.0535,0.0166],[0.6334,0.2065,0.0469,0.0166]],"what":"Derived: total revenues less cost of services and cost of products (FY2025 column)"}],"2024":[{"page":75,"rects":[[0.7513,0.1582,0.0447,0.0166],[0.7469,0.1905,0.0535,0.0166],[0.7535,0.2066,0.0469,0.0166]],"what":"Derived: total revenues less cost of services and cost of products (FY2024 column)"}],"2023":[{"page":75,"rects":[[0.8713,0.1582,0.0447,0.0166],[0.8669,0.1905,0.0535,0.0166],[0.8735,0.2066,0.0469,0.0166]],"what":"Derived: total revenues less cost of services and cost of products (FY2023 column)"}]},"oi":{"2025":[{"page":75,"rects":[[0.6312,0.1581,0.0447,0.0166],[0.6268,0.255,0.0535,0.0166],[0.6433,0.2711,0.037,0.0166]],"what":"Derived: total revenues less total costs and expenses less restructuring and impairment charges (FY2025 column)"}],"2024":[{"page":75,"rects":[[0.7513,0.1582,0.0447,0.0166],[0.7469,0.2551,0.0535,0.0166],[0.7535,0.2712,0.0469,0.0166]],"what":"Derived: total revenues less total costs and expenses less restructuring and impairment charges (FY2024 column)"}],"2023":[{"page":75,"rects":[[0.8713,0.1582,0.0447,0.0166],[0.8669,0.2551,0.0535,0.0166],[0.8735,0.2712,0.0469,0.0166]],"what":"Derived: total revenues less total costs and expenses less restructuring and impairment charges (FY2023 column)"}]},"ent":{"2025":[{"page":83,"rects":[[0.5856,0.2495,0.0538,0.0191]],"what":"Segment revenues, Entertainment total (gross of intersegment), FY2025 column"}],"2024":[{"page":83,"rects":[[0.7242,0.2495,0.0538,0.0191]],"what":"Segment revenues, Entertainment total (gross of intersegment), FY2024 column"}],"2023":[{"page":83,"rects":[[0.8627,0.2495,0.0538,0.0191]],"what":"Segment revenues, Entertainment total (gross of intersegment), FY2023 column"}]},"entR":{"2025":[{"page":83,"rects":[[0.5856,0.2495,0.0538,0.0191]],"what":"Segment revenues, Entertainment total (gross of intersegment), FY2025 column"}],"2024":[{"page":83,"rects":[[0.7242,0.2495,0.0538,0.0191]],"what":"Segment revenues, Entertainment total (gross of intersegment), FY2024 column"}],"2023":[{"page":83,"rects":[[0.8627,0.2495,0.0538,0.0191]],"what":"Segment revenues, Entertainment total (gross of intersegment), FY2023 column"}]},"spo":{"2025":[{"page":83,"rects":[[0.5856,0.3254,0.0538,0.0191]],"what":"Segment revenues, Sports total (gross of intersegment), FY2025 column"}],"2024":[{"page":83,"rects":[[0.7242,0.3254,0.0538,0.0191]],"what":"Segment revenues, Sports total (gross of intersegment), FY2024 column"}],"2023":[{"page":83,"rects":[[0.8627,0.3254,0.0538,0.0191]],"what":"Segment revenues, Sports total (gross of intersegment), FY2023 column"}]},"spoR":{"2025":[{"page":83,"rects":[[0.5856,0.3254,0.0538,0.0191]],"what":"Segment revenues, Sports total (gross of intersegment), FY2025 column"}],"2024":[{"page":83,"rects":[[0.7242,0.3254,0.0538,0.0191]],"what":"Segment revenues, Sports total (gross of intersegment), FY2024 column"}],"2023":[{"page":83,"rects":[[0.8627,0.3254,0.0538,0.0191]],"what":"Segment revenues, Sports total (gross of intersegment), FY2023 column"}]},"exp":{"2025":[{"page":83,"rects":[[0.5856,0.3444,0.0538,0.0191]],"what":"Segment revenues, Experiences total (gross of intersegment), FY2025 column"}],"2024":[{"page":83,"rects":[[0.7242,0.3444,0.0538,0.0191]],"what":"Segment revenues, Experiences total (gross of intersegment), FY2024 column"}],"2023":[{"page":83,"rects":[[0.8627,0.3444,0.0538,0.0191]],"what":"Segment revenues, Experiences total (gross of intersegment), FY2023 column"}]},"expR":{"2025":[{"page":83,"rects":[[0.5856,0.3444,0.0538,0.0191]],"what":"Segment revenues, Experiences total (gross of intersegment), FY2025 column"}],"2024":[{"page":83,"rects":[[0.7242,0.3444,0.0538,0.0191]],"what":"Segment revenues, Experiences total (gross of intersegment), FY2024 column"}],"2023":[{"page":83,"rects":[[0.8627,0.3444,0.0538,0.0191]],"what":"Segment revenues, Experiences total (gross of intersegment), FY2023 column"}]},"elim":{"2025":[{"page":83,"rects":[[0.5883,0.3634,0.0565,0.0191]],"what":"Segment revenues, “Eliminations”, FY2025 column"}],"2024":[{"page":83,"rects":[[0.7269,0.3634,0.0565,0.0191]],"what":"Segment revenues, “Eliminations”, FY2024 column"}],"2023":[{"page":83,"rects":[[0.8655,0.3634,0.0565,0.0191]],"what":"Segment revenues, “Eliminations”, FY2023 column"}]},"entOI":{"2025":[{"page":83,"rects":[[0.5938,0.4251,0.0455,0.0191]],"what":"Segment operating income (loss), Entertainment, FY2025 column"}],"2024":[{"page":83,"rects":[[0.7324,0.4251,0.0455,0.0191]],"what":"Segment operating income (loss), Entertainment, FY2024 column"}],"2023":[{"page":83,"rects":[[0.871,0.4251,0.0455,0.0191]],"what":"Segment operating income (loss), Entertainment, FY2023 column"}]},"spoOI":{"2025":[{"page":83,"rects":[[0.5938,0.4441,0.0455,0.0191]],"what":"Segment operating income (loss), Sports, FY2025 column"}],"2024":[{"page":83,"rects":[[0.7324,0.4441,0.0455,0.0191]],"what":"Segment operating income (loss), Sports, FY2024 column"}],"2023":[{"page":83,"rects":[[0.871,0.4441,0.0455,0.0191]],"what":"Segment operating income (loss), Sports, FY2023 column"}]},"expOI":{"2025":[{"page":83,"rects":[[0.5938,0.4631,0.0455,0.0191]],"what":"Segment operating income (loss), Experiences, FY2025 column"}],"2024":[{"page":83,"rects":[[0.7324,0.4631,0.0455,0.0191]],"what":"Segment operating income (loss), Experiences, FY2024 column"}],"2023":[{"page":83,"rects":[[0.871,0.4631,0.0455,0.0191]],"what":"Segment operating income (loss), Experiences, FY2023 column"}]},"eqE":{"2025":[{"page":83,"rects":[[0.6037,0.5483,0.0332,0.0191]],"what":"Equity in the income of investees included in segment operating income, Entertainment, FY2025 column"}],"2024":[{"page":83,"rects":[[0.7423,0.5483,0.0332,0.0191]],"what":"Equity in the income of investees included in segment operating income, Entertainment, FY2024 column"}],"2023":[{"page":83,"rects":[[0.8809,0.5483,0.0332,0.0191]],"what":"Equity in the income of investees included in segment operating income, Entertainment, FY2023 column"}]},"eqS":{"2025":[{"page":83,"rects":[[0.612,0.5673,0.0249,0.0191]],"what":"Equity in the income of investees included in segment operating income, Sports, FY2025 column"}],"2024":[{"page":83,"rects":[[0.7506,0.5673,0.0249,0.0191]],"what":"Equity in the income of investees included in segment operating income, Sports, FY2024 column"}],"2023":[{"page":83,"rects":[[0.8891,0.5673,0.0249,0.0191]],"what":"Equity in the income of investees included in segment operating income, Sports, FY2023 column"}]},"xeql":{"2023":[{"page":83,"rects":[[0.8919,0.5863,0.0277,0.0191]],"what":"Equity in the income (loss) of investees included in segment operating income, Experiences, FY2023 column"}]},"ppc":{"2025":[{"page":84,"rects":[[0.5856,0.089,0.0538,0.0191]],"what":"Entertainment — “Programming and production costs”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7242,0.089,0.0538,0.0191]],"what":"Entertainment — “Programming and production costs”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.8627,0.089,0.0538,0.0191]],"what":"Entertainment — “Programming and production costs”, FY2023 column"}]},"oox":{"2025":[{"page":84,"rects":[[0.5938,0.1089,0.0455,0.0191]],"what":"Entertainment — “Other segment operating expenses”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.1089,0.0455,0.0191]],"what":"Entertainment — “Other segment operating expenses”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.1089,0.0455,0.0191]],"what":"Entertainment — “Other segment operating expenses”, FY2023 column"}]},"esga":{"2025":[{"page":84,"rects":[[0.5938,0.1289,0.0455,0.0191]],"what":"Entertainment — “Selling, general, administrative and other”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.1289,0.0455,0.0191]],"what":"Entertainment — “Selling, general, administrative and other”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.1289,0.0455,0.0191]],"what":"Entertainment — “Selling, general, administrative and other”, FY2023 column"}]},"eda":{"2025":[{"page":84,"rects":[[0.6062,0.1488,0.0332,0.0191]],"what":"Entertainment — “Depreciation and amortization”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7448,0.1488,0.0332,0.0191]],"what":"Entertainment — “Depreciation and amortization”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.8834,0.1488,0.0332,0.0191]],"what":"Entertainment — “Depreciation and amortization”, FY2023 column"}]},"sppc":{"2025":[{"page":84,"rects":[[0.5856,0.2086,0.0538,0.0191]],"what":"Sports — “Programming and production costs”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7242,0.2086,0.0538,0.0191]],"what":"Sports — “Programming and production costs”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.8627,0.2086,0.0538,0.0191]],"what":"Sports — “Programming and production costs”, FY2023 column"}]},"sox":{"2025":[{"page":84,"rects":[[0.6062,0.2286,0.0332,0.0191]],"what":"Sports — “Other segment operating expenses”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7448,0.2286,0.0332,0.0191]],"what":"Sports — “Other segment operating expenses”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.8834,0.2286,0.0332,0.0191]],"what":"Sports — “Other segment operating expenses”, FY2023 column"}]},"ssga":{"2025":[{"page":84,"rects":[[0.5938,0.2485,0.0455,0.0191]],"what":"Sports — “Selling, general, administrative and other”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.2485,0.0455,0.0191]],"what":"Sports — “Selling, general, administrative and other”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.2485,0.0455,0.0191]],"what":"Sports — “Selling, general, administrative and other”, FY2023 column"}]},"sda":{"2025":[{"page":84,"rects":[[0.6144,0.2684,0.0249,0.0191]],"what":"Sports — “Depreciation and amortization”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.753,0.2684,0.0249,0.0191]],"what":"Sports — “Depreciation and amortization”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.8916,0.2684,0.0249,0.0191]],"what":"Sports — “Depreciation and amortization”, FY2023 column"}]},"xlab":{"2025":[{"page":84,"rects":[[0.5938,0.3283,0.0455,0.0191]],"what":"Experiences — “Operating labor”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.3283,0.0455,0.0191]],"what":"Experiences — “Operating labor”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.3283,0.0455,0.0191]],"what":"Experiences — “Operating labor”, FY2023 column"}]},"xinf":{"2025":[{"page":84,"rects":[[0.5938,0.3482,0.0455,0.0191]],"what":"Experiences — “Infrastructure costs”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.3482,0.0455,0.0191]],"what":"Experiences — “Infrastructure costs”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.3482,0.0455,0.0191]],"what":"Experiences — “Infrastructure costs”, FY2023 column"}]},"xcogs":{"2025":[{"page":84,"rects":[[0.5938,0.3682,0.0455,0.0191]],"what":"Experiences — “Costs of goods sold and distribution costs”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.3682,0.0455,0.0191]],"what":"Experiences — “Costs of goods sold and distribution costs”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.3682,0.0455,0.0191]],"what":"Experiences — “Costs of goods sold and distribution costs”, FY2023 column"}]},"xoth":{"2025":[{"page":84,"rects":[[0.5938,0.3881,0.0455,0.0191]],"what":"Experiences — “Other segment operating expenses”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.3881,0.0455,0.0191]],"what":"Experiences — “Other segment operating expenses”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.3881,0.0455,0.0191]],"what":"Experiences — “Other segment operating expenses”, FY2023 column"}]},"xsga":{"2025":[{"page":84,"rects":[[0.5938,0.408,0.0455,0.0191]],"what":"Experiences — “Selling, general, administrative and other”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.408,0.0455,0.0191]],"what":"Experiences — “Selling, general, administrative and other”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.408,0.0455,0.0191]],"what":"Experiences — “Selling, general, administrative and other”, FY2023 column"}]},"xda":{"2025":[{"page":84,"rects":[[0.5938,0.428,0.0455,0.0191]],"what":"Experiences — “Depreciation and amortization”, FY2025 column"}],"2024":[{"page":84,"rects":[[0.7324,0.428,0.0455,0.0191]],"what":"Experiences — “Depreciation and amortization”, FY2024 column"}],"2023":[{"page":84,"rects":[[0.871,0.428,0.0455,0.0191]],"what":"Experiences — “Depreciation and amortization”, FY2023 column"}]},"lin":{"2025":[{"page":41,"rects":[[0.5897,0.4038,0.0455,0.0191]],"what":"Entertainment — Revenues, “Linear Networks”, FY2025 column"}],"2024":[{"page":41,"rects":[[0.72,0.4039,0.0538,0.0191]],"what":"Entertainment — Revenues, “Linear Networks”, FY2024 column"}],"2023":[{"ext":"https://thewaltdisneycompany.com/app/uploads/2024/11/q4-fy24-earnings.pdf","what":"Not in the 2025 report. Fiscal 2024 fourth-quarter earnings release (November 14, 2024), Entertainment table, twelve months ended September 30, 2023 column, “Linear Networks” — recast basis that matches the FY2024 figures in the 10-K."}]},"dtc":{"2025":[{"page":41,"rects":[[0.5815,0.4228,0.0538,0.0191]],"what":"Entertainment — Revenues, “Direct-to-Consumer”, FY2025 column"}],"2024":[{"page":41,"rects":[[0.72,0.4229,0.0538,0.0191]],"what":"Entertainment — Revenues, “Direct-to-Consumer”, FY2024 column"}],"2023":[{"ext":"https://thewaltdisneycompany.com/app/uploads/2024/11/q4-fy24-earnings.pdf","what":"Not in the 2025 report. Fiscal 2024 fourth-quarter earnings release (November 14, 2024), Entertainment table, twelve months ended September 30, 2023 column, “Direct-to-Consumer” — recast basis that matches the FY2024 figures in the 10-K."}]},"csl":{"2025":[{"page":41,"rects":[[0.5897,0.4418,0.0455,0.0191]],"what":"Entertainment — Revenues, “Content Sales/Licensing and Other”, FY2025 column"}],"2024":[{"page":41,"rects":[[0.7283,0.4419,0.0455,0.0191]],"what":"Entertainment — Revenues, “Content Sales/Licensing and Other”, FY2024 column"}],"2023":[{"ext":"https://thewaltdisneycompany.com/app/uploads/2024/11/q4-fy24-earnings.pdf","what":"Not in the 2025 report. Fiscal 2024 fourth-quarter earnings release (November 14, 2024), Entertainment table, twelve months ended September 30, 2023 column, “Content Sales/Licensing and Other” — recast basis that matches the FY2024 figures in the 10-K."}]},"saf":{"2025":[{"page":93,"rects":[[0.6109,0.3167,0.0493,0.0179]],"what":"Note 3, 2025 table — “Subscription and affiliate fees” row, Sports column"},{"page":47,"rects":[[0.579,0.1327,0.0538,0.0191]],"what":"MD&A Sports table — “Affiliate and subscription fees”, FY2025 column"}],"2024":[{"page":93,"rects":[[0.6109,0.5424,0.0493,0.0179]],"what":"Note 3, 2024 table — “Subscription and affiliate fees” row, Sports column"},{"page":47,"rects":[[0.7176,0.1327,0.0538,0.0191]],"what":"MD&A Sports table — “Affiliate and subscription fees”, FY2024 column"}],"2023":[{"page":94,"rects":[[0.6109,0.0826,0.0493,0.0179]],"what":"Note 3, 2023 table — “Subscription and affiliate fees” row, Sports column"}]},"sad":{"2025":[{"page":93,"rects":[[0.6183,0.3347,0.0418,0.0179]],"what":"Note 3, 2025 table — “Advertising” row, Sports column"},{"page":47,"rects":[[0.5872,0.1516,0.0455,0.0191]],"what":"MD&A Sports table — “Advertising”, FY2025 column"}],"2024":[{"page":93,"rects":[[0.6183,0.5604,0.0418,0.0179]],"what":"Note 3, 2024 table — “Advertising” row, Sports column"},{"page":47,"rects":[[0.7258,0.1516,0.0455,0.0191]],"what":"MD&A Sports table — “Advertising”, FY2024 column"}],"2023":[{"page":94,"rects":[[0.6183,0.1007,0.0418,0.0179]],"what":"Note 3, 2023 table — “Advertising” row, Sports column"}]},"tpa":{"2025":[{"page":93,"rects":[[0.6962,0.3528,0.0493,0.0179]],"what":"Note 3, 2025 table — “Theme park admissions” row, Experiences column"},{"page":49,"rects":[[0.579,0.66,0.0538,0.0191]],"what":"MD&A Experiences table — “Theme park admissions”, FY2025 column"}],"2024":[{"page":93,"rects":[[0.6962,0.5785,0.0493,0.0179]],"what":"Note 3, 2024 table — “Theme park admissions” row, Experiences column"},{"page":49,"rects":[[0.7176,0.66,0.0538,0.0191]],"what":"MD&A Experiences table — “Theme park admissions”, FY2024 column"}],"2023":[{"page":94,"rects":[[0.6962,0.1187,0.0493,0.0179]],"what":"Note 3, 2023 table — “Theme park admissions” row, Experiences column"}]},"rv":{"2025":[{"page":93,"rects":[[0.7037,0.3888,0.0418,0.0179]],"what":"Note 3, 2025 table — “Resort and vacations” row, Experiences column"},{"page":49,"rects":[[0.5872,0.679,0.0455,0.0191]],"what":"MD&A Experiences table — “Resorts and vacations”, FY2025 column"}],"2024":[{"page":93,"rects":[[0.7037,0.6145,0.0418,0.0179]],"what":"Note 3, 2024 table — “Resort and vacations” row, Experiences column"},{"page":49,"rects":[[0.7258,0.679,0.0455,0.0191]],"what":"MD&A Experiences table — “Resorts and vacations”, FY2024 column"}],"2023":[{"page":94,"rects":[[0.7037,0.1548,0.0418,0.0179]],"what":"Note 3, 2023 table — “Resort and vacations” row, Experiences column"}]},"mfb":{"2025":[{"page":93,"rects":[[0.7037,0.3708,0.0418,0.0179]],"what":"Note 3, 2025 table — “Retail and wholesale sales of merchandise, food and beverage” row, Experiences column"}],"2024":[{"page":93,"rects":[[0.7037,0.5965,0.0418,0.0179]],"what":"Note 3, 2024 table — “Retail and wholesale sales of merchandise, food and beverage” row, Experiences column"}],"2023":[{"page":94,"rects":[[0.7037,0.1368,0.0418,0.0179]],"what":"Note 3, 2023 table — “Retail and wholesale sales of merchandise, food and beverage” row, Experiences column"}]},"ml":{"2025":[{"page":93,"rects":[[0.7037,0.4069,0.0418,0.0179]],"what":"Note 3, 2025 table — “Merchandise licensing” row, Experiences column"}],"2024":[{"page":93,"rects":[[0.7037,0.6326,0.0418,0.0179]],"what":"Note 3, 2024 table — “Merchandise licensing” row, Experiences column"}],"2023":[{"page":94,"rects":[[0.7037,0.1728,0.0418,0.0179]],"what":"Note 3, 2023 table — “Merchandise licensing” row, Experiences column"}]},"sot":{"2025":[{"page":93,"rects":[[0.6294,0.4249,0.0307,0.0179],[0.6183,0.461,0.0418,0.0179]],"what":"Note 3, 2025 table — Sports column: “TV/VOD and home entertainment distribution” plus “Other”"},{"page":47,"rects":[[0.5872,0.1706,0.0455,0.0191]],"what":"MD&A Sports table — “Other”, FY2025 column"}],"2024":[{"page":93,"rects":[[0.6294,0.6506,0.0307,0.0179],[0.6294,0.6867,0.0307,0.0179]],"what":"Note 3, 2024 table — Sports column: “TV/VOD and home entertainment distribution” plus “Other”"},{"page":47,"rects":[[0.7258,0.1706,0.0455,0.0191]],"what":"MD&A Sports table — “Other”, FY2024 column"}],"2023":[{"page":94,"rects":[[0.6294,0.1909,0.0307,0.0179],[0.6294,0.227,0.0307,0.0179]],"what":"Note 3, 2023 table — Sports column: “TV/VOD and home entertainment distribution” plus “Other”"}]},"plo":{"2025":[{"page":93,"rects":[[0.7037,0.461,0.0418,0.0179]],"what":"Note 3, 2025 table — “Other” row, Experiences column"},{"page":49,"rects":[[0.5872,0.736,0.0455,0.0191]],"what":"MD&A Experiences table — “Parks licensing and other”, FY2025 column"}],"2024":[{"page":93,"rects":[[0.7037,0.6867,0.0418,0.0179]],"what":"Note 3, 2024 table — “Other” row, Experiences column"},{"page":49,"rects":[[0.7258,0.736,0.0455,0.0191]],"what":"MD&A Experiences table — “Parks licensing and other”, FY2024 column"}],"2023":[{"page":94,"rects":[[0.7037,0.227,0.0418,0.0179],[0.7297,0.1007,0.0158,0.0179]],"what":"Note 3, 2023 table — Experiences column: “Other” plus the $4M of advertising"}]}}};
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('sankey');
+  const svgTitle = document.getElementById('sankey-title');
+  const tip = document.getElementById('tip');
+  const wrap = svg.closest('.chart-wrap');
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = id => document.getElementById(id);
+
+  function fmtM(v) { return '$' + Math.abs(v).toLocaleString('en-US') + 'M'; }
+  function fmtShort(v) { return Math.abs(v) >= 1000 ? '$' + (Math.abs(v) / 1000).toFixed(1) + 'B' : '$' + Math.abs(v).toLocaleString('en-US') + 'M'; }
+  function fmtBn(v) { return '$' + (v / 1000).toFixed(1) + ' billion'; }
+  function pct(a, b) { const p = (a / b - 1) * 100; return (p >= 0 ? '+' : '−') + Math.abs(p).toFixed(p >= 100 ? 0 : 1) + '%'; }
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function noteFor(n, y) { const s = n.note; if (!s) return ''; return typeof s === 'string' ? s : (s[y] || ''); }
+  function linkValue(L, y) { return L.spec === 's' ? L.s.v[y] : L.spec === 't' ? L.t.v[y] : L.spec[y]; }
+
+  // ---------- Scene: fixed columns, fixed vertical order, one scale across all three years ----------
+  function buildScene(view) {
+    const spec = VIEWS[view], G = spec.geom, cols = spec.cols, nodeW = 16;
+    const active = new Set(cols.flatMap(c => c.ids));
+    const byId = new Map(), nodes = [];
+    cols.forEach((c, ci) => c.ids.forEach((id, oi) => {
+      const n = Object.assign({ id: id }, NODES[id], { col: ci, ord: oi, out: [], inn: [], spine: c.spine === id, drillTo: (view === 'seg' || view === 'line') ? NODES[id].drill : null });
+      byId.set(id, n); nodes.push(n);
+    }));
+    const links = LINKS.filter(l => active.has(l[0]) && active.has(l[1])).map(l => {
+      const s = byId.get(l[0]), t = byId.get(l[1]);
+      const L = { s, t, spec: l[2], role: s.role === 'inflow' ? 'inflow' : t.role };
+      s.out.push(L); t.inn.push(L); return L;
+    });
+    const innerW = G.W - G.mL - G.mR, innerH = G.H - G.mT - G.mB;
+    const step = (innerW - nodeW) / (cols.length - 1);
+    nodes.forEach(n => { n.x0 = G.mL + n.col * step; n.x1 = n.x0 + nodeW; });
+    let ky = Infinity;
+    YEARS.forEach(y => cols.forEach(c => {
+      const nz = c.ids.filter(id => byId.get(id).v[y] > 0);
+      const sum = nz.reduce((a, id) => a + byId.get(id).v[y], 0);
+      if (sum > 0) ky = Math.min(ky, (innerH - G.pad * (nz.length - 1)) / sum);
+    }));
+    return { view, spec, cols, G, step, nodeW, ky, nodes, links, byId };
+  }
+
+  function layoutYear(sc, y) {
+    const G = sc.G, pad = G.pad;
+    sc.cols.forEach(c => {
+      let yy = G.mT;
+      c.ids.forEach(id => {
+        const n = sc.byId.get(id), v = n.v[y];
+        n._v = v; n._y0 = yy;
+        if (v > 0) { n._y1 = yy + v * sc.ky; yy = n._y1 + pad; } else { n._y1 = yy; }
+      });
+    });
+    sc.links.forEach(L => { L._v = linkValue(L, y); L._w = L._v > 0 ? L._v * sc.ky : 0; });
+    sc.nodes.forEach(n => {
+      let yy = n._y0;
+      n.out.filter(L => L._v > 0).sort((a, b) => a.t._y0 - b.t._y0).forEach(L => { L._sy = yy + L._w / 2; yy += L._w; });
+      yy = n._y0;
+      n.inn.filter(L => L._v > 0).sort((a, b) => a.s._y0 - b.s._y0).forEach(L => { L._ty = yy + L._w / 2; yy += L._w; });
+    });
+    sc.links.forEach(L => { if (!(L._v > 0)) { L._sy = L.s._y0; L._ty = L.t._y0; } });
+    const lh = 30, gap = 3;
+    sc.cols.forEach(c => {
+      const list = c.ids.map(id => sc.byId.get(id)).filter(n => !n.spine && n._v > 0);
+      let prevBottom = -Infinity;
+      list.forEach(n => {
+        let top = (n._y0 + n._y1) / 2 - lh / 2;
+        if (top < prevBottom + gap) top = prevBottom + gap;
+        if (top < G.mT + 1) top = G.mT + 1;
+        n._ly = top + lh / 2; prevBottom = top + lh;
+      });
+      let nextTop = G.H + gap;
+      for (let i = list.length - 1; i >= 0; i--) {
+        const n = list[i];
+        if (n._ly + lh / 2 > nextTop - gap) n._ly = nextTop - gap - lh / 2;
+        nextTop = n._ly - lh / 2;
+      }
+    });
+    const nodes = {}, links = [];
+    sc.nodes.forEach(n => { nodes[n.id] = { y0: n._y0, y1: n._y1, ly: n._v > 0 ? n._ly : n._y0, zero: !(n._v > 0) }; });
+    sc.links.forEach((L, i) => { links[i] = { sy: L._sy, ty: L._ty, w: L._w, zero: !(L._v > 0) }; });
+    return { nodes, links };
+  }
+
+  // ---------- Render ----------
+  function render(sc) {
+    const G = sc.G;
+    svg.setAttribute('viewBox', '0 0 ' + G.W + ' ' + G.H);
+    svg.classList.toggle('drill', sc.view !== 'seg' && sc.view !== 'line');
+    while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
+    svg.classList.remove('is-dim');
+    const linkG = el('g', { class: 'links' }, svg);
+    const hitG = el('g', { class: 'hits' }, svg);
+    const nodeG = el('g', { class: 'nodes' }, svg);
+    const labelG = el('g', { class: 'labels' }, svg);
+
+    sc.cols.forEach((c, ci) => {
+      if (!c.head) return;
+      const x = G.mL + ci * sc.step + sc.nodeW / 2;
+      el('text', { class: 'colhead', x: ci === 0 ? G.mL + sc.nodeW : x, y: G.mT - 11, 'text-anchor': ci === 0 ? 'end' : 'middle' }, labelG).textContent = c.head;
+    });
+
+    sc.links.forEach(L => {
+      L.el = el('path', { class: 'link stroke-' + L.role }, linkG);
+      L.hit = el('path', { class: 'hit' }, hitG);
+      L.hit.addEventListener('pointerenter', ev => { focusLink(L); showTip(linkTip(L), ev); });
+      L.hit.addEventListener('pointermove', moveTip);
+      L.hit.addEventListener('pointerleave', () => { clearFocus(); hideTip(); });
+    });
+
+    sc.nodes.forEach(n => {
+      const grp = el('g', { class: 'node' + (n.drillTo ? ' drill' : ''), tabindex: '0', role: 'button', 'aria-label': n.full || n.name }, nodeG);
+      n.el = grp;
+      n.rect = el('rect', { class: 'fill-' + n.role, x: n.x0, width: sc.nodeW, rx: 1.5 }, grp);
+      let lab;
+      if (n.spine) {
+        const cx = n.x0 + sc.nodeW / 2;
+        lab = el('g', { class: 'label spine', 'text-anchor': 'middle' }, labelG);
+        n.tName = el('text', { class: 'name', x: cx, y: G.mT - 26 }, lab);
+        n.tVal = el('text', { class: 'val', x: cx, y: G.mT - 11 }, lab);
+      } else {
+        const onLeft = n.col === 0;
+        n.lx = onLeft ? n.x0 - 9 : n.x1 + 9;
+        lab = el('g', { class: 'label' + (n.drillTo ? ' drill' : ''), 'text-anchor': onLeft ? 'end' : 'start' }, labelG);
+        n.tName = el('text', { class: 'name', x: n.lx }, lab);
+        n.tVal = el('text', { class: 'val', x: n.lx }, lab);
+      }
+      n.tName.textContent = n.name;
+      n.lab = lab;
+      const show = ev => { focusNode(n); showTip(nodeTip(n), ev, n); };
+      [grp, lab].forEach(t => {
+        t.addEventListener('pointerenter', show);
+        t.addEventListener('pointermove', moveTip);
+        t.addEventListener('pointerleave', () => { clearFocus(); hideTip(); });
+        t.addEventListener('click', () => activate(n));
+      });
+      grp.addEventListener('focus', () => { focusNode(n); showTip(nodeTip(n), null, n); });
+      grp.addEventListener('blur', () => { clearFocus(); hideTip(); });
+      grp.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); activate(n); } });
+      if (hasSource(n)) { grp.classList.add('drill'); lab.classList.add('src-able'); }
+    });
+  }
+
+  let appliedYear = null;
+  function apply(sc, geo, y) {
+    const textChange = y !== appliedYear;
+    sc.nodes.forEach(n => {
+      const g = geo.nodes[n.id];
+      n.rect.setAttribute('y', g.y0);
+      n.rect.setAttribute('height', Math.max(g.y1 - g.y0, g.zero ? 0 : 1.5));
+      n.el.classList.toggle('is-zero', g.zero);
+      n.lab.classList.toggle('is-zero', g.zero);
+      n.el.setAttribute('tabindex', g.zero ? '-1' : '0');
+      if (!n.spine) { n.tName.setAttribute('y', g.ly - 2); n.tVal.setAttribute('y', g.ly + 13); }
+      if (textChange) {
+        n.tVal.textContent = fmtShort(n.v[y]) + (n.drillTo ? ' ▸' : '');
+        n.el.setAttribute('aria-label', (n.full || n.name) + ', ' + fmtM(n.v[y]) + (n.drillTo ? ', opens the segment P&L' : hasSource(n) ? ', shows the source page' : ''));
+      }
+    });
+    sc.links.forEach((L, i) => {
+      const g = geo.links[i];
+      const x0 = L.s.x1, x1 = L.t.x0, xm = (x0 + x1) / 2;
+      const d = 'M' + x0 + ',' + g.sy + 'C' + xm + ',' + g.sy + ' ' + xm + ',' + g.ty + ' ' + x1 + ',' + g.ty;
+      L.el.setAttribute('d', d); L.el.setAttribute('stroke-width', g.zero ? 0 : Math.max(g.w, 1.2));
+      L.hit.setAttribute('d', d); L.hit.setAttribute('stroke-width', g.zero ? 0 : Math.max(g.w, 16));
+      L.el.classList.toggle('is-zero', g.zero); L.hit.classList.toggle('is-zero', g.zero);
+    });
+    appliedYear = y;
+  }
+
+  // ---------- State ----------
+  const state = { view: 'seg', year: 2025 };
+  let scene = null, cur = null, raf = 0;
+
+  function setView(view) {
+    stopPlay();
+    state.view = view;
+    scene = buildScene(view);
+    render(scene);
+    appliedYear = null;
+    cur = layoutYear(scene, state.year);
+    apply(scene, cur, state.year);
+    const drill = VIEWS[view].geom === GEOM.drill;
+    $('detail-group').hidden = drill;
+    $('back').hidden = !drill;
+    ['mode-seg', 'mode-line'].forEach(id => $(id).setAttribute('aria-pressed', String($(id).dataset.mode === view)));
+    $('chart-sub').textContent = drill ? SUB.drill : SUB[view];
+    updateText();
+    if (!drill) { try { localStorage.setItem('disney-sankey-mode', view); } catch (e) { /* storage unavailable */ } }
+  }
+
+  function setYear(y, animate) {
+    state.year = y;
+    $('year').value = String(YEARS.indexOf(y));
+    $('year').setAttribute('aria-valuetext', 'FY' + y);
+    document.querySelectorAll('.ticks button').forEach(b => b.setAttribute('aria-current', String(+b.dataset.y === y)));
+    updateText();
+    const to = layoutYear(scene, y);
+    cancelAnimationFrame(raf);
+    if (!animate || reduced || !cur) { cur = to; apply(scene, cur, y); return; }
+    const from = cur, start = performance.now(), dur = 700;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const frame = now => {
+      const t = Math.min(1, (now - start) / dur);
+      const e = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const g = { nodes: {}, links: [] };
+      for (const id in to.nodes) { const a = from.nodes[id], b = to.nodes[id]; g.nodes[id] = { y0: lerp(a.y0, b.y0, e), y1: lerp(a.y1, b.y1, e), ly: lerp(a.ly, b.ly, e), zero: b.zero }; }
+      to.links.forEach((b, i) => { const a = from.links[i]; g.links[i] = { sy: lerp(a.sy, b.sy, e), ty: lerp(a.ty, b.ty, e), w: lerp(a.w, b.w, e), zero: b.zero }; });
+      apply(scene, g, y);
+      if (t < 1) raf = requestAnimationFrame(frame); else { cur = to; apply(scene, cur, y); }
+    };
+    raf = requestAnimationFrame(frame);
+  }
+
+  function updateText() {
+    const y = state.year, p = YEARS[YEARS.indexOf(y) - 1];
+    const N = NODES;
+    $('h-fy').textContent = 'fiscal year ended ' + FY_END[y];
+    $('h-rev').textContent = fmtBn(N.total.v[y]);
+    $('h-ni').textContent = fmtBn(N.dis.v[y]);
+    const fig = (id, val, prev, money) => {
+      $(id).textContent = money ? fmtShort(val) : '$' + val.toFixed(2);
+      const d = $(id + '-d');
+      if (prev == null) { d.textContent = 'base year'; d.className = 'd'; return; }
+      const up = val >= prev;
+      d.textContent = pct(val, prev) + ' vs FY' + p;
+      d.className = 'd ' + (up ? 'up' : 'down');
+    };
+    fig('f-rev', N.total.v[y], p ? N.total.v[p] : null, true);
+    fig('f-ptx', N.ptx.v[y], p ? N.ptx.v[p] : null, true);
+    fig('f-dis', N.dis.v[y], p ? N.dis.v[p] : null, true);
+    fig('f-eps', EPS[y], p ? EPS[p] : null, false);
+    const spec = VIEWS[state.view];
+    $('chart-title').textContent = 'FY' + y + ' ' + spec.title;
+    $('year-note').textContent = (YEAR_NOTE[state.view] || YEAR_NOTE.consol)[y];
+    svgTitle.textContent = 'Sankey diagram of Disney’s FY' + y + ' ' + spec.title;
+  }
+
+  // ---------- Hover / focus ----------
+  function focusNode(n) {
+    svg.classList.add('is-dim');
+    n.el.classList.add('on'); n.lab.classList.add('on');
+    n.out.concat(n.inn).forEach(L => { L.el.classList.add('on'); L.s.el.classList.add('on'); L.t.el.classList.add('on'); L.s.lab.classList.add('on'); L.t.lab.classList.add('on'); });
+  }
+  function focusLink(L) {
+    svg.classList.add('is-dim');
+    L.el.classList.add('on'); L.s.el.classList.add('on'); L.t.el.classList.add('on'); L.s.lab.classList.add('on'); L.t.lab.classList.add('on');
+  }
+  function clearFocus() {
+    svg.classList.remove('is-dim');
+    svg.querySelectorAll('.on').forEach(e => e.classList.remove('on'));
+  }
+
+  function swatch(role) { return '<i style="background:var(--' + role + ')"></i>'; }
+  function baseLabel() { return VIEWS[state.view].base === 'total' ? 'of total revenues' : 'of segment revenue'; }
+  function nodeTip(n) {
+    const y = state.year, p = YEARS[YEARS.indexOf(y) - 1];
+    const base = NODES[VIEWS[state.view].base].v[y];
+    let h = '<div class="t">' + swatch(n.role) + (n.full || n.name) + '</div><div class="big">' + fmtM(n.v[y]) + (n.id === 'tax' ? ' benefit' : '') + '</div>';
+    if (p != null) {
+      const pv = n.v[p];
+      if (n.id === 'tax') h += '<div class="row">FY' + p + ': $' + NODES.taxexp.v[p].toLocaleString('en-US') + 'M expense</div>';
+      else if (pv > 0 && n.v[y] > 0) {
+        const up = n.v[y] >= pv, good = n.role === 'cost' ? !up : up;
+        h += '<div class="row">FY' + p + ': ' + fmtM(pv) + ' · <span class="' + (good ? 'up' : 'down') + '">' + pct(n.v[y], pv) + '</span></div>';
+      } else if (pv === 0 && n.v[y] > 0) h += '<div class="row">FY' + p + ': none</div>';
+    } else h += '<div class="row">FY2023 is the first year shown</div>';
+    if (n.id !== VIEWS[state.view].base && n.v[y] > 0) h += '<div class="row">' + (n.v[y] / base * 100).toFixed(1) + '% ' + baseLabel() + '</div>';
+    const note = noteFor(n, y);
+    if (note) h += '<div class="note">' + note + '</div>';
+    if (n.drillTo) h += '<div class="act">Click to open the ' + n.name + ' P&L ▸</div><div class="note">Source: ' + srcShort(n, y) + ' · open the P&L and click the revenue block to see the page</div>';
+    else if (hasSource(n)) h += '<div class="act">Click to see the source: ' + srcShort(n, y) + ' ⌕</div>';
+    return h;
+  }
+  function linkTip(L) {
+    const y = state.year, v = linkValue(L, y), base = NODES[VIEWS[state.view].base].v[y];
+    return '<div class="t">' + swatch(L.role) + L.s.name + ' → ' + L.t.name + '</div><div class="big">' + fmtM(v) + '</div>' +
+      '<div class="row">' + (v / base * 100).toFixed(1) + '% ' + baseLabel() + '</div>';
+  }
+
+  let tipShown = false;
+  function showTip(html, ev, n) {
+    tip.innerHTML = html; tip.hidden = false; tipShown = true;
+    if (ev) moveTip(ev); else if (n) placeAt(nodePoint(n));
+  }
+  function hideTip() { tip.hidden = true; tipShown = false; }
+  function nodePoint(n) {
+    const r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+    const sx = r.width / vb.width, sy = r.height / vb.height;
+    const g = cur.nodes[n.id];
+    return { x: r.left + n.x1 * sx, y: r.top + ((g.y0 + g.y1) / 2) * sy };
+  }
+  function moveTip(ev) { if (tipShown) placeAt({ x: ev.clientX, y: ev.clientY }); }
+  function placeAt(p) {
+    const wr = wrap.getBoundingClientRect();
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = p.x - wr.left + 16, y = p.y - wr.top + 14;
+    if (x + tw > wr.width - 8) x = p.x - wr.left - tw - 16;
+    if (x < 8) x = 8;
+    if (y + th > wr.height - 8) y = p.y - wr.top - th - 14;
+    if (y < 8) y = 8;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  document.addEventListener('pointerdown', ev => { if (!svg.contains(ev.target)) { clearFocus(); hideTip(); } });
+
+  // ---------- Source panel: the report page with the figure highlighted ----------
+  function srcEntries(n, y) { const s = SOURCES.src[n.id]; return s && s[y] ? s[y] : null; }
+  function hasSource(n) { return !!SOURCES.src[n.id]; }
+  function srcShort(n, y) {
+    const e = srcEntries(n, y);
+    if (!e) return 'not available for FY' + y;
+    const f = e[0];
+    return f.page ? SOURCES.pages[f.page].short : 'FY2024 earnings release';
+  }
+  function activate(n) {
+    if (n.drillTo) { setView(n.drillTo); return; }
+    if (hasSource(n)) openSource(n);
+  }
+  let srcState = { node: null, year: null, idx: 0, zoom: window.innerWidth < 640 ? 3.2 : 1.4, opener: null };
+  function openSource(n) {
+    const y = state.year, entries = srcEntries(n, y);
+    srcState = { node: n, year: y, idx: 0, zoom: srcState.zoom, opener: n.el };
+    hideTip(); clearFocus();
+    $('src-title').textContent = n.full || n.name;
+    $('src-amt').textContent = 'FY' + y + ' · ' + fmtM(n.v[y]) + (n.id === 'tax' ? ' benefit' : '');
+    $('src-backdrop').hidden = false; $('src').hidden = false;
+    document.body.style.overflow = 'hidden';
+    if (!entries) {
+      showExt('No source entry for this block in FY' + y + '.', null);
+    } else {
+      const alts = $('src-alts'); alts.innerHTML = '';
+      entries.forEach((e, i) => {
+        const b = document.createElement('button'); b.type = 'button';
+        b.textContent = e.page ? SOURCES.pages[e.page].short : 'FY2024 release';
+        b.setAttribute('aria-pressed', String(i === 0));
+        b.addEventListener('click', () => { srcState.idx = i; alts.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', String(j === i))); showEntry(); });
+        alts.appendChild(b);
+      });
+      showEntry();
+    }
+    $('src-close').focus();
+  }
+  function showEntry() {
+    const entries = srcEntries(srcState.node, srcState.year), e = entries[srcState.idx];
+    if (!e.page) { showExt(e.what, e.ext); return; }
+    const pg = SOURCES.pages[e.page];
+    $('src-ext').hidden = true; $('src-view').hidden = false; $('src-tools').hidden = false;
+    $('src-cite').innerHTML = '<b>' + SOURCES.report + ', p. ' + pg.printed + '</b> (PDF page ' + e.page + ') — ' + pg.label;
+    $('src-where').textContent = e.what;
+    const page = $('src-page'), img = $('src-img');
+    page.querySelectorAll('.hl').forEach(h => h.remove());
+    if (img.getAttribute('src') !== pg.file) { img.src = pg.file; img.alt = 'Page ' + pg.printed + ' of the ' + SOURCES.report; }
+    e.rects.forEach(r => {
+      const h = document.createElement('div'); h.className = 'hl';
+      h.style.left = (r[0] * 100) + '%'; h.style.top = (r[1] * 100) + '%'; h.style.width = (r[2] * 100) + '%'; h.style.height = (r[3] * 100) + '%';
+      page.appendChild(h);
+    });
+    applyZoom();
+  }
+  function showExt(text, href) {
+    $('src-view').hidden = true; $('src-tools').hidden = true; $('src-cite').textContent = 'Outside the 2025 Annual Report'; $('src-where').textContent = '';
+    const ext = $('src-ext'); ext.hidden = false;
+    ext.innerHTML = '<div class="box">' + text + '</div>' + (href ? '<div>Open the document: <a href="' + href + '" target="_blank" rel="noopener">fiscal 2024 fourth-quarter earnings release (PDF)</a>. The figure sits in the Entertainment table\u2019s prior-year column for the twelve months ended September 30, 2023.</div>' : '');
+  }
+  function applyZoom() {
+    const view = $('src-view'), page = $('src-page');
+    const z = srcState.zoom, avail = view.clientWidth - 32;
+    page.style.width = Math.round(avail * z) + 'px';
+    document.querySelectorAll('#src .src-tools [data-z]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.z === z)));
+    requestAnimationFrame(centerHighlight);
+  }
+  function centerHighlight() {
+    const view = $('src-view'), hls = view.querySelectorAll('.hl');
+    if (!hls.length) return;
+    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+    hls.forEach(h => { l = Math.min(l, h.offsetLeft); t = Math.min(t, h.offsetTop); r = Math.max(r, h.offsetLeft + h.offsetWidth); b = Math.max(b, h.offsetTop + h.offsetHeight); });
+    // Scroll just far enough that the figure is in view, keeping the row label on the left visible when it fits.
+    const left = Math.max(0, Math.min(l + 16 - 24, r + 16 + 32 - view.clientWidth));
+    view.scrollTo({ left: left, top: (t + b) / 2 + 16 - view.clientHeight / 2, behavior: 'auto' });
+  }
+  $('src-img').addEventListener('load', centerHighlight);
+  document.querySelectorAll('#src .src-tools [data-z]').forEach(b => b.addEventListener('click', () => { srcState.zoom = +b.dataset.z; applyZoom(); }));
+  function closeSource() {
+    if ($('src').hidden) return;
+    $('src').hidden = true; $('src-backdrop').hidden = true; document.body.style.overflow = '';
+    if (srcState.opener) { try { srcState.opener.focus({ preventScroll: true }); } catch (e) { /* ignore */ } }
+  }
+  $('src-close').addEventListener('click', closeSource);
+  $('src-backdrop').addEventListener('click', closeSource);
+  window.addEventListener('resize', () => { if (!$('src').hidden) applyZoom(); });
+
+  // ---------- Controls ----------
+  ['mode-seg', 'mode-line'].forEach(id => $(id).addEventListener('click', () => setView($(id).dataset.mode)));
+  $('back').addEventListener('click', () => { let m = 'seg'; try { m = localStorage.getItem('disney-sankey-mode') === 'line' ? 'line' : 'seg'; } catch (e) { /* ignore */ } setView(m); });
+  document.addEventListener('keydown', ev => { if (ev.key !== 'Escape') return; if (!$('src').hidden) { closeSource(); return; } if (!$('back').hidden) setView('seg'); });
+  $('year').addEventListener('input', () => { stopPlay(); setYear(YEARS[+$('year').value], true); });
+  document.querySelectorAll('.ticks button').forEach(b => b.addEventListener('click', () => { stopPlay(); setYear(+b.dataset.y, true); }));
+
+  let playing = false, timer = 0;
+  function stopPlay() { playing = false; clearTimeout(timer); $('play').setAttribute('aria-pressed', 'false'); $('play').textContent = '▶ Play FY23→25'; }
+  $('play').addEventListener('click', () => {
+    if (playing) { stopPlay(); return; }
+    playing = true; $('play').setAttribute('aria-pressed', 'true'); $('play').textContent = '■ Stop';
+    let i = state.year === 2025 ? 0 : YEARS.indexOf(state.year) + 1;
+    const stepFn = () => {
+      if (!playing) return;
+      setYear(YEARS[i], true);
+      if (i >= YEARS.length - 1) { timer = setTimeout(stopPlay, 900); return; }
+      i++; timer = setTimeout(stepFn, 1700);
+    };
+    stepFn();
+  });
+
+  let initial = 'seg';
+  try { const saved = localStorage.getItem('disney-sankey-mode'); if (saved === 'line' || saved === 'seg') initial = saved; } catch (e) { /* ignore */ }
+  setView(initial);
+})();
+</script>
+
+</body>
+</html>
