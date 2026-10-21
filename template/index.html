@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Disney's income statement FY{{Y0}}–FY{{YN}} drawn as an interactive Sankey diagram: year scrubber, segment P&L drill-downs, and every figure linked to its highlighted source page in the Form 10-K.">
+<meta property="og:title" content="Disney FY{{YN}} P&L Sankey">
+<meta property="og:description" content="How $94.4 billion of revenue became $12.4 billion of net income — an interactive flow of Disney's income statement, with every figure traced to its page in the 10-K.">
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Disney FY{{YN}} P&L Sankey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one reading column (max 1200px); the flow diagram is the hero and scrolls sideways on phones; year scrubber and view controls in one toolbar row; notes in a wrapping grid; tables collapsed below. */
+  :root {
+    --bg: #f3f4f7;
+    --surface: #fdfdfe;
+    --surface-2: #f7f8fa;
+    --fg: #14171c;
+    --fg-2: #4b525d;
+    --muted: #7a8290;
+    --line: #e1e4ea;
+    --rev: #2a78d6;
+    --profit: #008300;
+    --cost: #e34948;
+    --inflow: #6250d6;
+    --neutral: #7c8491;
+    --good-text: #006300;
+    --link-a: 0.42;
+    --link-dim: 0.08;
+    --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1114; --surface: #181b20; --surface-2: #1e2228; --fg: #eef0f3; --fg-2: #b7bcc6; --muted: #868d99; --line: #2a2f37;
+      --rev: #3987e5; --profit: #008300; --cost: #e66767; --inflow: #9085e9; --neutral: #8a919c; --good-text: #0ca30c;
+      --link-a: 0.55; --link-dim: 0.1;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1114; --surface: #181b20; --surface-2: #1e2228; --fg: #eef0f3; --fg-2: #b7bcc6; --muted: #868d99; --line: #2a2f37;
+    --rev: #3987e5; --profit: #008300; --cost: #e66767; --inflow: #9085e9; --neutral: #8a919c; --good-text: #0ca30c;
+    --link-a: 0.55; --link-dim: 0.1;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1200px; margin: 0 auto; padding-block: 40px 56px; padding-inline: 20px; display: grid; gap: 28px; }
+  .page > * { min-width: 0; }
+  .tables > * { min-width: 0; }
+
+  header { display: grid; gap: 10px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.12; margin: 0; letter-spacing: -0.015em; text-wrap: balance; max-width: 22ch; }
+  .lede { margin: 0; max-width: 68ch; color: var(--fg-2); }
+
+  .figures { display: flex; flex-wrap: wrap; gap: 12px 36px; padding-block: 6px; }
+  .figure { display: grid; gap: 2px; }
+  .figure .k { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; }
+  .figure .v { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.1; }
+  .figure .d { font-size: 13px; color: var(--fg-2); min-height: 1.4em; }
+  .figure .d.up { color: var(--good-text); font-weight: 500; }
+  .figure .d.down { color: var(--cost); font-weight: 500; }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 3px; gap: 2px; }
+  .seg button, .btn { font: inherit; font-size: 13px; font-weight: 500; color: var(--fg-2); background: transparent; border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+  .seg button:focus-visible, .btn:focus-visible, .ticks button:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; }
+  .btn { border: 1px solid var(--line); background: var(--surface); }
+  .btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+  .structure { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .share { display: grid; gap: 2px; font-size: 12px; color: var(--fg-2); }
+  .share output { font-weight: 600; color: var(--fg); }
+  .share input[type="range"] { width: 180px; margin: 0; accent-color: var(--inflow); cursor: pointer; }
+  .share input[type="range"]:focus-visible { outline: 2px solid var(--rev); outline-offset: 4px; border-radius: 4px; }
+  .pf-note { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 4px; padding: 6px 10px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); font-size: 13px; color: var(--fg-2); }
+  .pf-note b { color: var(--inflow); font-weight: 600; white-space: nowrap; flex: none; }
+  .pf-note > span:not(.pf-note) { flex: 1 1 40ch; min-width: 0; }
+  .pf-note button { font: inherit; font-size: 12.5px; color: var(--rev); background: none; border: 0; padding: 0; cursor: pointer; font-weight: 500; }
+  .pf-note button:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; border-radius: 3px; }
+  .years { display: flex; align-items: center; gap: 12px; }
+  .yr-track { display: grid; gap: 2px; width: 200px; }
+  .yr-track input[type="range"] { width: 100%; margin: 0; accent-color: var(--fg); cursor: pointer; }
+  .yr-track input[type="range"]:focus-visible { outline: 2px solid var(--rev); outline-offset: 4px; border-radius: 4px; }
+  .ticks { display: flex; justify-content: space-between; }
+  .ticks button { font: inherit; font-size: 12px; font-weight: 500; color: var(--muted); background: none; border: 0; padding: 2px 0; cursor: pointer; border-radius: 4px; }
+  .ticks button[aria-current="true"] { color: var(--fg); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--fg-2); margin-left: auto; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 18px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .chart-wrap { position: relative; padding: 18px 8px 10px; }
+  .chart-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px; padding: 0 12px 4px; font-size: 13px; color: var(--muted); }
+  .chart-head b { color: var(--fg-2); font-weight: 600; }
+  .year-note { margin: 0; padding: 0 12px 10px; font-size: 14px; color: var(--fg-2); max-width: 90ch; }
+  .chart-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+  svg.sankey { display: block; width: 100%; min-width: 1000px; height: auto; font-family: var(--font-body); }
+  svg.sankey.drill { min-width: 820px; }
+  .scroll-hint { display: none; padding: 8px 12px 2px; font-size: 12px; color: var(--muted); }
+  .re-strip { margin: 14px 12px 6px; padding: 14px 16px 10px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+  .re-head { font-size: 13px; color: var(--muted); }
+  .re-head b { color: var(--fg-2); font-weight: 600; }
+  .re-row { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; }
+  .re-cell { font: inherit; text-align: left; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer; display: grid; gap: 2px; min-width: 150px; color: var(--fg); }
+  .re-cell:hover { border-color: var(--rev); }
+  .re-cell:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; }
+  .re-cell .k { font-size: 11.5px; color: var(--muted); letter-spacing: 0.03em; text-transform: uppercase; }
+  .re-cell .v { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .re-cell .v.neg { color: var(--cost); } .re-cell .v.pos { color: var(--good-text); }
+  .re-op { align-self: center; font-size: 18px; color: var(--muted); padding: 0 2px; }
+  .re-note { margin: 2px 0 0; font-size: 13px; color: var(--fg-2); max-width: 100ch; }
+  @media (max-width: 1040px) { .scroll-hint { display: block; } }
+
+  .node rect { stroke: none; }
+  .node { cursor: default; outline: none; }
+  .node.drill, .label.drill { cursor: pointer; }
+  .node:focus-visible rect { stroke: var(--fg); stroke-width: 2px; }
+  .link { fill: none; opacity: var(--link-a); }
+  .hit { fill: none; stroke: transparent; cursor: default; }
+  .label .name { font-size: 13px; font-weight: 600; fill: var(--fg); paint-order: stroke; stroke: var(--surface); stroke-width: 3.5px; stroke-linejoin: round; }
+  .label .val { font-size: 12px; fill: var(--fg-2); paint-order: stroke; stroke: var(--surface); stroke-width: 3.5px; stroke-linejoin: round; font-variant-numeric: tabular-nums; }
+  .label.drill .val { fill: var(--rev); font-weight: 500; }
+  .label.compact .name { font-size: 12.5px; }
+  .label.compact .val { font-size: 12px; font-weight: 400; fill: var(--fg-2); stroke: none; }
+  .colhead { font-size: 11px; fill: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+  .is-zero { opacity: 0 !important; pointer-events: none; }
+  .is-dim .link { opacity: var(--link-dim); }
+  .is-dim .link.on { opacity: 0.85; }
+  .is-dim .node rect { opacity: 0.3; }
+  .is-dim .node.on rect { opacity: 1; }
+  .is-dim .label { opacity: 0.35; }
+  .is-dim .label.on { opacity: 1; }
+  .fill-rev { fill: var(--rev); } .fill-profit { fill: var(--profit); } .fill-cost { fill: var(--cost); } .fill-inflow { fill: var(--inflow); } .fill-neutral { fill: var(--neutral); }
+  .stroke-rev { stroke: var(--rev); } .stroke-profit { stroke: var(--profit); } .stroke-cost { stroke: var(--cost); } .stroke-inflow { stroke: var(--inflow); } .stroke-neutral { stroke: var(--neutral); }
+  @media (prefers-reduced-motion: no-preference) { .link, .node, .node rect, .label { transition: opacity 240ms ease; } }
+
+  .tip { position: absolute; z-index: 5; pointer-events: none; min-width: 200px; max-width: 300px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.14); padding: 10px 12px; font-size: 13px; line-height: 1.4; }
+  .tip[hidden] { display: none; }
+  .tip .t { font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .tip .t i { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+  .tip .big { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.2; margin-top: 2px; }
+  .tip .row { color: var(--fg-2); font-variant-numeric: tabular-nums; }
+  .tip .note { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); color: var(--fg-2); font-size: 12.5px; }
+  .tip .act { margin-top: 6px; color: var(--rev); font-weight: 500; font-size: 12.5px; }
+  .tip .up { color: var(--good-text); font-weight: 500; } .tip .down { color: var(--cost); font-weight: 500; }
+
+  .notes-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: -14px; }
+  .notes-head h2 { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+  .notes-head span { font-size: 13px; color: var(--muted); }
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .note { padding: 18px 20px; display: grid; gap: 6px; align-content: start; }
+  .note h3 { margin: 0; font-family: var(--font-display); font-size: 17px; font-weight: 700; line-height: 1.25; text-wrap: balance; }
+  .note p { margin: 0; color: var(--fg-2); font-size: 14px; }
+  .note .tag { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+
+  details.tbl { padding: 0 20px; }
+  details.tbl summary { cursor: pointer; padding: 16px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  details.tbl summary::-webkit-details-marker { display: none; }
+  details.tbl summary::after { content: "Show"; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  details.tbl[open] summary::after { content: "Hide"; }
+  details.tbl summary:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; border-radius: 4px; }
+  .tables { display: grid; gap: 28px; padding-bottom: 20px; }
+  .tables h4 { margin: 0 0 8px; font-size: 13px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+  .tscroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 14px; }
+  th, td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  th { font-weight: 500; color: var(--muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  th:first-child, td:first-child { text-align: left; white-space: normal; min-width: 220px; }
+  tr.sum td { font-weight: 600; }
+  tr.derived td:first-child::after { content: " †"; color: var(--muted); }
+  tr.sub td:first-child { padding-left: 24px; color: var(--fg-2); }
+  td.neg { color: var(--cost); } td.pos { color: var(--good-text); }
+  .tfoot { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+
+  /* Source drawer: the report page with the figure highlighted */
+  .src-backdrop { position: fixed; inset: 0; background: rgba(10,12,16,0.45); z-index: 40; }
+  .src { position: fixed; top: 0; right: 0; bottom: 0; width: min(880px, 100vw); background: var(--surface); color: var(--fg); z-index: 41; display: grid; grid-template-rows: auto 1fr; box-shadow: -12px 0 40px rgba(0,0,0,0.25); padding-top: env(safe-area-inset-top, 0px); }
+  .src-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+  .src-head .row1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .src-head .eyebrow { margin: 0; }
+  .src-head h2 { margin: 0; font-family: var(--font-display); font-size: 20px; font-weight: 700; line-height: 1.2; }
+  .src-head .amt { font-size: 14px; color: var(--fg-2); }
+  .src-head .cite { font-size: 13.5px; color: var(--fg-2); max-width: 80ch; }
+  .src-head .cite b { color: var(--fg); font-weight: 600; }
+  .src-head .where { font-size: 13px; color: var(--muted); max-width: 80ch; }
+  .src-details { display: grid; gap: 6px; padding-top: 6px; }
+  .src-details .lbl { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  .src-detail-list { display: flex; flex-wrap: wrap; gap: 6px; max-height: 200px; overflow-y: auto; }
+  .src-detail { font: inherit; font-size: 12.5px; text-align: left; color: var(--fg-2); background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; cursor: pointer; line-height: 1.3; max-width: 100%; }
+  .src-detail b { color: var(--fg); font-weight: 600; }
+  .src-detail .pg { color: var(--rev); font-weight: 500; white-space: nowrap; }
+  .src-detail[aria-pressed="true"] { border-color: var(--rev); background: var(--surface); box-shadow: inset 0 0 0 1px var(--rev); }
+  .src-detail:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; }
+  .src-detail.note { cursor: default; background: transparent; border-style: dashed; }
+  .src-tools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding-top: 4px; }
+  .src-tools .seg { padding: 2px; }
+  .src-tools .seg button { padding: 4px 10px; font-size: 12.5px; }
+  .src-tools .lbl { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  .src-close { font: inherit; font-size: 13px; font-weight: 500; color: var(--fg-2); background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; cursor: pointer; flex: none; }
+  .src-close:focus-visible { outline: 2px solid var(--rev); outline-offset: 2px; }
+  .src-view { overflow: auto; background: #d9dce2; padding: 16px; }
+  :root[data-theme="dark"] .src-view { background: #0a0b0d; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .src-view { background: #0a0b0d; } }
+  .src-page { position: relative; aspect-ratio: 1238 / 1613; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.25); margin: 0 auto; }
+  .src-page img { display: block; width: 100%; height: 100%; }
+  .src-page .hl { position: absolute; border: 2px solid #e8731a; background: rgba(255, 214, 0, 0.38); border-radius: 3px; box-shadow: 0 0 0 6px rgba(255, 214, 0, 0.18); }
+  @media (prefers-reduced-motion: no-preference) { .src-page .hl { animation: hlpulse 1.6s ease-in-out 3; } }
+  @keyframes hlpulse { 0%, 100% { box-shadow: 0 0 0 6px rgba(255, 214, 0, 0.18); } 50% { box-shadow: 0 0 0 14px rgba(255, 214, 0, 0.0); } }
+  .src-ext { padding: 24px 20px; display: grid; gap: 12px; align-content: start; font-size: 14px; color: var(--fg-2); }
+  .src-ext a { color: var(--rev); font-weight: 500; }
+  .src-ext .box { border: 1px dashed var(--line); border-radius: 8px; padding: 14px 16px; }
+
+  footer { font-size: 13px; color: var(--muted); max-width: 80ch; }
+  footer p { margin: 0 0 6px; }
+  @media (max-width: 600px) {
+    .page { padding-block: 28px 40px; padding-inline: 16px; gap: 22px; }
+    .figure .v { font-size: 22px; }
+    .legend { margin-left: 0; }
+  }
+</style>
+
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">The Walt Disney Company · Form 10-K · <span id="h-fy">fiscal year ended {{FY_END}}</span></div>
+    <h1>How <span id="h-rev">$94.4 billion</span> of revenue became <span id="h-ni">$12.4 billion</span> of net income</h1>
+    <p class="lede">Disney's consolidated income statement drawn as a flow, for fiscal {{Y0}} through {{YN}}. Band width is proportional to dollars on one scale across all {{NYEARS_WORD}} years. Scrub the year to watch the bands move, hover any band for the exact figure, click a block to see the page of the Form 10-K it comes from with the number highlighted, and click a segment block to open that segment's own P&amp;L.</p>
+    <div class="figures" aria-label="Key figures">
+      <div class="figure"><span class="k">Total revenues</span><span class="v" id="f-rev">$94.4B</span><span class="d" id="f-rev-d"></span></div>
+      <div class="figure"><span class="k">Income before taxes</span><span class="v" id="f-ptx">$12.0B</span><span class="d" id="f-ptx-d"></span></div>
+      <div class="figure"><span class="k">Net income to Disney</span><span class="v" id="f-dis">$12.4B</span><span class="d" id="f-dis-d"></span></div>
+      <div class="figure"><span class="k">Diluted EPS</span><span class="v" id="f-eps">$6.85</span><span class="d" id="f-eps-d"></span></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="Revenue detail level" id="detail-group">
+      <button type="button" id="mode-seg" data-mode="seg" aria-pressed="true">By segment</button>
+      <button type="button" id="mode-line" data-mode="line" aria-pressed="false">By business line</button>
+      <button type="button" id="mode-soi" data-mode="soi" aria-pressed="false">Segment operating income</button>
+      <button type="button" id="mode-biz" data-mode="biz" aria-pressed="false">Line profitability</button>
+      <button type="button" id="mode-cash" data-mode="cash" aria-pressed="false">Cash &amp; investment</button>
+    </div>
+    <div class="structure" id="structure-group">
+      <div class="seg" role="group" aria-label="Segment structure">
+        <button type="button" id="pf-off" aria-pressed="true">As reported</button>
+        <button type="button" id="pf-on" aria-pressed="false" title="Consumer Products licensing shown in Entertainment, as Disney will report from Q1 FY2027">FY2027 structure</button>
+      </div>
+      <div class="share" id="share-wrap" hidden>
+        <label for="share">Share of Consumer Products OI that moves: <output id="share-out" for="share">90%</output></label>
+        <input type="range" id="share" min="50" max="100" step="5" value="90">
+      </div>
+    </div>
+    <button type="button" class="btn" id="back" hidden>← All segments</button>
+    <div class="years">
+      <button type="button" class="btn" id="play" aria-pressed="false">▶ Play FY23→25</button>
+      <div class="yr-track">
+        <input type="range" id="year" min="0" max="{{NMAX}}" step="1" value="{{NMAX}}" aria-label="Fiscal year" aria-valuetext="FY{{YN}}">
+        <div class="ticks" aria-hidden="true">
+          {{YEAR_BUTTONS}}
+        </div>
+      </div>
+    </div>
+    <div class="legend" aria-label="Color key" id="legend">
+      <span><i style="background:var(--rev)"></i>Revenue</span>
+      <span><i style="background:var(--profit)"></i>Profit carried forward</span>
+      <span><i style="background:var(--cost)"></i>Costs &amp; expenses</span>
+      <span><i style="background:var(--inflow)"></i>Non-operating additions</span>
+      <span><i style="background:var(--neutral)"></i>Eliminations &amp; minority share</span>
+    </div>
+  </div>
+
+  <section class="card chart-wrap" aria-label="Sankey diagram of Disney's income statement">
+    <div class="chart-head"><span><b id="chart-title">FY{{YN}} income statement</b> · $ in millions</span><span id="chart-sub">Click a segment block to open its P&amp;L</span></div>
+    <p class="year-note" id="year-note"></p>
+    <div class="year-note" id="pf-note" hidden><span class="pf-note"><b>FY2027 structure (pro forma)</b><span id="pf-text"></span><button type="button" id="pf-src">Source ⌕</button></span></div>
+    <div class="chart-scroll"><svg class="sankey" id="sankey" viewBox="0 0 1240 640" role="img" aria-labelledby="sankey-title"><title id="sankey-title">Sankey diagram of Disney's FY{{YN}} income statement</title></svg></div>
+    <div class="scroll-hint">Scroll sideways to see the whole flow.</div>
+    <div class="re-strip" id="re-strip" hidden>
+      <div class="re-head"><b>Retained earnings roll-forward</b> · <span id="re-year">FY{{YN}}</span> · $ in millions · click a cell for its row in the statement of equity</div>
+      <div class="re-row" id="re-row1"></div>
+      <div class="re-row" id="re-row2"></div>
+      <p class="re-note">Retained earnings are the profits kept in the business over the years: an accounting balance, not cash on hand. The cash those profits produced is what the flow above allocates. Buybacks reduce equity through treasury stock rather than retained earnings, so the balance keeps growing even in years when Disney returns billions to shareholders.</p>
+    </div>
+    <div class="tip" id="tip" hidden role="status" aria-live="polite"></div>
+  </section>
+
+  <div class="src-backdrop" id="src-backdrop" hidden></div>
+  <aside class="src" id="src" hidden role="dialog" aria-modal="true" aria-labelledby="src-title">
+    <div class="src-head">
+      <div class="row1">
+        <div>
+          <p class="eyebrow">Source in the report</p>
+          <h2 id="src-title">Theme park admissions</h2>
+          <div class="amt" id="src-amt">FY{{YN}}</div>
+        </div>
+        <button type="button" class="src-close" id="src-close">Close ✕</button>
+      </div>
+      <div class="cite" id="src-cite"></div>
+      <div class="where" id="src-where"></div>
+      <div class="src-details" id="src-details" hidden>
+        <div class="lbl">Behind this figure, according to the report</div>
+        <div class="src-detail-list" id="src-detail-list"></div>
+      </div>
+      <div class="src-tools" id="src-tools">
+        <span class="lbl">Shown in</span>
+        <div class="seg" id="src-alts" role="group" aria-label="Source location"></div>
+        <span class="lbl">Zoom</span>
+        <div class="seg" role="group" aria-label="Zoom">
+          <button type="button" data-z="1" aria-pressed="false">Fit page</button>
+          <button type="button" data-z="1.4" aria-pressed="true">140%</button>
+          <button type="button" data-z="2.2" aria-pressed="false">220%</button>
+          <button type="button" data-z="3.2" aria-pressed="false">320%</button>
+        </div>
+      </div>
+    </div>
+    <div class="src-view" id="src-view">
+      <div class="src-page" id="src-page"><img id="src-img" alt="" src=""></div>
+    </div>
+    <div class="src-ext" id="src-ext" hidden></div>
+  </aside>
+
+  <div class="notes-head"><h2>Reading notes</h2><span>FY{{YN}} results and the {{NYEARS_WORD}}-year arc</span></div>
+<!--NOTES-->
+
+  <details class="card tbl" id="table-view">
+    <summary><!--TABLE SUMMARY--></summary>
+    <div class="tables">
+<!--TABLES-->
+    </div>
+  </details>
+
+  <footer>
+    <p>Sources: The Walt Disney Company Annual Reports (Form 10-K) for fiscal {{YEARS_DESC_LIST}} — consolidated statements of income, cash flows and equity, segment information notes (including capital expenditures by segment), revenue notes and MD&amp;A segment and liquidity tables. Each year's figures are sourced from that year's report, with later reports' comparative columns as alternates; the segment-expense categories come from the first report that disclosed them (the 2025 report, for all three of its years). Capital-expenditure blocks also list the ships and park projects the reports name, each linked to its passage. The Consumer Products reporting change is from the fiscal 2026 third-quarter earnings release (SEC Form 8-K, Exhibit 99.1). All figures in U.S. dollars, millions, as reported.</p>
+    <p>Clicking a block opens the page of the report that the figure comes from, with the figure highlighted; where a figure also appears in a later report's comparative column, that page is offered as an alternate.</p>
+    <p>Segment revenues are shown gross; intersegment fees removed in consolidation flow to their own block so the segments add up to consolidated revenue. Segment P&amp;Ls use the expense categories Disney reports for each segment; segment operating income is before corporate costs, acquisition amortization and restructuring.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Data ($ millions): generated by tools/build.py from data/values.json and data/sources.json ----------
+  const DATA = /*DATA*/{}/*END DATA*/;
+  const YEARS = DATA.years;
+  const V = (...a) => Object.fromEntries(YEARS.map((y, i) => [y, a[i] === undefined ? null : a[i]]));
+  const D = id => DATA.values[id];
+  const DL = key => DATA.links[key];
+  const FY_END = DATA.fyEnd;
+  const EPS = DATA.EPS;
+  const YEAR_NOTE = {
+    consol: {
+      2023: 'Restructuring and impairment charges of $3.9B and a $2.5B Direct-to-Consumer operating loss held income before taxes to $4.8B.',
+      2024: 'Direct-to-Consumer turned a small profit ($143M), but $3.6B of impairments (Star India $1.5B, linear-network goodwill $1.3B, retail assets $0.3B) absorbed 43% of operating income.',
+      2025: 'Impairments fell to $0.8B, operating income rose 56%, and a $1.4B Hulu-related tax benefit lifted net income above pre-tax income.'
+    },
+    ent: {
+      2023: 'Direct-to-Consumer lost $2.5B and Content Sales/Licensing lost $179M; Linear Networks\u2019 $4.1B carried the segment to $1.4B of operating income.',
+      2024: 'Programming and production costs fell $1.5B and Direct-to-Consumer reached breakeven; segment operating income nearly tripled to $3.9B.',
+      2025: 'Direct-to-Consumer earned $1.3B as subscription revenue grew 11%; Linear Networks slipped to $3.0B. Segment margin 11.0%.'
+    },
+    spo: {
+      2023: 'Segment operating income $2.5B, a 14.4% margin; programming and production costs took 72% of revenue.',
+      2024: 'Programming costs rose 5% and Star India lost $636M; segment operating income slipped to $2.4B.',
+      2025: 'Star India moved into the joint venture and ESPN domestic advertising rose 14%; operating income grew 20% to $2.9B, a 16.3% margin.'
+    },
+    cash: {
+      2023: 'Cash from operations was only $9.9B after a record $27.2B of content spend. With no dividend or buyback, Disney repaid $1.9B of debt, spent $5.0B on capex, bought the rest of BAMTech and added $2.6B to cash.',
+      2024: 'Disney drew $8.1B from its cash balance to pay NBCUniversal $8.6B for Hulu, put $1.5B into Epic Games, reinstated the dividend ($1.4B) and restarted buybacks ($3.0B).',
+      2025: 'Operating cash rose to $18.1B. Capex jumped 48% to $8.0B (cruise ships, parks expansion), debt fell by $4.7B, and $5.3B went back to shareholders through buybacks and dividends.'
+    },
+    biz: {
+      2023: 'Linear Networks\u2019 $4.1B carried Entertainment while Direct-to-Consumer lost $2.5B; Star India and ESPN International were loss-making; Consumer Products earned a 45% margin.',
+      2024: 'Direct-to-Consumer reached breakeven ($143M); Star India lost $636M ahead of the joint venture; Parks Domestic earned $5.9B at a 24.9% margin.',
+      2025: 'Every line is profitable. Margins: Consumer Products 49%, Linear Networks 32%, Parks Domestic 25%, Parks International 22%, ESPN Domestic 17%, DTC 5%, Content Sales 5%.'
+    },
+    exp: {
+      2023: 'Revenue $32.5B at a 27.5% margin; operating labor ($7.6B) is the largest cost at 23% of revenue.',
+      2024: 'Revenue grew 5% while operating labor rose 11% to $8.4B; the margin held at 27.2% as depreciation eased from its FY2023 peak.',
+      2025: 'Revenue up 6% to $36.2B with the Disney Treasure\u2019s first year of sailing; operating labor +7% to $8.9B; margin 27.6%.'
+    }
+  };
+
+  const NODES = {
+    // Business lines
+    lin: { name: 'Linear Networks', role: 'rev', v: D('lin'), note: V('Operating income $4,119M.', 'Operating income $3,452M (−16%).', 'Affiliate fees $6,348M, advertising $2,856M. Operating income $2,955M (−14%).') },
+    dtc: { name: 'Direct-to-Consumer', role: 'rev', v: D('dtc'), note: V('Operating loss of $2,496M.', 'Operating income $143M, the first profitable year.', 'Subscription fees $20,772M, advertising $3,684M. Operating income $1,327M.') },
+    csl: { name: 'Content Sales/Licensing', role: 'rev', v: D('csl'), full: 'Content Sales/Licensing and Other', note: V('Operating loss of $179M.', 'Operating income $328M.', 'TV/VOD and home entertainment $3,458M, theatrical $2,592M, other $2,438M. Operating income $392M.') },
+    saf: { name: 'Affiliate & subscription fees', role: 'rev', v: D('saf'), full: 'Sports affiliate and subscription fees', note: V(null, null, 'ESPN domestic $10,837M, ESPN international $1,076M, Star India $31M.') },
+    sad: { name: 'Sports advertising', role: 'rev', v: D('sad'), note: V(null, null, 'ESPN domestic advertising $4,273M (+14%), helped by four additional College Football Playoff games.') },
+    sot: { name: 'Sports other revenue', role: 'rev', v: D('sot'), note: 'TV/VOD distribution, sub-licensing fees and fees from Entertainment for sports programming on Disney+ and ABC.' },
+    tpa: { name: 'Theme park admissions', role: 'rev', v: D('tpa'), note: V(null, null, 'Up 5% on higher per-capita ticket revenue.') },
+    rv: { name: 'Resorts & vacations', role: 'rev', v: D('rv'), note: V(null, null, 'Hotels, Disney Vacation Club and the cruise line (Disney Treasure launched in FY2025).') },
+    mfb: { name: 'Merchandise, food & beverage', role: 'rev', v: D('mfb'), full: 'Retail and wholesale sales of merchandise, food and beverage', note: 'Sales at the parks and resorts plus Disney Store retail; the MD&A groups the retail part with merchandise licensing.' },
+    ml: { name: 'Merchandise licensing', role: 'rev', v: D('ml') },
+    plo: { name: 'Parks licensing & other', role: 'rev', v: D('plo'), note: V('Includes $4M of advertising revenue.', null, 'Sponsorship and co-branding, real estate sales and Tokyo Disney Resort royalties.') },
+    // Segments
+    ent: { name: 'Entertainment', role: 'rev', v: D('ent'), drill: 'ent', note: V('Segment operating income $1,444M. Includes $377M of intersegment revenue.', 'Segment operating income $3,923M. Includes $411M of intersegment revenue.', 'Segment operating income $4,674M (+19%). Includes $448M of intersegment revenue.') },
+    spo: { name: 'Sports', role: 'rev', v: D('spo'), drill: 'spo', note: V('Segment operating income $2,465M. Includes $1,020M of intersegment revenue.', 'Segment operating income $2,406M. Includes $1,184M of intersegment revenue.', 'Segment operating income $2,882M (+20%). Includes $1,421M of intersegment revenue, mostly fees from Hulu and the Entertainment networks.') },
+    exp: { name: 'Experiences', role: 'rev', v: D('exp'), drill: 'exp', note: V('Segment operating income $8,954M, a 27.5% margin.', 'Segment operating income $9,272M, a 27.2% margin.', 'Segment operating income $9,995M (+8%), a 27.6% margin.') },
+    // Consolidated
+    total: { name: 'Total revenues', role: 'rev', v: D('total'), note: V('Services $79,562M and products $9,336M.', 'Services $81,841M and products $9,520M.', 'Services $84,588M and products $9,837M.') },
+    elim: { name: 'Eliminations', role: 'neutral', v: D('elim'), full: 'Intersegment eliminations', note: 'Fees paid between segments (Hulu to ESPN and the linear networks; ABC and Disney+ to ESPN), removed in consolidation.' },
+    gp: { name: 'Gross profit', role: 'profit', v: D('gp'), note: 'Derived: total revenues less cost of services and cost of products. Disney does not report this line.' },
+    cos: { name: 'Cost of services', role: 'cost', v: D('cos'), note: 'Excludes depreciation and amortization. Mostly programming and production costs and operating labor.' },
+    cop: { name: 'Cost of products', role: 'cost', v: D('cop'), note: 'Excludes depreciation and amortization.' },
+    eq: { name: 'Equity income', role: 'inflow', v: D('eq'), full: 'Equity in the income of investees', note: V('A+E and other investees, including the Company’s $56M share of an A+E gain.', 'A+E and other investees.', 'A+E and other investees ($506M) less the India joint-venture loss ($202M) and related amortization.') },
+    othin: { name: 'Other income, net', role: 'inflow', v: D('othin'), full: 'Other income (expense), net', note: 'Includes a $169M gain on the DraftKings investment and a $101M charge from a legal ruling.' },
+    oi: { name: 'Operating income', role: 'profit', v: D('oi'), note: V('Derived: gross profit less SG&A, D&A and restructuring. Total segment operating income was $12,863M.', 'Derived: gross profit less SG&A, D&A and restructuring. Total segment operating income was $15,601M.', 'Derived: gross profit less SG&A, D&A and restructuring. Disney reports total segment operating income of $17,551M before corporate costs and acquisition amortization.') },
+    sga: { name: 'SG&A and other', role: 'cost', v: D('sga'), full: 'Selling, general, administrative and other' },
+    da: { name: 'Depreciation & amortization', role: 'cost', v: D('da') },
+    restr: { name: 'Restructuring & impairment', role: 'cost', v: D('restr'), note: V('Content impairments $2,577M (strategic changes to content curation, net of the A+E gain), goodwill $721M, severance $357M, equity investments $141M (2024 report, p. 33).', 'Star India $1,545M, linear-network goodwill $1,287M, retail assets $328M, content $187M, equity investments $165M, severance $83M.', 'Equity investment impairments $635M (A+E, Tata Play), Star India $143M, content $109M, less $68M of other items.') },
+    tax: { name: 'Tax benefit', role: 'inflow', v: D('tax'), full: 'Income taxes (benefit)', note: 'A benefit, not an expense: Hulu’s U.S. tax classification changed at the close of the NBCU buyout, producing a ~$3.3B non-cash benefit. Effective rate −11.9%.' },
+    ptx: { name: 'Pre-tax income', role: 'profit', v: D('ptx'), full: 'Income before income taxes', note: 'Operating income less net interest expense, plus equity income from investees and other income (expense).' },
+    int: { name: 'Interest, net', role: 'cost', v: D('int'), full: 'Interest expense, net' },
+    othout: { name: 'Other expense, net', role: 'cost', v: D('othout'), full: 'Other income (expense), net', note: 'A $65M charge related to a legal ruling.' },
+    ni: { name: 'Net income', role: 'profit', v: D('ni') },
+    taxexp: { name: 'Income taxes', role: 'cost', v: D('taxexp'), note: V('Effective tax rate 28.9%.', 'Effective tax rate 23.7%, including about 6 points from non-deductible impairments.', null) },
+    dis: { name: 'Net income to Disney', role: 'profit', v: D('dis'), full: 'Net income attributable to Disney', note: V('Diluted EPS $1.29.', 'Diluted EPS $2.72.', 'Diluted EPS $6.85 vs $2.72.') },
+    nci: { name: 'Noncontrolling interests', role: 'neutral', v: D('nci'), full: 'Net income attributable to noncontrolling interests', note: V('Mainly NBCU’s share of Hulu and other partners’ interests.', 'Mainly NBCU’s share of Hulu and other partners’ interests.', 'Includes a $0.4B incremental payment to NBCU for its share of Hulu above the guaranteed floor.') },
+    // Entertainment P&L
+    eqE: { name: 'Equity income', role: 'inflow', v: D('eqE'), full: 'Equity in the income of investees', note: 'Mostly A+E; included in segment operating income.' },
+    entR: { name: 'Entertainment revenue', role: 'rev', v: D('entR'), note: 'Gross of intersegment revenue.' },
+    entOI: { name: 'Segment operating income', role: 'profit', v: D('entOI'), note: V('Margin 3.6%.', 'Margin 9.5%.', 'Margin 11.0%.') },
+    ppc: { name: 'Programming & production', role: 'cost', v: D('ppc'), note: 'Amortization of produced and licensed content, including sports rights paid to ESPN for ABC and Disney+.' },
+    oox: { name: 'Other operating expenses', role: 'cost', v: D('oox'), note: 'Technology support, distribution costs and cost of goods sold.' },
+    esga: { name: 'SG&A and other', role: 'cost', v: D('esga') },
+    eda: { name: 'Depreciation & amortization', role: 'cost', v: D('eda') },
+    // Sports P&L
+    eqS: { name: 'Equity income', role: 'inflow', v: D('eqS'), full: 'Equity in the income of investees', note: 'Included in segment operating income.' },
+    spoR: { name: 'Sports revenue', role: 'rev', v: D('spoR'), note: 'Gross of intersegment revenue.' },
+    spoOI: { name: 'Segment operating income', role: 'profit', v: D('spoOI'), note: V('Margin 14.4%.', 'Margin 13.7%.', 'Margin 16.3%.') },
+    sppc: { name: 'Programming & production', role: 'cost', v: D('sppc'), note: 'Sports rights amortization and production; ESPN domestic $11,240M in FY2025.' },
+    sox: { name: 'Other operating expenses', role: 'cost', v: D('sox'), note: 'Technology support and distribution costs.' },
+    ssga: { name: 'SG&A and other', role: 'cost', v: D('ssga') },
+    sda: { name: 'Depreciation & amortization', role: 'cost', v: D('sda') },
+    // Experiences P&L
+    expR: { name: 'Experiences revenue', role: 'rev', v: D('expR') },
+    expOI: { name: 'Segment operating income', role: 'profit', v: D('expOI'), note: V('Margin 27.5%.', 'Margin 27.2%.', 'Margin 27.6%.') },
+    xlab: { name: 'Operating labor', role: 'cost', v: D('xlab'), note: 'Cast member wages and benefits; the largest Experiences cost.' },
+    xinf: { name: 'Infrastructure costs', role: 'cost', v: D('xinf'), note: 'Maintenance, utilities and property costs for the parks, resorts and ships.' },
+    xcogs: { name: 'Cost of goods sold & distribution', role: 'cost', v: D('xcogs'), note: 'Merchandise, food and beverage cost of sales.' },
+    xoth: { name: 'Other operating expenses', role: 'cost', v: D('xoth'), note: 'Supplies, commissions and entertainment offerings.' },
+    xsga: { name: 'SG&A and other', role: 'cost', v: D('xsga') },
+    xda: { name: 'Depreciation & amortization', role: 'cost', v: D('xda') },
+    xeql: { name: 'Equity in loss of investees', role: 'cost', v: D('xeql') },
+    // Segment operating income view (Disney's own lens)
+    oiE: { name: 'Entertainment OI', role: 'profit', v: D('oiE'), full: 'Entertainment segment operating income', note: V('Margin 3.6%.', 'Margin 9.5%.', 'Margin 11.0%.') },
+    oiS: { name: 'Sports OI', role: 'profit', v: D('oiS'), full: 'Sports segment operating income', note: V('Margin 14.4%.', 'Margin 13.7%.', 'Margin 16.3%.') },
+    oiX: { name: 'Experiences OI', role: 'profit', v: D('oiX'), full: 'Experiences segment operating income', note: V('Margin 27.5%.', 'Margin 27.2%.', 'Margin 27.6%.') },
+    cE: { name: 'Entertainment costs', role: 'cost', v: D('cE'), full: 'Entertainment segment costs and expenses', note: 'Programming and production, other operating expenses, SG&A and D&A as reported for the segment. Click Entertainment in the segment view for the split.' },
+    cS: { name: 'Sports costs', role: 'cost', v: D('cS'), full: 'Sports segment costs and expenses', note: 'Programming and production (mostly sports rights), other operating expenses, SG&A and D&A.' },
+    cX: { name: 'Experiences costs', role: 'cost', v: D('cX'), full: 'Experiences segment costs and expenses', note: 'Operating labor, infrastructure, cost of goods sold, other operating expenses, SG&A and D&A.' },
+    tsoi: { name: 'Total segment operating income', role: 'profit', v: D('tsoi'), note: 'The figure Disney reports and guides to: before corporate costs, acquisition amortization, restructuring and interest.' },
+    corp: { name: 'Corporate costs', role: 'cost', v: D('corp'), full: 'Corporate and unallocated shared expenses', note: 'Corporate functions, executive management and unallocated administrative support.' },
+    india: { name: 'India JV loss', role: 'cost', v: D('india'), full: 'Equity in the loss of India joint venture', note: 'Disney\u2019s share of the loss of the joint venture that took over Star India in November 2024.' },
+    restrS: { name: 'Restructuring & impairment', role: 'cost', v: D('restrS'), note: V('Net of the $56M A+E gain, which is why this is $56M below the $3,892M on the income statement. Mostly content impairments ($2,577M), goodwill ($721M) and severance ($357M).', 'Star India $1,545M, linear-network goodwill $1,287M, retail assets $328M, content $187M, equity investments $165M, severance $83M.', 'Equity investment impairments $635M (A+E, Tata Play), Star India $143M, content $109M, less $68M of other items.') },
+    tfcf: { name: 'TFCF/Hulu amortization', role: 'cost', v: D('tfcf'), full: 'TFCF and Hulu acquisition amortization', note: 'Amortization of intangible assets and the step-up of film and episodic costs from the 2019 Fox acquisition, plus $9M related to equity investees.' },
+    // Line profitability view: the nine businesses with disclosed operating income
+    espnD: { name: 'ESPN Domestic', role: 'rev', v: D('espnD'), note: 'Affiliate fees, advertising and other revenue of domestic ESPN networks and services.' },
+    espnI: { name: 'ESPN International', role: 'rev', v: D('espnI') },
+    star: { name: 'Star India', role: 'rev', v: D('star'), note: 'Contributed to the joint venture with Reliance in November 2024; FY2025 includes only the weeks before the close.' },
+    parksD: { name: 'Parks & Experiences Domestic', role: 'rev', v: D('parksD'), note: 'Walt Disney World, Disneyland Resort, Disney Cruise Line, Disney Vacation Club, Aulani and Adventures by Disney.' },
+    parksI: { name: 'Parks & Experiences International', role: 'rev', v: D('parksI'), note: 'Disneyland Paris, Hong Kong Disneyland, Shanghai Disney Resort and royalties from Tokyo Disney Resort.' },
+    cp: { name: 'Consumer Products', role: 'rev', v: D('cp'), full: 'Consumer Products (reported inside Experiences)', note: 'Merchandise licensing, publishing, games licensing and Disney Store retail. Much of it moves to Entertainment from Q1 FY2027.' },
+    oiLin: { name: 'Linear Networks OI', role: 'profit', v: D('oiLin'), mrev: 'lin', full: 'Linear Networks operating income', note: 'Includes equity in the income of investees, mainly A+E ($445M in FY2025).' },
+    cLin: { name: 'Linear Networks costs', role: 'cost', v: D('cLin'), full: 'Linear Networks costs, net of equity income', note: 'Derived: revenue less operating income. Shown net of the equity income Disney includes in the line\u2019s operating income.' },
+    oiDtc: { name: 'Direct-to-Consumer OI', role: 'profit', v: D('oiDtc'), mrev: 'dtc', full: 'Direct-to-Consumer operating income', note: V(null, 'First profitable year after a $2,496M loss in FY2023.', 'Up from $143M on higher pricing and subscribers.') },
+    cDtc: { name: 'Direct-to-Consumer costs', role: 'cost', v: D('cDtc'), full: 'Direct-to-Consumer costs', note: V('Costs exceeded revenue by $2,496M; the loss is drawn from the Entertainment profit pool.', 'Derived: revenue less operating income.', 'Derived: revenue less operating income.') },
+    oiCsl: { name: 'Content Sales/Licensing OI', role: 'profit', v: D('oiCsl'), mrev: 'csl', full: 'Content Sales/Licensing and Other operating income' },
+    cCsl: { name: 'Content Sales/Licensing costs', role: 'cost', v: D('cCsl'), full: 'Content Sales/Licensing and Other costs', note: V('Costs exceeded revenue by $179M; the loss is drawn from the Entertainment profit pool.', 'Derived: revenue less operating income.', 'Derived: revenue less operating income.') },
+    oiEspnD: { name: 'ESPN Domestic OI', role: 'profit', v: D('oiEspnD'), mrev: 'espnD', full: 'ESPN Domestic operating income', note: V(null, null, 'Down 8%: programming costs rose with expanded college football, including four more College Football Playoff games.') },
+    cEspnD: { name: 'ESPN Domestic costs', role: 'cost', v: D('cEspnD'), full: 'ESPN Domestic costs', note: 'Derived: revenue less operating income. Mostly sports rights.' },
+    oiEspnI: { name: 'ESPN International OI', role: 'profit', v: D('oiEspnI'), mrev: 'espnI', full: 'ESPN International operating income' },
+    cEspnI: { name: 'ESPN International costs', role: 'cost', v: D('cEspnI'), full: 'ESPN International costs', note: V('Loss of $39M drawn from the Sports profit pool.', 'Loss of $72M drawn from the Sports profit pool.', 'Derived: revenue less operating income.') },
+    oiStar: { name: 'Star India OI', role: 'profit', v: D('oiStar'), mrev: 'star', full: 'Star India operating income' },
+    cStar: { name: 'Star India costs', role: 'cost', v: D('cStar'), full: 'Star India costs', note: V('Loss of $432M drawn from the Sports profit pool.', 'Loss of $636M drawn from the Sports profit pool.', 'Only the weeks before the joint venture closed.') },
+    oiParksD: { name: 'Parks Domestic OI', role: 'profit', v: D('oiParksD'), mrev: 'parksD', full: 'Parks & Experiences Domestic operating income', note: V(null, null, 'Up 8% on higher guest spending, cruise growth (Disney Treasure) and attendance.') },
+    cParksD: { name: 'Parks Domestic costs', role: 'cost', v: D('cParksD'), full: 'Parks & Experiences Domestic costs', note: 'Derived: revenue less operating income. Operating labor is the largest component.' },
+    oiParksI: { name: 'Parks International OI', role: 'profit', v: D('oiParksI'), mrev: 'parksI', full: 'Parks & Experiences International operating income' },
+    cParksI: { name: 'Parks International costs', role: 'cost', v: D('cParksI'), full: 'Parks & Experiences International costs', note: 'Derived: revenue less operating income.' },
+    oiCp: { name: 'Consumer Products OI', role: 'profit', v: D('oiCp'), mrev: 'cp', full: 'Consumer Products operating income', note: 'The highest margin in the company: licensing royalties carry little cost.' },
+    cCp: { name: 'Consumer Products costs', role: 'cost', v: D('cCp'), full: 'Consumer Products costs', note: 'Derived: revenue less operating income. Mostly Disney Store retail, publishing and licensing SG&A.' },
+    poolE: { name: 'Entertainment OI', role: 'profit', v: D('poolE'), pool: 'E', full: 'Entertainment segment operating income', note: V('Profits of the profitable lines ($4,119M, all Linear Networks) less $2,675M of losses at DTC and Content Sales leaves $1,444M.', 'Margin 9.5%.', 'Margin 11.0%.') },
+    poolS: { name: 'Sports OI', role: 'profit', v: D('poolS'), pool: 'S', full: 'Sports segment operating income', note: V('ESPN Domestic ($2,881M) plus equity income ($55M) less losses at ESPN International ($39M) and Star India ($432M) leaves $2,465M.', 'ESPN Domestic ($3,056M) plus equity income ($58M) less losses at ESPN International ($72M) and Star India ($636M) leaves $2,406M.', 'Margin 16.3%.') },
+    poolX: { name: 'Experiences OI', role: 'profit', v: D('poolX'), pool: 'X', full: 'Experiences segment operating income', note: V('Margin 27.5%.', 'Margin 27.2%.', 'Margin 27.6%.') },
+    lossDtc: { name: 'DTC loss', role: 'cost', v: D('lossDtc'), full: 'Direct-to-Consumer operating loss', note: 'A −12.6% margin: the streaming business consumed $2.5B of the profits earned by Linear Networks.' },
+    lossCsl: { name: 'Content Sales loss', role: 'cost', v: D('lossCsl'), full: 'Content Sales/Licensing and Other operating loss' },
+    lossEspnI: { name: 'ESPN International loss', role: 'cost', v: D('lossEspnI'), full: 'ESPN International operating loss' },
+    lossStar: { name: 'Star India loss', role: 'cost', v: D('lossStar'), full: 'Star India operating loss', note: V(null, 'Includes the run-up to the Reliance joint venture that closed in November 2024.', null) },
+    // Cash & investment view (statement of cash flows, content spend and capex by segment)
+    ocbc: { name: 'Operating cash before content', role: 'rev', v: D('ocbc'), full: 'Cash from operations before content spend', note: 'Derived: cash provided by operations with the year\u2019s content spend added back. Disney deducts content spend inside operating cash flow, so this is what the business generated before investing in content.' },
+    content: { name: 'Content spend', role: 'inflow', v: D('content'), full: 'Spending on produced and licensed content', note: V('The peak year: $12.3B of produced content and $14.9B of licensed programming and rights.', 'Produced content $9.8B; licensed programming and rights $13.6B.', 'Produced content $9.8B; licensed programming and rights $12.9B, lower after Star India moved to the joint venture.') },
+    lic: { name: 'Licensed programming', role: 'inflow', v: D('lic'), full: 'Licensed programming and rights', note: 'Sports rights and licensed programming for ESPN, ABC, Disney+ and Hulu.' },
+    prod: { name: 'Produced content', role: 'inflow', v: D('prod'), note: 'Films and series produced at Disney\u2019s own studios or commissioned from third parties.' },
+    cfo: { name: 'Cash from operations', role: 'profit', v: D('cfo'), full: 'Cash provided by operations', note: V('Held down by heavy content spend and a $1.1B working-capital outflow.', 'Includes payment of FY2023 federal and California taxes deferred under winter-storm relief.', 'Up 30%: lower tax payments (FY2025 federal and California taxes deferred to October 2025 under wildfire relief) and higher cash receipts at Entertainment and Experiences.') },
+    borrow: { name: 'New borrowings', role: 'rev', v: D('borrow'), note: V(null, '$132M of borrowings plus $1,532M of net commercial paper issuance.', null) },
+    cashIn: { name: 'Cash drawn from balance', role: 'rev', v: D('cashIn'), full: 'Decrease in cash, cash equivalents and restricted cash', note: V(null, 'Cash fell from $14.2B to $6.1B, largely to fund the Hulu buyout.', 'Cash fell from $6.1B to $5.8B.') },
+    othIn: { name: 'Other inflows', role: 'rev', v: D('othIn'), note: V('Contributions from noncontrolling interests $735M, sales of investments $458M, exchange-rate impact $73M.', 'Sales of investments $105M, exchange-rate impact $65M, contributions $9M.', 'Other investing inflows $75M, contributions $12M, sales of investments $4M, exchange-rate impact $5M.') },
+    pool: { name: 'Cash available', role: 'profit', v: D('pool'), full: 'Cash available to allocate', note: 'Cash from operations plus new borrowings, cash drawn from the balance and other inflows: everything Disney had to allocate in the year.' },
+    capex: { name: 'Capital expenditures', role: 'inflow', v: D('capex'), full: 'Investments in parks, resorts and other property', note: V(null, null, 'Up 48%: cruise ship fleet expansion, theme park and resort expansion and new attractions. Disney expects about $9B in FY2026.') },
+    cxD: { name: 'Experiences Domestic', role: 'inflow', v: D('cxD'), full: 'Capital expenditures \u2014 Experiences Domestic', note: 'Walt Disney World, Disneyland Resort and Disney Cruise Line: ships, new lands and attractions.' },
+    cxI: { name: 'Experiences International', role: 'inflow', v: D('cxI'), full: 'Capital expenditures \u2014 Experiences International', note: 'Disneyland Paris, Hong Kong Disneyland and Shanghai Disney Resort.' },
+    cxE: { name: 'Entertainment', role: 'inflow', v: D('cxE'), full: 'Capital expenditures \u2014 Entertainment', note: 'Technology, broadcast centers, production facilities and television station facilities.' },
+    cxS: { name: 'Sports', role: 'inflow', v: D('cxS'), full: 'Capital expenditures \u2014 Sports' },
+    cxC: { name: 'Corporate', role: 'inflow', v: D('cxC'), full: 'Capital expenditures \u2014 Corporate', note: 'Facilities, information technology infrastructure and equipment.' },
+    debt: { name: 'Debt reduction', role: 'neutral', v: D('debt'), full: 'Reduction of borrowings and net commercial paper payments', note: V('$1,675M of borrowings repaid plus $191M of net commercial paper payments.', '$3,064M of borrowings repaid.', '$3,735M of borrowings repaid plus $943M of net commercial paper payments.') },
+    buyb: { name: 'Share repurchases', role: 'cost', v: D('buyb'), note: V(null, 'Buybacks resumed in FY2024 after being suspended since the 2019 Fox acquisition.', '32 million shares retired to treasury stock.') },
+    divs: { name: 'Dividends', role: 'cost', v: D('divs'), full: 'Dividends paid', note: V('No dividend was paid in FY2023; the dividend was reinstated in FY2024.', 'Cash dividends paid; $1,379M was charged to retained earnings.', 'Cash dividends paid; $1,820M was charged to retained earnings.') },
+    hulu: { name: 'Hulu buyout', role: 'inflow', v: D('hulu'), full: 'Acquisition of redeemable noncontrolling interests', note: V('Purchase of the remaining minority interest in BAMTech.', '$8.6B paid to NBCUniversal for its one-third interest in Hulu at the guaranteed floor value.', '$0.4B incremental payment to NBCUniversal after the appraisal of Hulu\u2019s fair value.') },
+    invest: { name: 'Investments', role: 'inflow', v: D('invest'), full: 'Purchase of investments', note: V(null, '$1.5B equity investment in Epic Games.', null) },
+    othOut: { name: 'Other outflows', role: 'neutral', v: D('othOut'), note: 'Dividends paid to noncontrolling-interest holders, taxes withheld on vested equity awards and other investing outflows.' },
+    cashOut: { name: 'Cash added to balance', role: 'neutral', v: D('cashOut'), full: 'Increase in cash, cash equivalents and restricted cash', note: 'Cash rose to $14.2B ahead of the Hulu payment due in FY2024.' }
+  };
+  // Retained earnings roll-forward (statements of equity), shown as a strip under the cash view
+  const RE = {
+    reBeg: { name: 'Retained earnings, start of year', v: D('reBeg') },
+    reNI: { name: 'Net income to Disney', v: D('reNI') },
+    reDiv: { name: 'Dividends declared', v: D('reDiv') },
+    reOth: { name: 'Other', v: D('reOth'), full: 'Distributions and other (equity-award and noncontrolling-interest adjustments)' },
+    reEnd: { name: 'Retained earnings, end of year', v: D('reEnd') },
+    tsBeg: { name: 'Treasury stock, start of year', v: D('tsBeg') },
+    tsRep: { name: 'Share repurchases', v: D('tsRep'), full: 'Common stock repurchases (added to treasury stock)' },
+    tsEnd: { name: 'Treasury stock, end of year', v: D('tsEnd') }
+  };
+
+  // Links: value spec is 's' (source node value), 't' (target node value) or a per-year object.
+  const LINKS = [
+    ['lin', 'ent', 's'], ['dtc', 'ent', 's'], ['csl', 'ent', 's'],
+    ['saf', 'spo', 's'], ['sad', 'spo', 's'], ['sot', 'spo', 's'],
+    ['tpa', 'exp', 's'], ['rv', 'exp', 's'], ['mfb', 'exp', 's'], ['ml', 'exp', 's'], ['plo', 'exp', 's'],
+    ['ent', 'total', DL('ent>total')], ['ent', 'elim', DL('ent>elim')],
+    ['spo', 'total', DL('spo>total')], ['spo', 'elim', DL('spo>elim')],
+    ['exp', 'total', 's'],
+    ['total', 'gp', 't'], ['total', 'cos', 't'], ['total', 'cop', 't'],
+    ['gp', 'oi', 't'], ['gp', 'sga', 't'], ['gp', 'da', 't'], ['gp', 'restr', 't'],
+    ['eq', 'ptx', 's'], ['othin', 'ptx', 's'], ['oi', 'ptx', DL('oi>ptx')], ['oi', 'int', 't'], ['oi', 'othout', 't'],
+    ['tax', 'ni', 's'], ['ptx', 'ni', DL('ptx>ni')], ['ptx', 'taxexp', 't'],
+    ['ni', 'dis', 't'], ['ni', 'nci', 't'],
+    // Entertainment P&L
+    ['lin', 'entR', 's'], ['dtc', 'entR', 's'], ['csl', 'entR', 's'],
+    ['eqE', 'entOI', 's'], ['entR', 'entOI', DL('entR>entOI')], ['entR', 'ppc', 't'], ['entR', 'oox', 't'], ['entR', 'esga', 't'], ['entR', 'eda', 't'],
+    // Sports P&L
+    ['saf', 'spoR', 's'], ['sad', 'spoR', 's'], ['sot', 'spoR', 's'],
+    ['eqS', 'spoOI', 's'], ['spoR', 'spoOI', DL('spoR>spoOI')], ['spoR', 'sppc', 't'], ['spoR', 'sox', 't'], ['spoR', 'ssga', 't'], ['spoR', 'sda', 't'],
+    // Experiences P&L
+    ['tpa', 'expR', 's'], ['rv', 'expR', 's'], ['mfb', 'expR', 's'], ['ml', 'expR', 's'], ['plo', 'expR', 's'],
+    ['expR', 'expOI', 't'], ['expR', 'xlab', 't'], ['expR', 'xinf', 't'], ['expR', 'xcogs', 't'], ['expR', 'xoth', 't'], ['expR', 'xsga', 't'], ['expR', 'xda', 't'], ['expR', 'xeql', 't'],
+    // FY2027 structure: merchandise licensing reroutes to Entertainment (zero as reported)
+    ['ml', 'ent', DL('ml>ent')],
+    // Segment operating income view
+    ['eqE', 'oiE', 's'], ['ent', 'oiE', DL('ent>oiE')], ['ent', 'cE', 't'],
+    ['eqS', 'oiS', 's'], ['spo', 'oiS', DL('spo>oiS')], ['spo', 'cS', 't'],
+    ['exp', 'oiX', 't'], ['exp', 'cX', 't'], ['exp', 'xeql', 't'],
+    ['oiE', 'tsoi', 's'], ['oiS', 'tsoi', 's'], ['oiX', 'tsoi', 's'],
+    ['tsoi', 'ptx', DL('tsoi>ptx')], ['tsoi', 'corp', 't'], ['tsoi', 'india', 't'], ['tsoi', 'restrS', 't'], ['tsoi', 'int', 't'], ['tsoi', 'tfcf', 't'], ['tsoi', 'othout', 't'],
+    // Line profitability view
+    ['lin', 'oiLin', 't'], ['lin', 'cLin', 't'], ['dtc', 'oiDtc', 't'], ['dtc', 'cDtc', 't'], ['csl', 'oiCsl', 't'], ['csl', 'cCsl', 't'],
+    ['espnD', 'oiEspnD', 't'], ['espnD', 'cEspnD', 't'], ['espnI', 'oiEspnI', 't'], ['espnI', 'cEspnI', 't'], ['star', 'oiStar', 't'], ['star', 'cStar', 't'],
+    ['parksD', 'oiParksD', 't'], ['parksD', 'cParksD', 't'], ['parksI', 'oiParksI', 't'], ['parksI', 'cParksI', 't'], ['cp', 'oiCp', 't'], ['cp', 'cCp', 't'],
+    ['oiLin', 'poolE', 's'], ['oiDtc', 'poolE', 's'], ['oiCsl', 'poolE', 's'],
+    ['eqS', 'poolS', 's'], ['oiEspnD', 'poolS', 's'], ['oiEspnI', 'poolS', 's'], ['oiStar', 'poolS', 's'],
+    ['oiParksD', 'poolX', 's'], ['oiParksI', 'poolX', 's'], ['oiCp', 'poolX', 's'], ['oiCp', 'poolE', DL('oiCp>poolE')],
+    ['poolE', 'tsoi', DL('poolE>tsoi')], ['poolE', 'lossDtc', 't'], ['poolE', 'lossCsl', 't'],
+    ['poolS', 'tsoi', DL('poolS>tsoi')], ['poolS', 'lossEspnI', 't'], ['poolS', 'lossStar', 't'],
+    ['poolX', 'tsoi', DL('poolX>tsoi')],
+    // Cash & investment view
+    ['ocbc', 'content', 't'], ['ocbc', 'cfo', 't'], ['content', 'lic', 't'], ['content', 'prod', 't'],
+    ['cfo', 'pool', 's'], ['borrow', 'pool', 's'], ['cashIn', 'pool', 's'], ['othIn', 'pool', 's'],
+    ['pool', 'capex', 't'], ['pool', 'debt', 't'], ['pool', 'buyb', 't'], ['pool', 'divs', 't'], ['pool', 'hulu', 't'], ['pool', 'invest', 't'], ['pool', 'othOut', 't'], ['pool', 'cashOut', 't'],
+    ['capex', 'cxD', 't'], ['capex', 'cxI', 't'], ['capex', 'cxE', 't'], ['capex', 'cxS', 't'], ['capex', 'cxC', 't']
+  ];
+
+  const CONSOL_COLS = [
+    { ids: ['total', 'elim'], spine: 'total' },
+    { ids: ['gp', 'cos', 'cop'], spine: 'gp' },
+    { ids: ['eq', 'othin', 'oi', 'sga', 'da', 'restr'], spine: 'oi' },
+    { ids: ['tax', 'ptx', 'int', 'othout'], spine: 'ptx' },
+    { ids: ['ni', 'taxexp'], spine: 'ni' },
+    { ids: ['dis', 'nci'], spine: 'dis' }
+  ];
+  const GEOM = {
+    seg:   { W: 1240, H: 640, mL: 176, mR: 195, mT: 52, mB: 18, pad: 18 },
+    line:  { W: 1340, H: 700, mL: 240, mR: 195, mT: 52, mB: 18, pad: 12 },
+    drill: { W: 1160, H: 560, mL: 300, mR: 330, mT: 52, mB: 18, pad: 16 },
+    soi:   { W: 1240, H: 640, mL: 176, mR: 195, mT: 52, mB: 18, pad: 16 },
+    biz:   { W: 1300, H: 820, mL: 236, mR: 230, mT: 52, mB: 18, pad: 9 },
+    cash:  { W: 1260, H: 660, mL: 250, mR: 215, mT: 52, mB: 18, pad: 14 }
+  };
+  const VIEWS = {
+    seg:  { geom: GEOM.seg,  base: 'total', title: 'income statement', cols: [{ ids: ['ent', 'spo', 'exp'], head: 'Segments' }].concat(CONSOL_COLS) },
+    line: { geom: GEOM.line, base: 'total', title: 'income statement', cols: [{ ids: ['lin', 'dtc', 'csl', 'saf', 'sad', 'sot', 'tpa', 'rv', 'mfb', 'ml', 'plo'], head: 'Business lines' }, { ids: ['ent', 'spo', 'exp'], head: 'Segments' }].concat(CONSOL_COLS) },
+    ent:  { geom: GEOM.drill, base: 'entR', title: 'Entertainment segment P&L', cols: [{ ids: ['lin', 'dtc', 'csl'], head: 'Revenue lines' }, { ids: ['eqE', 'entR'], spine: 'entR' }, { ids: ['entOI', 'ppc', 'oox', 'esga', 'eda'], spine: 'entOI' }] },
+    spo:  { geom: GEOM.drill, base: 'spoR', title: 'Sports segment P&L', cols: [{ ids: ['saf', 'sad', 'sot'], head: 'Revenue lines' }, { ids: ['eqS', 'spoR'], spine: 'spoR' }, { ids: ['spoOI', 'sppc', 'sox', 'ssga', 'sda'], spine: 'spoOI' }] },
+    exp:  { geom: GEOM.drill, base: 'expR', title: 'Experiences segment P&L', cols: [{ ids: ['tpa', 'rv', 'mfb', 'ml', 'plo'], head: 'Revenue lines' }, { ids: ['expR'], spine: 'expR' }, { ids: ['expOI', 'xlab', 'xinf', 'xcogs', 'xoth', 'xsga', 'xda', 'xeql'], spine: 'expOI' }] },
+    soi:  { geom: GEOM.soi, base: 'total', title: 'segment operating income', cols: [
+      { ids: ['eqE', 'ent', 'eqS', 'spo', 'exp'], head: 'Segments' },
+      { ids: ['oiE', 'cE', 'oiS', 'cS', 'oiX', 'cX', 'xeql'], head: 'Segment OI and costs' },
+      { ids: ['tsoi', 'othin'], spine: 'tsoi' },
+      { ids: ['tax', 'ptx', 'corp', 'india', 'restrS', 'int', 'tfcf', 'othout'], spine: 'ptx' },
+      { ids: ['ni', 'taxexp'], spine: 'ni' },
+      { ids: ['dis', 'nci'], spine: 'dis' }] },
+    biz:  { geom: GEOM.biz, base: 'total', title: 'business line profitability', compact: [1], cols: [
+      { ids: ['lin', 'dtc', 'csl', 'espnD', 'espnI', 'star', 'parksD', 'parksI', 'cp'], head: 'Business lines' },
+      { ids: ['oiLin', 'cLin', 'oiDtc', 'cDtc', 'oiCsl', 'cCsl', 'eqS', 'oiEspnD', 'cEspnD', 'oiEspnI', 'cEspnI', 'oiStar', 'cStar', 'oiParksD', 'cParksD', 'oiParksI', 'cParksI', 'oiCp', 'cCp'], head: 'Operating income · margin · costs' },
+      { ids: ['poolE', 'poolS', 'poolX'], head: 'Segment OI' },
+      { ids: ['tsoi', 'lossDtc', 'lossCsl', 'lossEspnI', 'lossStar'], spine: 'tsoi' }] },
+    cash: { geom: GEOM.cash, base: 'pool', title: 'cash and investment', cols: [
+      { ids: ['ocbc', 'borrow', 'cashIn', 'othIn'], head: 'Sources of cash' },
+      { ids: ['content', 'cfo'], head: 'Operations' },
+      { ids: ['lic', 'prod', 'pool'], spine: 'pool' },
+      { ids: ['capex', 'hulu', 'invest', 'buyb', 'divs', 'debt', 'othOut', 'cashOut'], head: 'Uses of cash' },
+      { ids: ['cxD', 'cxI', 'cxE', 'cxS', 'cxC'], head: 'Capex by segment' }] }
+  };
+  const LEGENDS = {
+    default: [['rev', 'Revenue'], ['profit', 'Profit carried forward'], ['cost', 'Costs & expenses'], ['inflow', 'Non-operating additions'], ['neutral', 'Eliminations & minority share']],
+    cash: [['rev', 'Sources of cash'], ['profit', 'Cash from operations & available'], ['inflow', 'Investment'], ['cost', 'Returned to shareholders'], ['neutral', 'Debt, cash & other']]
+  };
+  const PF = DATA.PF;
+  const CP_NODE = { id: 'cp', name: 'Consumer Products', full: 'Consumer Products (reported inside Experiences)', v: D('cp'), el: null };
+  const SUB = {
+    seg: 'Click any block to see its page in that year\u2019s 10-K · click a segment block to open its P&L',
+    line: 'Click any block to see its page in that year\u2019s 10-K · click a segment block to open its P&L',
+    drill: 'Revenue lines → segment revenue → the expense categories Disney reports → segment operating income · click any block for its source page',
+    soi: 'Segment revenue → segment costs and operating income → total segment OI → corporate, amortization, restructuring, interest → pre-tax → net income',
+    biz: 'Each business with disclosed operating income → its costs and OI (margin on the label) → segment OI → total segment OI; losses are drawn from the segment\u2019s profit pool',
+    cash: 'Operating cash before content → content spend and cash from operations → cash available (with borrowings and cash drawn) → capex, Hulu, investments, buybacks, dividends, debt → capex by segment'
+  };
+
+  const SOURCES = DATA.sources;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('sankey');
+  const svgTitle = document.getElementById('sankey-title');
+  const tip = document.getElementById('tip');
+  const wrap = svg.closest('.chart-wrap');
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = id => document.getElementById(id);
+
+  function fmtM(v) { return '$' + Math.abs(v).toLocaleString('en-US') + 'M'; }
+  function fmtShort(v) { return Math.abs(v) >= 1000 ? '$' + (Math.abs(v) / 1000).toFixed(1) + 'B' : '$' + Math.abs(v).toLocaleString('en-US') + 'M'; }
+  function fmtBn(v) { return '$' + (v / 1000).toFixed(1) + ' billion'; }
+  function pct(a, b) { const p = (a / b - 1) * 100; return (p >= 0 ? '+' : '−') + Math.abs(p).toFixed(p >= 100 ? 0 : 1) + '%'; }
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function noteFor(n, y) { const s = n.note; if (!s) return ''; return typeof s === 'string' ? s : (s[y] || ''); }
+  function linkValue(L, y) {
+    const base = L.spec === 's' ? L.s.v[y] : L.spec === 't' ? L.t.v[y] : L.spec[y];
+    if (!state.proforma) return base;
+    const R = PF.R[y], o = movedOI(y);
+    switch (L.s.id + '>' + L.t.id) {
+      case 'ent>total': return base + R; case 'exp>total': return base - R;
+      case 'ml>exp': return 0; case 'ml>ent': return R;
+      case 'ent>oiE': return base + o; case 'ent>cE': return base + R - o;
+      case 'exp>oiX': return base - o; case 'exp>cX': return base - R + o;
+      case 'oiE>tsoi': return base + o; case 'oiX>tsoi': return base - o;
+      case 'oiCp>poolX': return base - o; case 'oiCp>poolE': return o;
+      case 'poolE>tsoi': return base + o; case 'poolX>tsoi': return base - o;
+      default: return base;
+    }
+  }
+
+  // ---------- Scene: fixed columns, fixed vertical order, one scale across all three years ----------
+  function buildScene(view) {
+    const spec = VIEWS[view], G = spec.geom, cols = spec.cols, nodeW = 16;
+    const active = new Set(cols.flatMap(c => c.ids));
+    const byId = new Map(), nodes = [];
+    cols.forEach((c, ci) => c.ids.forEach((id, oi) => {
+      const n = Object.assign({ id: id }, NODES[id], { col: ci, ord: oi, out: [], inn: [], spine: c.spine === id, drillTo: (view === 'seg' || view === 'line') ? NODES[id].drill : null });
+      byId.set(id, n); nodes.push(n);
+    }));
+    const links = LINKS.filter(l => active.has(l[0]) && active.has(l[1])).map(l => {
+      const s = byId.get(l[0]), t = byId.get(l[1]);
+      const L = { s, t, spec: l[2], role: s.role === 'inflow' ? 'inflow' : t.role };
+      s.out.push(L); t.inn.push(L); return L;
+    });
+    const innerW = G.W - G.mL - G.mR, innerH = G.H - G.mT - G.mB;
+    const step = (innerW - nodeW) / (cols.length - 1);
+    nodes.forEach(n => { n.x0 = G.mL + n.col * step; n.x1 = n.x0 + nodeW; });
+    let ky = Infinity;
+    const savedPf = state.proforma;
+    [false, true].forEach(pf => {
+      state.proforma = pf;
+      YEARS.forEach(y => cols.forEach(c => {
+        const nz = c.ids.filter(id => nodeVal(byId.get(id), y) > 0);
+        const sum = nz.reduce((a, id) => a + nodeVal(byId.get(id), y), 0);
+        if (sum > 0) ky = Math.min(ky, (innerH - G.pad * (nz.length - 1)) / sum);
+      }));
+    });
+    state.proforma = savedPf;
+    return { view, spec, cols, G, step, nodeW, ky, nodes, links, byId };
+  }
+
+  function layoutYear(sc, y) {
+    const G = sc.G, pad = G.pad;
+    sc.cols.forEach(c => {
+      let yy = G.mT;
+      c.ids.forEach(id => {
+        const n = sc.byId.get(id), v = nodeVal(n, y);
+        n._v = v; n._y0 = yy;
+        if (v > 0) { n._y1 = yy + v * sc.ky; yy = n._y1 + pad; } else { n._y1 = yy; }
+      });
+    });
+    sc.links.forEach(L => { L._v = linkValue(L, y); L._w = L._v > 0 ? L._v * sc.ky : 0; });
+    sc.nodes.forEach(n => {
+      let yy = n._y0;
+      n.out.filter(L => L._v > 0).sort((a, b) => a.t._y0 - b.t._y0).forEach(L => { L._sy = yy + L._w / 2; yy += L._w; });
+      yy = n._y0;
+      n.inn.filter(L => L._v > 0).sort((a, b) => a.s._y0 - b.s._y0).forEach(L => { L._ty = yy + L._w / 2; yy += L._w; });
+    });
+    sc.links.forEach(L => { if (!(L._v > 0)) { L._sy = L.s._y0; L._ty = L.t._y0; } });
+    sc.cols.forEach((c, ci) => {
+      const compact = !!(sc.spec.compact && sc.spec.compact.includes(ci));
+      const lh = compact ? 17 : 30, gap = compact ? 2 : 3;
+      const list = c.ids.map(id => sc.byId.get(id)).filter(n => !n.spine && n._v > 0);
+      let prevBottom = -Infinity;
+      list.forEach(n => {
+        let top = (n._y0 + n._y1) / 2 - lh / 2;
+        if (top < prevBottom + gap) top = prevBottom + gap;
+        if (top < G.mT + 1) top = G.mT + 1;
+        n._ly = top + lh / 2; prevBottom = top + lh;
+      });
+      let nextTop = G.H + gap;
+      for (let i = list.length - 1; i >= 0; i--) {
+        const n = list[i];
+        if (n._ly + lh / 2 > nextTop - gap) n._ly = nextTop - gap - lh / 2;
+        nextTop = n._ly - lh / 2;
+      }
+    });
+    const nodes = {}, links = [];
+    sc.nodes.forEach(n => { nodes[n.id] = { y0: n._y0, y1: n._y1, ly: n._v > 0 ? n._ly : n._y0, zero: !(n._v > 0) }; });
+    sc.links.forEach((L, i) => { links[i] = { sy: L._sy, ty: L._ty, w: L._w, zero: !(L._v > 0) }; });
+    return { nodes, links };
+  }
+
+  // ---------- Render ----------
+  function render(sc) {
+    const G = sc.G;
+    svg.setAttribute('viewBox', '0 0 ' + G.W + ' ' + G.H);
+    svg.classList.toggle('drill', sc.view !== 'seg' && sc.view !== 'line');
+    while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
+    svg.classList.remove('is-dim');
+    const linkG = el('g', { class: 'links' }, svg);
+    const hitG = el('g', { class: 'hits' }, svg);
+    const nodeG = el('g', { class: 'nodes' }, svg);
+    const labelG = el('g', { class: 'labels' }, svg);
+
+    sc.cols.forEach((c, ci) => {
+      if (!c.head) return;
+      const x = G.mL + ci * sc.step + sc.nodeW / 2;
+      el('text', { class: 'colhead', x: ci === 0 ? G.mL + sc.nodeW : x, y: G.mT - 11, 'text-anchor': ci === 0 ? 'end' : 'middle' }, labelG).textContent = c.head;
+    });
+
+    sc.links.forEach(L => {
+      L.el = el('path', { class: 'link stroke-' + L.role }, linkG);
+      L.hit = el('path', { class: 'hit' }, hitG);
+      L.hit.addEventListener('pointerenter', ev => { focusLink(L); showTip(linkTip(L), ev); });
+      L.hit.addEventListener('pointermove', moveTip);
+      L.hit.addEventListener('pointerleave', () => { clearFocus(); hideTip(); });
+    });
+
+    sc.nodes.forEach(n => {
+      const grp = el('g', { class: 'node' + (n.drillTo ? ' drill' : ''), tabindex: '0', role: 'button', 'aria-label': n.full || n.name }, nodeG);
+      n.el = grp;
+      n.rect = el('rect', { class: 'fill-' + n.role, x: n.x0, width: sc.nodeW, rx: 1.5 }, grp);
+      let lab;
+      if (n.spine) {
+        const cx = n.x0 + sc.nodeW / 2;
+        lab = el('g', { class: 'label spine', 'text-anchor': 'middle' }, labelG);
+        n.tName = el('text', { class: 'name', x: cx, y: G.mT - 26 }, lab);
+        n.tVal = el('text', { class: 'val', x: cx, y: G.mT - 11 }, lab);
+      } else {
+        const onLeft = n.col === 0;
+        n.lx = onLeft ? n.x0 - 9 : n.x1 + 9;
+        n.compact = !!(sc.spec.compact && sc.spec.compact.includes(n.col));
+        lab = el('g', { class: 'label' + (n.drillTo ? ' drill' : '') + (n.compact ? ' compact' : ''), 'text-anchor': onLeft ? 'end' : 'start' }, labelG);
+        if (n.compact) {
+          const t = el('text', { class: 'name', x: n.lx }, lab);
+          n.tName = el('tspan', {}, t);
+          n.tVal = el('tspan', { class: 'val', dx: 6 }, t);
+          n.tLine = t;
+        } else {
+          n.tName = el('text', { class: 'name', x: n.lx }, lab);
+          n.tVal = el('text', { class: 'val', x: n.lx }, lab);
+        }
+      }
+      n.tName.textContent = n.name;
+      n.lab = lab;
+      const show = ev => { focusNode(n); showTip(nodeTip(n), ev, n); };
+      [grp, lab].forEach(t => {
+        t.addEventListener('pointerenter', show);
+        t.addEventListener('pointermove', moveTip);
+        t.addEventListener('pointerleave', () => { clearFocus(); hideTip(); });
+        t.addEventListener('click', () => activate(n));
+      });
+      grp.addEventListener('focus', () => { focusNode(n); showTip(nodeTip(n), null, n); });
+      grp.addEventListener('blur', () => { clearFocus(); hideTip(); });
+      grp.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); activate(n); } });
+      if (hasSource(n)) { grp.classList.add('drill'); lab.classList.add('src-able'); }
+    });
+  }
+
+  function valText(sc, n, y) {
+    const v = nodeVal(n, y);
+    if (n.pool) {
+      const toTotal = n.out.find(L => L.t.id === 'tsoi');
+      const kept = toTotal ? linkValue(toTotal, y) : v;
+      return fmtShort(kept) + (v - kept > 0 ? ' after ' + fmtShort(v - kept) + ' losses' : '');
+    }
+    if (n.mrev && v > 0) {
+      const rev = sc.byId.get(n.mrev);
+      if (rev) return fmtShort(v) + ' · ' + (v / nodeVal(rev, y) * 100).toFixed(1) + '%';
+    }
+    return fmtShort(v);
+  }
+  let appliedKey = null;
+  function apply(sc, geo, y) {
+    const key = y + ':' + (state.proforma ? state.share : 'r');
+    const textChange = key !== appliedKey;
+    sc.nodes.forEach(n => {
+      const g = geo.nodes[n.id];
+      n.rect.setAttribute('y', g.y0);
+      n.rect.setAttribute('height', Math.max(g.y1 - g.y0, g.zero ? 0 : 1.5));
+      n.el.classList.toggle('is-zero', g.zero);
+      n.lab.classList.toggle('is-zero', g.zero);
+      n.el.setAttribute('tabindex', g.zero ? '-1' : '0');
+      if (!n.spine) { if (n.compact) n.tLine.setAttribute('y', g.ly + 4); else { n.tName.setAttribute('y', g.ly - 2); n.tVal.setAttribute('y', g.ly + 13); } }
+      if (textChange) {
+        n.tVal.textContent = valText(sc, n, y) + (n.drillTo ? ' ▸' : '');
+        n.el.setAttribute('aria-label', (n.full || n.name) + ', ' + fmtM(nodeVal(n, y)) + (n.drillTo ? ', opens the segment P&L' : hasSource(n) ? ', shows the source page' : ''));
+      }
+    });
+    sc.links.forEach((L, i) => {
+      const g = geo.links[i];
+      const x0 = L.s.x1, x1 = L.t.x0, xm = (x0 + x1) / 2;
+      const d = 'M' + x0 + ',' + g.sy + 'C' + xm + ',' + g.sy + ' ' + xm + ',' + g.ty + ' ' + x1 + ',' + g.ty;
+      L.el.setAttribute('d', d); L.el.setAttribute('stroke-width', g.zero ? 0 : Math.max(g.w, 1.2));
+      L.hit.setAttribute('d', d); L.hit.setAttribute('stroke-width', g.zero ? 0 : Math.max(g.w, 16));
+      L.el.classList.toggle('is-zero', g.zero); L.hit.classList.toggle('is-zero', g.zero);
+    });
+    appliedKey = key;
+  }
+
+  // ---------- State ----------
+  const state = { view: 'seg', year: 2025, proforma: false, share: 0.9 };
+  function movedOI(y) { return Math.round(PF.cpOI[y] * state.share); }
+  const PF_NODES = new Set(['ent', 'exp', 'oiE', 'oiX', 'cE', 'cX', 'poolE', 'poolX']);
+  function nodeVal(n, y) {
+    const v = n.v[y];
+    if (!state.proforma) return v;
+    const R = PF.R[y], o = movedOI(y);
+    switch (n.id) {
+      case 'ent': return v + R; case 'exp': return v - R;
+      case 'oiE': return v + o; case 'oiX': return v - o;
+      case 'cE': return v + R - o; case 'cX': return v - R + o;
+      case 'poolE': return v + o; case 'poolX': return v - o;
+      default: return v;
+    }
+  }
+  let scene = null, cur = null, raf = 0;
+
+  function setView(view) {
+    stopPlay();
+    state.view = view;
+    scene = buildScene(view);
+    render(scene);
+    appliedKey = null;
+    cur = layoutYear(scene, state.year);
+    apply(scene, cur, state.year);
+    const drill = VIEWS[view].geom === GEOM.drill;
+    $('detail-group').hidden = drill;
+    $('structure-group').hidden = drill || view === 'cash';
+    $('legend').innerHTML = (LEGENDS[view] || LEGENDS.default).map(([r, t]) => '<span><i style="background:var(--' + r + ')"></i>' + t + '</span>').join('');
+    $('re-strip').hidden = view !== 'cash';
+    $('back').hidden = !drill;
+    ['mode-seg', 'mode-line', 'mode-soi', 'mode-biz', 'mode-cash'].forEach(id => $(id).setAttribute('aria-pressed', String($(id).dataset.mode === view)));
+    $('chart-sub').textContent = drill ? SUB.drill : SUB[view];
+    updateText();
+    if (!drill) { try { localStorage.setItem('disney-sankey-mode', view); } catch (e) { /* storage unavailable */ } }
+  }
+
+  function setYear(y, animate) {
+    state.year = y;
+    $('year').value = String(YEARS.indexOf(y));
+    $('year').setAttribute('aria-valuetext', 'FY' + y);
+    document.querySelectorAll('.ticks button').forEach(b => b.setAttribute('aria-current', String(+b.dataset.y === y)));
+    updateText();
+    transitionTo(layoutYear(scene, y), animate);
+  }
+  function transitionTo(to, animate) {
+    const y = state.year;
+    cancelAnimationFrame(raf);
+    if (!animate || reduced || !cur) { cur = to; apply(scene, cur, y); return; }
+    const from = cur, start = performance.now(), dur = 700;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const frame = now => {
+      const t = Math.min(1, (now - start) / dur);
+      const e = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const g = { nodes: {}, links: [] };
+      for (const id in to.nodes) { const a = from.nodes[id], b = to.nodes[id]; g.nodes[id] = { y0: lerp(a.y0, b.y0, e), y1: lerp(a.y1, b.y1, e), ly: lerp(a.ly, b.ly, e), zero: b.zero }; }
+      to.links.forEach((b, i) => { const a = from.links[i]; g.links[i] = { sy: lerp(a.sy, b.sy, e), ty: lerp(a.ty, b.ty, e), w: lerp(a.w, b.w, e), zero: b.zero }; });
+      apply(scene, g, y);
+      if (t < 1) raf = requestAnimationFrame(frame); else { cur = to; apply(scene, cur, y); }
+    };
+    raf = requestAnimationFrame(frame);
+  }
+
+  function updateText() {
+    const y = state.year, p = YEARS[YEARS.indexOf(y) - 1];
+    const N = NODES;
+    $('h-fy').textContent = 'fiscal year ended ' + FY_END[y];
+    $('h-rev').textContent = fmtBn(N.total.v[y]);
+    $('h-ni').textContent = fmtBn(N.dis.v[y]);
+    const fig = (id, val, prev, money) => {
+      $(id).textContent = money ? fmtShort(val) : '$' + val.toFixed(2);
+      const d = $(id + '-d');
+      if (prev == null) { d.textContent = 'base year'; d.className = 'd'; return; }
+      const up = val >= prev;
+      d.textContent = pct(val, prev) + ' vs FY' + p;
+      d.className = 'd ' + (up ? 'up' : 'down');
+    };
+    fig('f-rev', N.total.v[y], p ? N.total.v[p] : null, true);
+    fig('f-ptx', N.ptx.v[y], p ? N.ptx.v[p] : null, true);
+    fig('f-dis', N.dis.v[y], p ? N.dis.v[p] : null, true);
+    fig('f-eps', EPS[y], p ? EPS[p] : null, false);
+    const spec = VIEWS[state.view];
+    $('chart-title').textContent = 'FY' + y + ' ' + spec.title;
+    $('year-note').textContent = (YEAR_NOTE[state.view] || YEAR_NOTE.consol)[y];
+    const drill = VIEWS[state.view].geom === GEOM.drill;
+    renderRE(y);
+    $('pf-note').hidden = !state.proforma || state.view === 'cash';
+    if (state.proforma) {
+      const o = movedOI(y);
+      $('pf-text').textContent = drill
+        ? ' Segment P&Ls are shown as reported: Disney has not disclosed the cost base of the business that moves.'
+        : ' Consumer Products licensing revenue of ' + fmtM(PF.R[y]) + ' shown in Entertainment instead of Experiences, with ' + Math.round(state.share * 100) + '% of Consumer Products operating income (' + fmtM(o) + ' of ' + fmtM(PF.cpOI[y]) + '). Disney reports on this basis from Q1 FY2027; its recast figures will replace this estimate.';
+    }
+    svgTitle.textContent = 'Sankey diagram of Disney’s FY' + y + ' ' + spec.title;
+  }
+
+  // ---------- Retained earnings strip ----------
+  function reCell(id, op, sign) {
+    const n = RE[id], y = state.year, v = n.v[y];
+    const shown = sign === '-' ? -v : v;
+    const cls = id.startsWith('ts') ? 'neg' : (shown < 0 ? 'neg' : (sign === '+' && v > 0 ? 'pos' : ''));
+    const txt = id.startsWith('ts') ? '(' + fmtShort(v) + ')' : (shown < 0 ? '−' : '') + fmtShort(v);
+    return (op ? '<span class="re-op">' + op + '</span>' : '') + '<button type="button" class="re-cell" data-re="' + id + '"><span class="k">' + n.name + '</span><span class="v ' + cls + '">' + txt + '</span></button>';
+  }
+  function renderRE(y) {
+    $('re-year').textContent = 'FY' + y;
+    $('re-row1').innerHTML = reCell('reBeg') + reCell('reNI', '+', '+') + reCell('reDiv', '−', '-') + reCell('reOth', '+', '+') + reCell('reEnd', '=');
+    $('re-row2').innerHTML = reCell('tsBeg') + reCell('tsRep', '−', '-') + reCell('tsEnd', '=');
+    document.querySelectorAll('.re-cell').forEach(b => b.addEventListener('click', () => {
+      const id = b.dataset.re, n = RE[id];
+      if (n.v[state.year] > 0 || SOURCES.src[id] && SOURCES.src[id][state.year]) openSource({ id: id, name: n.name, full: n.full || n.name, v: n.v, el: b });
+    }));
+  }
+
+  // ---------- Hover / focus ----------
+  function focusNode(n) {
+    svg.classList.add('is-dim');
+    n.el.classList.add('on'); n.lab.classList.add('on');
+    n.out.concat(n.inn).forEach(L => { L.el.classList.add('on'); L.s.el.classList.add('on'); L.t.el.classList.add('on'); L.s.lab.classList.add('on'); L.t.lab.classList.add('on'); });
+  }
+  function focusLink(L) {
+    svg.classList.add('is-dim');
+    L.el.classList.add('on'); L.s.el.classList.add('on'); L.t.el.classList.add('on'); L.s.lab.classList.add('on'); L.t.lab.classList.add('on');
+  }
+  function clearFocus() {
+    svg.classList.remove('is-dim');
+    svg.querySelectorAll('.on').forEach(e => e.classList.remove('on'));
+  }
+
+  function swatch(role) { return '<i style="background:var(--' + role + ')"></i>'; }
+  function baseLabel() { const b = VIEWS[state.view].base; return b === 'total' ? 'of total revenues' : b === 'pool' ? 'of cash available' : 'of segment revenue'; }
+  function nodeTip(n) {
+    const y = state.year, p = YEARS[YEARS.indexOf(y) - 1];
+    const base = NODES[VIEWS[state.view].base].v[y];
+    const cv = nodeVal(n, y), adjusted = state.proforma && PF_NODES.has(n.id);
+    let h = '<div class="t">' + swatch(n.role) + (n.full || n.name) + '</div><div class="big">' + fmtM(cv) + (n.id === 'tax' ? ' benefit' : '') + (adjusted ? ' <span class="row" style="font-size:12px;font-weight:500">pro forma</span>' : '') + '</div>';
+    if (adjusted) h += '<div class="row">As reported: ' + fmtM(n.v[y]) + ' · FY2027 structure moves licensing ' + (cv > n.v[y] ? 'in' : 'out') + '</div>';
+    if (p != null) {
+      const pv = nodeVal(n, p);
+      if (n.id === 'tax') h += '<div class="row">FY' + p + ': $' + NODES.taxexp.v[p].toLocaleString('en-US') + 'M expense</div>';
+      else if (pv > 0 && cv > 0) {
+        const up = cv >= pv, good = n.role === 'cost' ? !up : up;
+        h += '<div class="row">FY' + p + ': ' + fmtM(pv) + ' · <span class="' + (good ? 'up' : 'down') + '">' + pct(cv, pv) + '</span></div>';
+      } else if (pv === 0 && cv > 0) h += '<div class="row">FY' + p + ': none</div>';
+    } else h += '<div class="row">FY2023 is the first year shown</div>';
+    if (n.id !== VIEWS[state.view].base && cv > 0 && !(state.view === 'cash' && n.col < 3)) h += '<div class="row">' + (cv / base * 100).toFixed(1) + '% ' + baseLabel() + '</div>';
+    if (state.proforma && n.id === 'ml') h += '<div class="row">Rerouted to Entertainment under the FY2027 structure</div>';
+    if (state.view === 'biz' && n.col === 0) {
+      const oiN = scene.nodes.find(x => x.mrev === n.id), lossN = { dtc: 'lossDtc', csl: 'lossCsl', espnI: 'lossEspnI', star: 'lossStar' }[n.id];
+      const oi = oiN ? nodeVal(oiN, y) : 0, loss = lossN ? NODES[lossN].v[y] : 0;
+      const net = oi - loss;
+      h += '<div class="row">Operating ' + (net >= 0 ? 'income' : 'loss') + ': ' + fmtM(net) + ' · margin <span class="' + (net >= 0 ? 'up' : 'down') + '">' + (net / cv * 100).toFixed(1) + '%</span></div>';
+    }
+    if (n.mrev) {
+      const rev = scene.byId.get(n.mrev);
+      if (rev && cv > 0) h += '<div class="row">Margin: ' + (cv / nodeVal(rev, y) * 100).toFixed(1) + '% of ' + rev.name + ' revenue</div>';
+    }
+    if (n.pool) {
+      const toTotal = n.out.find(L => L.t.id === 'tsoi'), kept = toTotal ? linkValue(toTotal, y) : cv;
+      if (cv - kept > 0) h += '<div class="row">Segment operating income after losses: ' + fmtM(kept) + '</div>';
+    }
+    const note = noteFor(n, y);
+    if (note) h += '<div class="note">' + note + '</div>';
+    if (n.drillTo) h += '<div class="act">Click to open the ' + n.name + ' P&L ▸</div><div class="note">Source: ' + srcShort(n, y) + ' · open the P&L and click the revenue block to see the page</div>';
+    else if (hasSource(n)) h += '<div class="act">Click to see the source: ' + srcShort(n, y) + ' ⌕</div>';
+    return h;
+  }
+  function linkTip(L) {
+    const y = state.year, v = linkValue(L, y), base = NODES[VIEWS[state.view].base].v[y];
+    return '<div class="t">' + swatch(L.role) + L.s.name + ' → ' + L.t.name + '</div><div class="big">' + fmtM(v) + '</div>' +
+      '<div class="row">' + (v / base * 100).toFixed(1) + '% ' + baseLabel() + '</div>';
+  }
+
+  let tipShown = false;
+  function showTip(html, ev, n) {
+    tip.innerHTML = html; tip.hidden = false; tipShown = true;
+    if (ev) moveTip(ev); else if (n) placeAt(nodePoint(n));
+  }
+  function hideTip() { tip.hidden = true; tipShown = false; }
+  function nodePoint(n) {
+    const r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+    const sx = r.width / vb.width, sy = r.height / vb.height;
+    const g = cur.nodes[n.id];
+    return { x: r.left + n.x1 * sx, y: r.top + ((g.y0 + g.y1) / 2) * sy };
+  }
+  function moveTip(ev) { if (tipShown) placeAt({ x: ev.clientX, y: ev.clientY }); }
+  function placeAt(p) {
+    const wr = wrap.getBoundingClientRect();
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = p.x - wr.left + 16, y = p.y - wr.top + 14;
+    if (x + tw > wr.width - 8) x = p.x - wr.left - tw - 16;
+    if (x < 8) x = 8;
+    if (y + th > wr.height - 8) y = p.y - wr.top - th - 14;
+    if (y < 8) y = 8;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  document.addEventListener('pointerdown', ev => { if (!svg.contains(ev.target)) { clearFocus(); hideTip(); } });
+
+  // ---------- Source panel: the report page with the figure highlighted ----------
+  function srcEntries(n, y) { const s = SOURCES.src[n.id]; return s && s[y] ? s[y] : null; }
+  function hasSource(n) { return !!SOURCES.src[n.id]; }
+  function srcShort(n, y) {
+    const e = srcEntries(n, y);
+    if (!e) return 'not available for FY' + y;
+    const f = e[0];
+    return f.page ? SOURCES.pages[f.page].short : 'FY2024 earnings release';
+  }
+  function activate(n) {
+    if (n.drillTo) { setView(n.drillTo); return; }
+    if (hasSource(n)) openSource(n);
+  }
+  let srcState = { node: null, year: null, idx: 0, zoom: window.innerWidth < 640 ? 3.2 : 1.4, opener: null };
+  function openSource(n) {
+    const y = state.year, entries = srcEntries(n, y);
+    srcState = { node: n, year: y, idx: 0, zoom: srcState.zoom, opener: n.el, detail: -1 };
+    hideTip(); clearFocus();
+    $('src-title').textContent = n.full || n.name;
+    const poolKept = n.pool ? { E: NODES.entOI, S: NODES.spoOI, X: NODES.expOI }[n.pool].v[y] : null;
+    if (RE[n.id]) { $('src-amt').textContent = 'FY' + y + ' · ' + (n.id.startsWith('ts') ? '($' + n.v[y].toLocaleString('en-US') + 'M)' : fmtM(n.v[y])); }
+    else
+    $('src-amt').textContent = 'FY' + y + ' · ' + fmtM(poolKept != null ? poolKept : n.v[y]) + (n.id === 'tax' ? ' benefit' : '') + (state.proforma && PF_NODES.has(n.id) ? ' as reported' : '') + (n.id === 'cp' ? ' revenue · ' + fmtM(PF.cpOI[y]) + ' operating income' : '') + (poolKept != null && n.v[y] !== poolKept ? ' (segment operating income after losses)' : '');
+    $('src-backdrop').hidden = false; $('src').hidden = false;
+    document.body.style.overflow = 'hidden';
+    if (!entries) {
+      showExt('No source entry for this block in FY' + y + '.', null);
+    } else {
+      const alts = $('src-alts'); alts.innerHTML = '';
+      entries.forEach((e, i) => {
+        const b = document.createElement('button'); b.type = 'button';
+        b.textContent = e.page ? SOURCES.pages[e.page].short : 'FY2024 release';
+        b.setAttribute('aria-pressed', String(i === 0));
+        b.addEventListener('click', () => { srcState.idx = i; srcState.detail = -1; alts.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', String(j === i))); showEntry(); });
+        alts.appendChild(b);
+      });
+      showEntry();
+    }
+    $('src-close').focus();
+  }
+  function renderDetails() {
+    const list = (SOURCES.details && SOURCES.details[srcState.node.id] && SOURCES.details[srcState.node.id][srcState.year]) || null;
+    const box = $('src-details'), ul = $('src-detail-list');
+    box.hidden = !list; ul.innerHTML = '';
+    if (!list) return;
+    list.forEach((dt, i) => {
+      if (!dt.page) { const n = document.createElement('div'); n.className = 'src-detail note'; n.innerHTML = '<b>' + dt.t + '.</b> ' + dt.x; ul.appendChild(n); return; }
+      const pg = SOURCES.pages[dt.page];
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'src-detail'; b.setAttribute('aria-pressed', String(srcState.detail === i));
+      b.innerHTML = '<b>' + dt.t + '</b> — ' + dt.x + ' <span class="pg">' + pg.short + ' ⌕</span>';
+      b.addEventListener('click', () => { srcState.detail = i; $('src-alts').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false')); showEntry(dt); });
+      ul.appendChild(b);
+    });
+  }
+  function showEntry(detail) {
+    const entries = srcEntries(srcState.node, srcState.year);
+    const e = detail || entries[srcState.idx];
+    if (!detail) srcState.detail = -1;
+    renderDetails();
+    if (!e.page) { showExt(e.what, e.ext); return; }
+    const pg = SOURCES.pages[e.page];
+    $('src-ext').hidden = true; $('src-view').hidden = false; $('src-tools').hidden = false;
+    $('src-cite').innerHTML = '<b>' + pg.report + ', p. ' + pg.printed + '</b> (PDF page ' + pg.pdf + ') — ' + pg.label;
+    $('src-where').textContent = detail ? detail.t + ': ' + detail.x : e.what;
+    const page = $('src-page'), img = $('src-img');
+    page.querySelectorAll('.hl').forEach(h => h.remove());
+    page.style.aspectRatio = pg.w + ' / ' + pg.h;
+    if (img.getAttribute('src') !== pg.file) { img.src = pg.file; img.alt = 'Page ' + pg.printed + ' of the ' + pg.report; }
+    e.rects.forEach(r => {
+      const h = document.createElement('div'); h.className = 'hl';
+      h.style.left = (r[0] * 100) + '%'; h.style.top = (r[1] * 100) + '%'; h.style.width = (r[2] * 100) + '%'; h.style.height = (r[3] * 100) + '%';
+      page.appendChild(h);
+    });
+    applyZoom();
+  }
+  function showExt(text, href) {
+    $('src-view').hidden = true; $('src-tools').hidden = true; $('src-cite').textContent = 'Outside the annual reports'; $('src-where').textContent = '';
+    const ext = $('src-ext'); ext.hidden = false;
+    ext.innerHTML = '<div class="box">' + text + '</div>' + (href ? '<div>Open the document: <a href="' + href + '" target="_blank" rel="noopener">fiscal 2024 fourth-quarter earnings release (PDF)</a>. The figure sits in the Entertainment table\u2019s prior-year column for the twelve months ended September 30, 2023.</div>' : '');
+  }
+  function applyZoom() {
+    const view = $('src-view'), page = $('src-page');
+    const z = srcState.zoom, avail = view.clientWidth - 32;
+    page.style.width = Math.round(avail * z) + 'px';
+    document.querySelectorAll('#src .src-tools [data-z]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.z === z)));
+    requestAnimationFrame(centerHighlight);
+  }
+  function centerHighlight() {
+    const view = $('src-view'), hls = view.querySelectorAll('.hl');
+    if (!hls.length) return;
+    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+    hls.forEach(h => { l = Math.min(l, h.offsetLeft); t = Math.min(t, h.offsetTop); r = Math.max(r, h.offsetLeft + h.offsetWidth); b = Math.max(b, h.offsetTop + h.offsetHeight); });
+    // Scroll just far enough that the figure is in view, keeping the row label on the left visible when it fits.
+    const left = Math.max(0, Math.min(l + 16 - 24, r + 16 + 32 - view.clientWidth));
+    view.scrollTo({ left: left, top: (t + b) / 2 + 16 - view.clientHeight / 2, behavior: 'auto' });
+  }
+  $('src-img').addEventListener('load', centerHighlight);
+  document.querySelectorAll('#src .src-tools [data-z]').forEach(b => b.addEventListener('click', () => { srcState.zoom = +b.dataset.z; applyZoom(); }));
+  function closeSource() {
+    if ($('src').hidden) return;
+    $('src').hidden = true; $('src-backdrop').hidden = true; document.body.style.overflow = '';
+    if (srcState.opener) { try { srcState.opener.focus({ preventScroll: true }); } catch (e) { /* ignore */ } }
+  }
+  $('src-close').addEventListener('click', closeSource);
+  $('src-backdrop').addEventListener('click', closeSource);
+  window.addEventListener('resize', () => { if (!$('src').hidden) applyZoom(); });
+
+  // ---------- Controls ----------
+  ['mode-seg', 'mode-line', 'mode-soi', 'mode-biz', 'mode-cash'].forEach(id => $(id).addEventListener('click', () => setView($(id).dataset.mode)));
+  $('back').addEventListener('click', () => { let m = 'seg'; try { const sv = localStorage.getItem('disney-sankey-mode'); if (['line', 'soi', 'biz', 'cash'].includes(sv)) m = sv; } catch (e) { /* ignore */ } setView(m); });
+  function setProforma(on) {
+    if (state.proforma === on) return;
+    stopPlay();
+    state.proforma = on;
+    $('pf-on').setAttribute('aria-pressed', String(on)); $('pf-off').setAttribute('aria-pressed', String(!on));
+    $('share-wrap').hidden = !on;
+    updateText();
+    transitionTo(layoutYear(scene, state.year), true);
+  }
+  $('pf-on').addEventListener('click', () => setProforma(true));
+  $('pf-off').addEventListener('click', () => setProforma(false));
+  $('share').addEventListener('input', () => {
+    state.share = +$('share').value / 100;
+    $('share-out').textContent = Math.round(state.share * 100) + '%';
+    updateText();
+    if (state.proforma) transitionTo(layoutYear(scene, state.year), true);
+  });
+  $('pf-src').addEventListener('click', () => openSource(CP_NODE));
+  document.addEventListener('keydown', ev => { if (ev.key !== 'Escape') return; if (!$('src').hidden) { closeSource(); return; } if (!$('back').hidden) setView('seg'); });
+  $('year').addEventListener('input', () => { stopPlay(); setYear(YEARS[+$('year').value], true); });
+  document.querySelectorAll('.ticks button').forEach(b => b.addEventListener('click', () => { stopPlay(); setYear(+b.dataset.y, true); }));
+
+  let playing = false, timer = 0;
+  function stopPlay() { playing = false; clearTimeout(timer); $('play').setAttribute('aria-pressed', 'false'); $('play').textContent = '▶ Play FY23→25'; }
+  $('play').addEventListener('click', () => {
+    if (playing) { stopPlay(); return; }
+    playing = true; $('play').setAttribute('aria-pressed', 'true'); $('play').textContent = '■ Stop';
+    let i = state.year === 2025 ? 0 : YEARS.indexOf(state.year) + 1;
+    const stepFn = () => {
+      if (!playing) return;
+      setYear(YEARS[i], true);
+      if (i >= YEARS.length - 1) { timer = setTimeout(stopPlay, 900); return; }
+      i++; timer = setTimeout(stepFn, 1700);
+    };
+    stepFn();
+  });
+
+  let initial = 'seg';
+  try { const saved = localStorage.getItem('disney-sankey-mode'); if (['line', 'seg', 'soi', 'biz', 'cash'].includes(saved)) initial = saved; } catch (e) { /* ignore */ }
+  setView(initial);
+})();
+</script>
+
+</body>
+</html>

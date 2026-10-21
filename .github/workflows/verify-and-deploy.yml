@@ -1,0 +1,78 @@
+# Every push to main: extract the filings, verify every figure, build the site, check the built page,
+# cross-check against SEC XBRL — and deploy to GitHub Pages only if all of that passed.
+name: Verify and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Extract, verify, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install poppler and pdfplumber
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q poppler-utils
+          python -m pip install -q pdfplumber==0.11.10
+      - name: Extract the tables from every filing
+        run: make extract
+      - name: Assemble and verify every figure against the filings
+        run: make verify
+      - name: Cross-check the consolidated figures against SEC XBRL
+        env:
+          SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+        run: |
+          if [ -n "$SEC_USER_AGENT" ]; then
+            make xbrl
+          else
+            echo "::warning::Set the repository variable SEC_USER_AGENT (e.g. 'disney-pnl-sankey (you@example.com)') to make the XBRL cross-check a hard gate"
+            python3 -I tools/xbrl.py
+          fi
+      - name: Build the site and check the page ties out in every view
+        run: make check
+      - name: The committed site must be the verified build
+        run: |
+          if ! cmp -s site/index.html index.html; then
+            echo "::error::index.html at the repo root differs from the verified build — run 'make publish' and commit"; exit 1
+          fi
+      - name: Keep the verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-reports
+          path: |
+            data/verify-report.md
+            data/xbrl-report.md
+            data/consistency.json
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

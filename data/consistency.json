@@ -1,0 +1,39 @@
+[
+ {
+  "field": "othFin",
+  "year": 2023,
+  "values": {
+   "2023-10-K": -828,
+   "2024-10-K": -776,
+   "2025-10-K": -776
+  }
+ },
+ {
+  "node": "othIn",
+  "year": 2023,
+  "report": "2024-10-K",
+  "value": 1266,
+  "own": 1318
+ },
+ {
+  "node": "othIn",
+  "year": 2023,
+  "report": "2025-10-K",
+  "value": 1266,
+  "own": 1318
+ },
+ {
+  "node": "othOut",
+  "year": 2023,
+  "report": "2024-10-K",
+  "value": 906,
+  "own": 958
+ },
+ {
+  "node": "othOut",
+  "year": 2023,
+  "report": "2025-10-K",
+  "value": 906,
+  "own": 958
+ }
+]

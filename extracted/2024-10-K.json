@@ -1,0 +1,3865 @@
+{
+ "report": "2024-10-K",
+ "fiscalYear": 2024,
+ "fiscalYearEnd": "September 28, 2024",
+ "fields": {
+  "services": {
+   "2024": {
+    "value": 81841,
+    "page": 77,
+    "rect": [
+     0.63,
+     0.1327,
+     0.0443,
+     0.0165
+    ],
+    "label": "Services",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 79562,
+    "page": 77,
+    "rect": [
+     0.7488,
+     0.1328,
+     0.0443,
+     0.0165
+    ],
+    "label": "Services",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 74200,
+    "page": 77,
+    "rect": [
+     0.8677,
+     0.1328,
+     0.0443,
+     0.0165
+    ],
+    "label": "Services",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "products": {
+   "2024": {
+    "value": 9520,
+    "page": 77,
+    "rect": [
+     0.6365,
+     0.1488,
+     0.0377,
+     0.0165
+    ],
+    "label": "Products",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 9336,
+    "page": 77,
+    "rect": [
+     0.7554,
+     0.1489,
+     0.0377,
+     0.0165
+    ],
+    "label": "Products",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 8522,
+    "page": 77,
+    "rect": [
+     0.8742,
+     0.1489,
+     0.0377,
+     0.0165
+    ],
+    "label": "Products",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "total": {
+   "2024": {
+    "value": 91361,
+    "page": 77,
+    "rect": [
+     0.63,
+     0.1649,
+     0.0443,
+     0.0165
+    ],
+    "label": "Total revenues",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 88898,
+    "page": 77,
+    "rect": [
+     0.7488,
+     0.1649,
+     0.0443,
+     0.0165
+    ],
+    "label": "Total revenues",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 82722,
+    "page": 77,
+    "rect": [
+     0.8677,
+     0.1649,
+     0.0443,
+     0.0165
+    ],
+    "label": "Total revenues",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "cos": {
+   "2024": {
+    "value": -52509,
+    "page": 77,
+    "rect": [
+     0.6256,
+     0.1971,
+     0.053,
+     0.0165
+    ],
+    "label": "Cost of services (exclusive of depreciation and amortization)",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -53139,
+    "page": 77,
+    "rect": [
+     0.7445,
+     0.1971,
+     0.053,
+     0.0165
+    ],
+    "label": "Cost of services (exclusive of depreciation and amortization)",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -48962,
+    "page": 77,
+    "rect": [
+     0.8634,
+     0.1971,
+     0.053,
+     0.0165
+    ],
+    "label": "Cost of services (exclusive of depreciation and amortization)",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "cop": {
+   "2024": {
+    "value": -6189,
+    "page": 77,
+    "rect": [
+     0.6321,
+     0.2132,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cost of products (exclusive of depreciation and amortization)",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -6062,
+    "page": 77,
+    "rect": [
+     0.751,
+     0.2132,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cost of products (exclusive of depreciation and amortization)",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -5439,
+    "page": 77,
+    "rect": [
+     0.8699,
+     0.2132,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cost of products (exclusive of depreciation and amortization)",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "sga": {
+   "2024": {
+    "value": -15759,
+    "page": 77,
+    "rect": [
+     0.6256,
+     0.2293,
+     0.053,
+     0.0165
+    ],
+    "label": "Selling, general, administrative and other",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -15336,
+    "page": 77,
+    "rect": [
+     0.7445,
+     0.2293,
+     0.053,
+     0.0165
+    ],
+    "label": "Selling, general, administrative and other",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -16388,
+    "page": 77,
+    "rect": [
+     0.8634,
+     0.2293,
+     0.053,
+     0.0165
+    ],
+    "label": "Selling, general, administrative and other",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "da": {
+   "2024": {
+    "value": -4990,
+    "page": 77,
+    "rect": [
+     0.6321,
+     0.2454,
+     0.0465,
+     0.0165
+    ],
+    "label": "Depreciation and amortization",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -5369,
+    "page": 77,
+    "rect": [
+     0.751,
+     0.2454,
+     0.0465,
+     0.0165
+    ],
+    "label": "Depreciation and amortization",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -5163,
+    "page": 77,
+    "rect": [
+     0.8699,
+     0.2454,
+     0.0465,
+     0.0165
+    ],
+    "label": "Depreciation and amortization",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "totalCosts": {
+   "2024": {
+    "value": -79447,
+    "page": 77,
+    "rect": [
+     0.6256,
+     0.2615,
+     0.053,
+     0.0165
+    ],
+    "label": "Total costs and expenses",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -79906,
+    "page": 77,
+    "rect": [
+     0.7445,
+     0.2615,
+     0.053,
+     0.0165
+    ],
+    "label": "Total costs and expenses",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -75952,
+    "page": 77,
+    "rect": [
+     0.8634,
+     0.2615,
+     0.053,
+     0.0165
+    ],
+    "label": "Total costs and expenses",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "restr": {
+   "2024": {
+    "value": -3595,
+    "page": 77,
+    "rect": [
+     0.6321,
+     0.2775,
+     0.0465,
+     0.0165
+    ],
+    "label": "Restructuring and impairment charges",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -3892,
+    "page": 77,
+    "rect": [
+     0.751,
+     0.2776,
+     0.0465,
+     0.0165
+    ],
+    "label": "Restructuring and impairment charges",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -237,
+    "page": 77,
+    "rect": [
+     0.8797,
+     0.2776,
+     0.0367,
+     0.0165
+    ],
+    "label": "Restructuring and impairment charges",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "oth": {
+   "2024": {
+    "value": -65,
+    "page": 77,
+    "rect": [
+     0.6485,
+     0.2936,
+     0.0301,
+     0.0165
+    ],
+    "label": "Other income (expense), net",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 96,
+    "page": 77,
+    "rect": [
+     0.7717,
+     0.2937,
+     0.0214,
+     0.0165
+    ],
+    "label": "Other income (expense), net",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -667,
+    "page": 77,
+    "rect": [
+     0.8797,
+     0.2937,
+     0.0367,
+     0.0165
+    ],
+    "label": "Other income (expense), net",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "int": {
+   "2024": {
+    "value": -1260,
+    "page": 77,
+    "rect": [
+     0.6321,
+     0.3097,
+     0.0465,
+     0.0165
+    ],
+    "label": "Interest expense, net",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -1209,
+    "page": 77,
+    "rect": [
+     0.751,
+     0.3098,
+     0.0465,
+     0.0165
+    ],
+    "label": "Interest expense, net",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -1397,
+    "page": 77,
+    "rect": [
+     0.8699,
+     0.3098,
+     0.0465,
+     0.0165
+    ],
+    "label": "Interest expense, net",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "eq": {
+   "2024": {
+    "value": 575,
+    "page": 77,
+    "rect": [
+     0.6463,
+     0.3258,
+     0.0279,
+     0.0165
+    ],
+    "label": "Equity in the income of investees",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 782,
+    "page": 77,
+    "rect": [
+     0.7652,
+     0.3259,
+     0.0279,
+     0.0165
+    ],
+    "label": "Equity in the income of investees",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 816,
+    "page": 77,
+    "rect": [
+     0.8841,
+     0.3259,
+     0.0279,
+     0.0165
+    ],
+    "label": "Equity in the income of investees",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "ptx": {
+   "2024": {
+    "value": 7569,
+    "page": 77,
+    "rect": [
+     0.6365,
+     0.3419,
+     0.0377,
+     0.0165
+    ],
+    "label": "Income from continuing operations before income taxes",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 4769,
+    "page": 77,
+    "rect": [
+     0.7554,
+     0.342,
+     0.0377,
+     0.0165
+    ],
+    "label": "Income from continuing operations before income taxes",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 5285,
+    "page": 77,
+    "rect": [
+     0.8742,
+     0.342,
+     0.0377,
+     0.0165
+    ],
+    "label": "Income from continuing operations before income taxes",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "taxSigned": {
+   "2024": {
+    "value": -1796,
+    "page": 77,
+    "rect": [
+     0.6321,
+     0.358,
+     0.0465,
+     0.0165
+    ],
+    "label": "Income taxes on continuing operations",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -1379,
+    "page": 77,
+    "rect": [
+     0.751,
+     0.3581,
+     0.0465,
+     0.0165
+    ],
+    "label": "Income taxes on continuing operations",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -1732,
+    "page": 77,
+    "rect": [
+     0.8699,
+     0.3581,
+     0.0465,
+     0.0165
+    ],
+    "label": "Income taxes on continuing operations",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "ni": {
+   "2024": {
+    "value": 5773,
+    "page": 77,
+    "rect": [
+     0.6365,
+     0.4078,
+     0.0377,
+     0.0165
+    ],
+    "label": "Net income",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 3390,
+    "page": 77,
+    "rect": [
+     0.7554,
+     0.4078,
+     0.0377,
+     0.0165
+    ],
+    "label": "Net income",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 3505,
+    "page": 77,
+    "rect": [
+     0.8742,
+     0.4078,
+     0.0377,
+     0.0165
+    ],
+    "label": "Net income",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "nci": {
+   "2024": {
+    "value": -801,
+    "page": 77,
+    "rect": [
+     0.642,
+     0.4305,
+     0.0367,
+     0.0165
+    ],
+    "label": "",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": -1036,
+    "page": 77,
+    "rect": [
+     0.751,
+     0.4306,
+     0.0465,
+     0.0165
+    ],
+    "label": "",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": -360,
+    "page": 77,
+    "rect": [
+     0.8797,
+     0.4306,
+     0.0367,
+     0.0165
+    ],
+    "label": "",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "dis": {
+   "2024": {
+    "value": 4972,
+    "page": 77,
+    "rect": [
+     0.6365,
+     0.452,
+     0.0377,
+     0.0165
+    ],
+    "label": "Net income attributable to The Walt Disney Company (Disney)",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 2354,
+    "page": 77,
+    "rect": [
+     0.7554,
+     0.452,
+     0.0377,
+     0.0165
+    ],
+    "label": "Net income attributable to The Walt Disney Company (Disney)",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 3145,
+    "page": 77,
+    "rect": [
+     0.8742,
+     0.452,
+     0.0377,
+     0.0165
+    ],
+    "label": "Net income attributable to The Walt Disney Company (Disney)",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "epsDiluted": {
+   "2024": {
+    "value": 2.72,
+    "page": 77,
+    "rect": [
+     0.643,
+     0.5193,
+     0.0312,
+     0.0165
+    ],
+    "label": "Continuing operations",
+    "table": "Consolidated Statements of Income"
+   },
+   "2023": {
+    "value": 1.29,
+    "page": 77,
+    "rect": [
+     0.7619,
+     0.5193,
+     0.0312,
+     0.0165
+    ],
+    "label": "Continuing operations",
+    "table": "Consolidated Statements of Income"
+   },
+   "2022": {
+    "value": 1.75,
+    "page": 77,
+    "rect": [
+     0.8808,
+     0.5193,
+     0.0312,
+     0.0165
+    ],
+    "label": "Continuing operations",
+    "table": "Consolidated Statements of Income"
+   }
+  },
+  "ent3p": {
+   "2024": {
+    "value": 40775,
+    "page": 85,
+    "rect": [
+     0.5823,
+     0.3544,
+     0.0533,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 revenue from third parties",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 40258,
+    "page": 85,
+    "rect": [
+     0.7196,
+     0.3544,
+     0.0533,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 revenue from third parties",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 39231,
+    "page": 85,
+    "rect": [
+     0.8568,
+     0.3544,
+     0.0533,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 revenue from third parties",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "entInter": {
+   "2024": {
+    "value": 411,
+    "page": 85,
+    "rect": [
+     0.6027,
+     0.3734,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 377,
+    "page": 85,
+    "rect": [
+     0.74,
+     0.3734,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 338,
+    "page": 85,
+    "rect": [
+     0.8772,
+     0.3734,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "entRev": {
+   "2024": {
+    "value": 41186,
+    "page": 85,
+    "rect": [
+     0.5823,
+     0.3923,
+     0.0533,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 total segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 40635,
+    "page": 85,
+    "rect": [
+     0.7196,
+     0.3923,
+     0.0533,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 total segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 39569,
+    "page": 85,
+    "rect": [
+     0.8568,
+     0.3923,
+     0.0533,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 total segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "spo3p": {
+   "2024": {
+    "value": 16435,
+    "page": 85,
+    "rect": [
+     0.5823,
+     0.4302,
+     0.0533,
+     0.0191
+    ],
+    "label": "Sports \u2014 revenue from third parties",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 16091,
+    "page": 85,
+    "rect": [
+     0.7196,
+     0.4302,
+     0.0533,
+     0.0191
+    ],
+    "label": "Sports \u2014 revenue from third parties",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 16429,
+    "page": 85,
+    "rect": [
+     0.8568,
+     0.4302,
+     0.0533,
+     0.0191
+    ],
+    "label": "Sports \u2014 revenue from third parties",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "spoInter": {
+   "2024": {
+    "value": 1184,
+    "page": 85,
+    "rect": [
+     0.5905,
+     0.4491,
+     0.0451,
+     0.0191
+    ],
+    "label": "Sports \u2014 intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 1020,
+    "page": 85,
+    "rect": [
+     0.7277,
+     0.4491,
+     0.0451,
+     0.0191
+    ],
+    "label": "Sports \u2014 intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 841,
+    "page": 85,
+    "rect": [
+     0.8772,
+     0.4491,
+     0.0328,
+     0.0191
+    ],
+    "label": "Sports \u2014 intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "spoRev": {
+   "2024": {
+    "value": 17619,
+    "page": 85,
+    "rect": [
+     0.5823,
+     0.4681,
+     0.0533,
+     0.0191
+    ],
+    "label": "Sports \u2014 total segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 17111,
+    "page": 85,
+    "rect": [
+     0.7196,
+     0.4681,
+     0.0533,
+     0.0191
+    ],
+    "label": "Sports \u2014 total segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 17270,
+    "page": 85,
+    "rect": [
+     0.8568,
+     0.4681,
+     0.0533,
+     0.0191
+    ],
+    "label": "Sports \u2014 total segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "expRev": {
+   "2024": {
+    "value": 34151,
+    "page": 85,
+    "rect": [
+     0.5823,
+     0.487,
+     0.0533,
+     0.0191
+    ],
+    "label": "Experiences \u2014 segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 32549,
+    "page": 85,
+    "rect": [
+     0.7196,
+     0.487,
+     0.0533,
+     0.0191
+    ],
+    "label": "Experiences \u2014 segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 28085,
+    "page": 85,
+    "rect": [
+     0.8568,
+     0.487,
+     0.0533,
+     0.0191
+    ],
+    "label": "Experiences \u2014 segment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "elim": {
+   "2024": {
+    "value": -1595,
+    "page": 85,
+    "rect": [
+     0.585,
+     0.5059,
+     0.056,
+     0.0191
+    ],
+    "label": "Eliminations of intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": -1397,
+    "page": 85,
+    "rect": [
+     0.7223,
+     0.5059,
+     0.056,
+     0.0191
+    ],
+    "label": "Eliminations of intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": -1179,
+    "page": 85,
+    "rect": [
+     0.8595,
+     0.5059,
+     0.056,
+     0.0191
+    ],
+    "label": "Eliminations of intersegment revenue",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "entOI": {
+   "2024": {
+    "value": 3923,
+    "page": 85,
+    "rect": [
+     0.5905,
+     0.5675,
+     0.0451,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 1444,
+    "page": 85,
+    "rect": [
+     0.7277,
+     0.5675,
+     0.0451,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 2126,
+    "page": 85,
+    "rect": [
+     0.865,
+     0.5675,
+     0.0451,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "spoOI": {
+   "2024": {
+    "value": 2406,
+    "page": 85,
+    "rect": [
+     0.5905,
+     0.5864,
+     0.0451,
+     0.0191
+    ],
+    "label": "Sports \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 2465,
+    "page": 85,
+    "rect": [
+     0.7277,
+     0.5864,
+     0.0451,
+     0.0191
+    ],
+    "label": "Sports \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 2710,
+    "page": 85,
+    "rect": [
+     0.865,
+     0.5864,
+     0.0451,
+     0.0191
+    ],
+    "label": "Sports \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "expOI": {
+   "2024": {
+    "value": 9272,
+    "page": 85,
+    "rect": [
+     0.5905,
+     0.6054,
+     0.0451,
+     0.0191
+    ],
+    "label": "Experiences \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 8954,
+    "page": 85,
+    "rect": [
+     0.7277,
+     0.6054,
+     0.0451,
+     0.0191
+    ],
+    "label": "Experiences \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 7285,
+    "page": 85,
+    "rect": [
+     0.865,
+     0.6054,
+     0.0451,
+     0.0191
+    ],
+    "label": "Experiences \u2014 segment operating income",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "tsoi": {
+   "2024": {
+    "value": 15601,
+    "page": 85,
+    "rect": [
+     0.5823,
+     0.6243,
+     0.0533,
+     0.0191
+    ],
+    "label": "Total segment operating income(1)",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 12863,
+    "page": 85,
+    "rect": [
+     0.7196,
+     0.6243,
+     0.0533,
+     0.0191
+    ],
+    "label": "Total segment operating income(1)",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 12121,
+    "page": 85,
+    "rect": [
+     0.8568,
+     0.6243,
+     0.0533,
+     0.0191
+    ],
+    "label": "Total segment operating income(1)",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "eqE": {
+   "2024": {
+    "value": 529,
+    "page": 85,
+    "rect": [
+     0.6027,
+     0.6903,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 equity in the income of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 685,
+    "page": 85,
+    "rect": [
+     0.74,
+     0.6903,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 equity in the income of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 783,
+    "page": 85,
+    "rect": [
+     0.8772,
+     0.6903,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 equity in the income of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "eqS": {
+   "2024": {
+    "value": 58,
+    "page": 85,
+    "rect": [
+     0.6109,
+     0.7092,
+     0.0247,
+     0.0191
+    ],
+    "label": "Sports \u2014 equity in the income of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": 55,
+    "page": 85,
+    "rect": [
+     0.7482,
+     0.7092,
+     0.0247,
+     0.0191
+    ],
+    "label": "Sports \u2014 equity in the income of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": 55,
+    "page": 85,
+    "rect": [
+     0.8854,
+     0.7092,
+     0.0247,
+     0.0191
+    ],
+    "label": "Sports \u2014 equity in the income of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "eqX": {
+   "2024": {
+    "value": 0,
+    "page": 85,
+    "rect": [
+     0.6109,
+     0.7282,
+     0.0247,
+     0.0191
+    ],
+    "label": "Experiences \u2014 equity in the income (loss) of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2023": {
+    "value": -2,
+    "page": 85,
+    "rect": [
+     0.7509,
+     0.7282,
+     0.0274,
+     0.0191
+    ],
+    "label": "Experiences \u2014 equity in the income (loss) of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   },
+   "2022": {
+    "value": -10,
+    "page": 85,
+    "rect": [
+     0.88,
+     0.7282,
+     0.0356,
+     0.0191
+    ],
+    "label": "Experiences \u2014 equity in the income (loss) of investees",
+    "table": "Segment note \u2014 segment revenues and operating income"
+   }
+  },
+  "corp": {
+   "2024": {
+    "value": -1435,
+    "page": 86,
+    "rect": [
+     0.585,
+     0.3428,
+     0.056,
+     0.0191
+    ],
+    "label": "Corporate and unallocated shared expenses",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   },
+   "2023": {
+    "value": -1147,
+    "page": 86,
+    "rect": [
+     0.7223,
+     0.3428,
+     0.056,
+     0.0191
+    ],
+    "label": "Corporate and unallocated shared expenses",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   },
+   "2022": {
+    "value": -1159,
+    "page": 86,
+    "rect": [
+     0.8595,
+     0.3428,
+     0.056,
+     0.0191
+    ],
+    "label": "Corporate and unallocated shared expenses",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   }
+  },
+  "restrS": {
+   "2024": {
+    "value": -3595,
+    "page": 86,
+    "rect": [
+     0.585,
+     0.3617,
+     0.056,
+     0.0191
+    ],
+    "label": "Restructuring and impairment charges(1)",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   },
+   "2023": {
+    "value": -3836,
+    "page": 86,
+    "rect": [
+     0.7223,
+     0.3617,
+     0.056,
+     0.0191
+    ],
+    "label": "Restructuring and impairment charges(1)",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   },
+   "2022": {
+    "value": -237,
+    "page": 86,
+    "rect": [
+     0.8718,
+     0.3617,
+     0.0437,
+     0.0191
+    ],
+    "label": "Restructuring and impairment charges(1)",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   }
+  },
+  "tfcf": {
+   "2024": {
+    "value": -1677,
+    "page": 86,
+    "rect": [
+     0.585,
+     0.4185,
+     0.056,
+     0.0191
+    ],
+    "label": "TFCF and Hulu acquisition amortization(3)",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   },
+   "2023": {
+    "value": -1998,
+    "page": 86,
+    "rect": [
+     0.7223,
+     0.4185,
+     0.056,
+     0.0191
+    ],
+    "label": "TFCF and Hulu acquisition amortization(3)",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   },
+   "2022": {
+    "value": -2353,
+    "page": 86,
+    "rect": [
+     0.8595,
+     0.4185,
+     0.056,
+     0.0191
+    ],
+    "label": "TFCF and Hulu acquisition amortization(3)",
+    "table": "Segment note \u2014 reconciliation of segment operating income to income before income taxes"
+   }
+  },
+  "subAffS": {
+   "2024": {
+    "value": 12068,
+    "page": 96,
+    "rect": [
+     0.6227,
+     0.1377,
+     0.0359,
+     0.0159
+    ],
+    "rects": [
+     [
+      0.6227,
+      0.1377,
+      0.0359,
+      0.0159
+     ],
+     [
+      0.6166,
+      0.1538,
+      0.042,
+      0.0159
+     ]
+    ],
+    "values": [
+     1650,
+     10418
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Subscription fees + Affiliate fees"
+   },
+   "2023": {
+    "value": 12107,
+    "page": 96,
+    "rect": [
+     0.6227,
+     0.377,
+     0.0359,
+     0.0159
+    ],
+    "rects": [
+     [
+      0.6227,
+      0.377,
+      0.0359,
+      0.0159
+     ],
+     [
+      0.6166,
+      0.3931,
+      0.042,
+      0.0159
+     ]
+    ],
+    "values": [
+     1517,
+     10590
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Subscription fees + Affiliate fees"
+   },
+   "2022": {
+    "value": 11909,
+    "page": 96,
+    "rect": [
+     0.6227,
+     0.6257,
+     0.0359,
+     0.0159
+    ],
+    "rects": [
+     [
+      0.6227,
+      0.6257,
+      0.0359,
+      0.0159
+     ],
+     [
+      0.6166,
+      0.6418,
+      0.042,
+      0.0159
+     ]
+    ],
+    "values": [
+     1113,
+     10796
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Subscription fees + Affiliate fees"
+   }
+  },
+  "advS": {
+   "2024": {
+    "value": 4388,
+    "page": 96,
+    "rect": [
+     0.6227,
+     0.1699,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Advertising (Sports column)"
+   },
+   "2023": {
+    "value": 3920,
+    "page": 96,
+    "rect": [
+     0.6227,
+     0.4092,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Advertising (Sports column)"
+   },
+   "2022": {
+    "value": 4370,
+    "page": 96,
+    "rect": [
+     0.6227,
+     0.6579,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Advertising (Sports column)"
+   }
+  },
+  "tvvodS": {
+   "2024": {
+    "value": 305,
+    "page": 96,
+    "rect": [
+     0.6319,
+     0.2504,
+     0.0267,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "TV/VOD distribution (Sports column)"
+   },
+   "2023": {
+    "value": 347,
+    "page": 96,
+    "rect": [
+     0.6319,
+     0.4897,
+     0.0267,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "TV/VOD distribution (Sports column)"
+   },
+   "2022": {
+    "value": 351,
+    "page": 96,
+    "rect": [
+     0.6319,
+     0.7384,
+     0.0267,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "TV/VOD distribution (Sports column)"
+   }
+  },
+  "otherS": {
+   "2024": {
+    "value": 858,
+    "page": 96,
+    "rect": [
+     0.6319,
+     0.2987,
+     0.0267,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Other (Sports column)"
+   },
+   "2023": {
+    "value": 737,
+    "page": 96,
+    "rect": [
+     0.6319,
+     0.538,
+     0.0267,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Other (Sports column)"
+   },
+   "2022": {
+    "value": 640,
+    "page": 96,
+    "rect": [
+     0.6319,
+     0.7867,
+     0.0267,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Other (Sports column)"
+   }
+  },
+  "advX": {
+   "2024": {
+    "value": 0,
+    "page": 96,
+    "rect": [
+     0.7225,
+     0.1699,
+     0.0206,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Advertising (Experiences column)"
+   },
+   "2023": {
+    "value": 4,
+    "page": 96,
+    "rect": [
+     0.7287,
+     0.4092,
+     0.0145,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Advertising (Experiences column)"
+   },
+   "2022": {
+    "value": 4,
+    "page": 96,
+    "rect": [
+     0.7287,
+     0.6579,
+     0.0145,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Advertising (Experiences column)"
+   }
+  },
+  "tpa": {
+   "2024": {
+    "value": 11171,
+    "page": 96,
+    "rect": [
+     0.7011,
+     0.186,
+     0.042,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Theme park admissions (Experiences column)"
+   },
+   "2023": {
+    "value": 10423,
+    "page": 96,
+    "rect": [
+     0.7011,
+     0.4253,
+     0.042,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Theme park admissions (Experiences column)"
+   },
+   "2022": {
+    "value": 8602,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.674,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Theme park admissions (Experiences column)"
+   }
+  },
+  "mfb": {
+   "2024": {
+    "value": 9204,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.2021,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Retail and wholesale sales of merchandise, food and beverage (Experiences column)"
+   },
+   "2023": {
+    "value": 8921,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.4414,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Retail and wholesale sales of merchandise, food and beverage (Experiences column)"
+   },
+   "2022": {
+    "value": 7838,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.6901,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Retail and wholesale sales of merchandise, food and beverage (Experiences column)"
+   }
+  },
+  "rv": {
+   "2024": {
+    "value": 8375,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.2182,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Resorts and vacations (Experiences column)"
+   },
+   "2023": {
+    "value": 7949,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.4575,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Resorts and vacations (Experiences column)"
+   },
+   "2022": {
+    "value": 6410,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.7062,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Resorts and vacations (Experiences column)"
+   }
+  },
+  "ml": {
+   "2024": {
+    "value": 3142,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.2343,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Merchandise licensing (Experiences column)"
+   },
+   "2023": {
+    "value": 2509,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.4736,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Merchandise licensing (Experiences column)"
+   },
+   "2022": {
+    "value": 3349,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.7223,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Merchandise licensing (Experiences column)"
+   }
+  },
+  "otherX": {
+   "2024": {
+    "value": 2259,
+    "page": 96,
+    "rect": [
+     0.7072,
+     0.2987,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Other (Experiences column)"
+   },
+   "2023": {
+    "value": 2743,
+    "page": 96,
+    "rect": [
+     0.7073,
+     0.538,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Other (Experiences column)"
+   },
+   "2022": {
+    "value": 1882,
+    "page": 96,
+    "rect": [
+     0.7073,
+     0.7867,
+     0.0359,
+     0.0159
+    ],
+    "table": "Revenue note \u2014 revenues by segment and major source",
+    "label": "Other (Experiences column)"
+   }
+  },
+  "linRev": {
+   "2024": {
+    "value": 10692,
+    "page": 43,
+    "rect": [
+     0.5807,
+     0.1389,
+     0.0533,
+     0.0191
+    ],
+    "label": "Linear Networks \u2014 revenue",
+    "table": "MD&A \u2014 Entertainment segment results"
+   },
+   "2023": {
+    "value": 11701,
+    "page": 43,
+    "rect": [
+     0.7179,
+     0.139,
+     0.0533,
+     0.0191
+    ],
+    "label": "Linear Networks \u2014 revenue",
+    "table": "MD&A \u2014 Entertainment segment results"
+   }
+  },
+  "dtcRev": {
+   "2024": {
+    "value": 22776,
+    "page": 43,
+    "rect": [
+     0.5807,
+     0.1579,
+     0.0533,
+     0.0191
+    ],
+    "label": "Direct-to-Consumer \u2014 revenue",
+    "table": "MD&A \u2014 Entertainment segment results"
+   },
+   "2023": {
+    "value": 19886,
+    "page": 43,
+    "rect": [
+     0.7179,
+     0.158,
+     0.0533,
+     0.0191
+    ],
+    "label": "Direct-to-Consumer \u2014 revenue",
+    "table": "MD&A \u2014 Entertainment segment results"
+   }
+  },
+  "cslRev": {
+   "2024": {
+    "value": 7718,
+    "page": 43,
+    "rect": [
+     0.5888,
+     0.1768,
+     0.0451,
+     0.0191
+    ],
+    "label": "Content Sales/Licensing and Other \u2014 revenue",
+    "table": "MD&A \u2014 Entertainment segment results"
+   },
+   "2023": {
+    "value": 9048,
+    "page": 43,
+    "rect": [
+     0.7261,
+     0.1769,
+     0.0451,
+     0.0191
+    ],
+    "label": "Content Sales/Licensing and Other \u2014 revenue",
+    "table": "MD&A \u2014 Entertainment segment results"
+   }
+  },
+  "linOI": {
+   "2024": {
+    "value": 3452,
+    "page": 43,
+    "rect": [
+     0.5888,
+     0.2336,
+     0.0451,
+     0.0191
+    ],
+    "label": "Linear Networks \u2014 operating income",
+    "table": "MD&A \u2014 Entertainment segment results"
+   },
+   "2023": {
+    "value": 4119,
+    "page": 43,
+    "rect": [
+     0.7261,
+     0.2337,
+     0.0451,
+     0.0191
+    ],
+    "label": "Linear Networks \u2014 operating income",
+    "table": "MD&A \u2014 Entertainment segment results"
+   }
+  },
+  "dtcOI": {
+   "2024": {
+    "value": 143,
+    "page": 43,
+    "rect": [
+     0.6011,
+     0.2526,
+     0.0328,
+     0.0191
+    ],
+    "label": "Direct-to-Consumer \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Entertainment segment results"
+   },
+   "2023": {
+    "value": -2496,
+    "page": 43,
+    "rect": [
+     0.7207,
+     0.2527,
+     0.056,
+     0.0191
+    ],
+    "label": "Direct-to-Consumer \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Entertainment segment results"
+   }
+  },
+  "cslOI": {
+   "2024": {
+    "value": 328,
+    "page": 43,
+    "rect": [
+     0.6011,
+     0.272,
+     0.0328,
+     0.0191
+    ],
+    "label": "Content Sales/Licensing and Other \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Entertainment segment results"
+   },
+   "2023": {
+    "value": -179,
+    "page": 43,
+    "rect": [
+     0.7329,
+     0.2716,
+     0.0437,
+     0.0191
+    ],
+    "label": "Content Sales/Licensing and Other \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Entertainment segment results"
+   }
+  },
+  "safM": {
+   "2024": {
+    "value": 12068,
+    "page": 48,
+    "rect": [
+     0.5782,
+     0.4299,
+     0.0533,
+     0.0191
+    ],
+    "rects": [
+     [
+      0.5782,
+      0.4299,
+      0.0533,
+      0.0191
+     ],
+     [
+      0.5864,
+      0.4678,
+      0.0451,
+      0.0191
+     ]
+    ],
+    "values": [
+     10418,
+     1650
+    ],
+    "table": "MD&A \u2014 Sports segment results",
+    "label": "Affiliate fees + Subscription fees"
+   },
+   "2023": {
+    "value": 12107,
+    "page": 48,
+    "rect": [
+     0.7155,
+     0.4299,
+     0.0533,
+     0.0191
+    ],
+    "rects": [
+     [
+      0.7155,
+      0.4299,
+      0.0533,
+      0.0191
+     ],
+     [
+      0.7236,
+      0.4678,
+      0.0451,
+      0.0191
+     ]
+    ],
+    "values": [
+     10590,
+     1517
+    ],
+    "table": "MD&A \u2014 Sports segment results",
+    "label": "Affiliate fees + Subscription fees"
+   }
+  },
+  "sadM": {
+   "2024": {
+    "value": 4388,
+    "page": 48,
+    "rect": [
+     0.5864,
+     0.4488,
+     0.0451,
+     0.0191
+    ],
+    "label": "Advertising",
+    "table": "MD&A \u2014 Sports segment results"
+   },
+   "2023": {
+    "value": 3920,
+    "page": 48,
+    "rect": [
+     0.7236,
+     0.4488,
+     0.0451,
+     0.0191
+    ],
+    "label": "Advertising",
+    "table": "MD&A \u2014 Sports segment results"
+   }
+  },
+  "sotM": {
+   "2024": {
+    "value": 1163,
+    "page": 48,
+    "rect": [
+     0.5864,
+     0.4867,
+     0.0451,
+     0.0191
+    ],
+    "label": "Other",
+    "table": "MD&A \u2014 Sports segment results"
+   },
+   "2023": {
+    "value": 1084,
+    "page": 48,
+    "rect": [
+     0.7236,
+     0.4867,
+     0.0451,
+     0.0191
+    ],
+    "label": "Other",
+    "table": "MD&A \u2014 Sports segment results"
+   }
+  },
+  "espnDRev": {
+   "2024": {
+    "value": 15339,
+    "page": 50,
+    "rect": [
+     0.5758,
+     0.3743,
+     0.0533,
+     0.0191
+    ],
+    "label": "ESPN Domestic \u2014 revenue",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   },
+   "2023": {
+    "value": 14945,
+    "page": 50,
+    "rect": [
+     0.713,
+     0.3743,
+     0.0533,
+     0.0191
+    ],
+    "label": "ESPN Domestic \u2014 revenue",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   }
+  },
+  "espnIRev": {
+   "2024": {
+    "value": 1439,
+    "page": 50,
+    "rect": [
+     0.5839,
+     0.3933,
+     0.0451,
+     0.0191
+    ],
+    "label": "ESPN International \u2014 revenue",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   },
+   "2023": {
+    "value": 1437,
+    "page": 50,
+    "rect": [
+     0.7212,
+     0.3933,
+     0.0451,
+     0.0191
+    ],
+    "label": "ESPN International \u2014 revenue",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   }
+  },
+  "starRev": {
+   "2024": {
+    "value": 841,
+    "page": 50,
+    "rect": [
+     0.5962,
+     0.4311,
+     0.0328,
+     0.0191
+    ],
+    "label": "Star India \u2014 revenue",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   },
+   "2023": {
+    "value": 729,
+    "page": 50,
+    "rect": [
+     0.7334,
+     0.4311,
+     0.0328,
+     0.0191
+    ],
+    "label": "Star India \u2014 revenue",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   }
+  },
+  "espnDOI": {
+   "2024": {
+    "value": 3056,
+    "page": 50,
+    "rect": [
+     0.5839,
+     0.5069,
+     0.0451,
+     0.0191
+    ],
+    "label": "ESPN Domestic \u2014 operating income",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   },
+   "2023": {
+    "value": 2881,
+    "page": 50,
+    "rect": [
+     0.7212,
+     0.5069,
+     0.0451,
+     0.0191
+    ],
+    "label": "ESPN Domestic \u2014 operating income",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   }
+  },
+  "espnIOI": {
+   "2024": {
+    "value": -72,
+    "page": 50,
+    "rect": [
+     0.5989,
+     0.5258,
+     0.0356,
+     0.0191
+    ],
+    "label": "ESPN International \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   },
+   "2023": {
+    "value": -39,
+    "page": 50,
+    "rect": [
+     0.7362,
+     0.5258,
+     0.0356,
+     0.0191
+    ],
+    "label": "ESPN International \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   }
+  },
+  "starOI": {
+   "2024": {
+    "value": -636,
+    "page": 50,
+    "rect": [
+     0.5907,
+     0.5637,
+     0.0437,
+     0.0191
+    ],
+    "label": "Star India \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   },
+   "2023": {
+    "value": -432,
+    "page": 50,
+    "rect": [
+     0.728,
+     0.5637,
+     0.0437,
+     0.0191
+    ],
+    "label": "Star India \u2014 operating income (loss)",
+    "table": "MD&A \u2014 Sports supplemental detail (ESPN / Star)"
+   }
+  },
+  "tpaM": {
+   "2024": {
+    "value": 11171,
+    "page": 51,
+    "rect": [
+     0.5782,
+     0.1395,
+     0.0533,
+     0.0191
+    ],
+    "label": "Theme park admissions",
+    "table": "MD&A \u2014 Experiences segment results"
+   },
+   "2023": {
+    "value": 10423,
+    "page": 51,
+    "rect": [
+     0.7155,
+     0.1395,
+     0.0533,
+     0.0191
+    ],
+    "label": "Theme park admissions",
+    "table": "MD&A \u2014 Experiences segment results"
+   }
+  },
+  "rvM": {
+   "2024": {
+    "value": 8375,
+    "page": 51,
+    "rect": [
+     0.5864,
+     0.1584,
+     0.0451,
+     0.0191
+    ],
+    "label": "Resorts and vacations",
+    "table": "MD&A \u2014 Experiences segment results"
+   },
+   "2023": {
+    "value": 7949,
+    "page": 51,
+    "rect": [
+     0.7236,
+     0.1584,
+     0.0451,
+     0.0191
+    ],
+    "label": "Resorts and vacations",
+    "table": "MD&A \u2014 Experiences segment results"
+   }
+  },
+  "ploM": {
+   "2024": {
+    "value": 2259,
+    "page": 51,
+    "rect": [
+     0.5864,
+     0.2152,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks licensing and other",
+    "table": "MD&A \u2014 Experiences segment results"
+   },
+   "2023": {
+    "value": 2107,
+    "page": 51,
+    "rect": [
+     0.7236,
+     0.2152,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks licensing and other",
+    "table": "MD&A \u2014 Experiences segment results"
+   }
+  },
+  "xlabM": {
+   "2024": {
+    "value": -8392,
+    "page": 52,
+    "rect": [
+     0.5932,
+     0.6565,
+     0.056,
+     0.0191
+    ],
+    "label": "Operating labor",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   },
+   "2023": {
+    "value": -7550,
+    "page": 52,
+    "rect": [
+     0.7256,
+     0.6565,
+     0.056,
+     0.0191
+    ],
+    "label": "Operating labor",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   }
+  },
+  "xinfM": {
+   "2024": {
+    "value": -3363,
+    "page": 52,
+    "rect": [
+     0.5932,
+     0.6755,
+     0.056,
+     0.0191
+    ],
+    "label": "Infrastructure costs",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   },
+   "2023": {
+    "value": -3127,
+    "page": 52,
+    "rect": [
+     0.7256,
+     0.6755,
+     0.056,
+     0.0191
+    ],
+    "label": "Infrastructure costs",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   }
+  },
+  "xcogsM": {
+   "2024": {
+    "value": -3319,
+    "page": 52,
+    "rect": [
+     0.5932,
+     0.6944,
+     0.056,
+     0.0191
+    ],
+    "label": "Cost of goods sold and distribution costs",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   },
+   "2023": {
+    "value": -3357,
+    "page": 52,
+    "rect": [
+     0.7256,
+     0.6944,
+     0.056,
+     0.0191
+    ],
+    "label": "Cost of goods sold and distribution costs",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   }
+  },
+  "xothM": {
+   "2024": {
+    "value": -3282,
+    "page": 52,
+    "rect": [
+     0.5932,
+     0.7133,
+     0.056,
+     0.0191
+    ],
+    "label": "Other operating expenses",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   },
+   "2023": {
+    "value": -3095,
+    "page": 52,
+    "rect": [
+     0.7256,
+     0.7133,
+     0.056,
+     0.0191
+    ],
+    "label": "Other operating expenses",
+    "table": "MD&A \u2014 Experiences operating expenses"
+   }
+  },
+  "parksDRev": {
+   "2024": {
+    "value": 23596,
+    "page": 53,
+    "rect": [
+     0.588,
+     0.2768,
+     0.0533,
+     0.0191
+    ],
+    "label": "Parks & Experiences Domestic \u2014 revenue",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   },
+   "2023": {
+    "value": 22677,
+    "page": 53,
+    "rect": [
+     0.7204,
+     0.2768,
+     0.0533,
+     0.0191
+    ],
+    "label": "Parks & Experiences Domestic \u2014 revenue",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   }
+  },
+  "parksIRev": {
+   "2024": {
+    "value": 6183,
+    "page": 53,
+    "rect": [
+     0.5962,
+     0.2957,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks & Experiences International \u2014 revenue",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   },
+   "2023": {
+    "value": 5475,
+    "page": 53,
+    "rect": [
+     0.7285,
+     0.2957,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks & Experiences International \u2014 revenue",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   }
+  },
+  "cpRev": {
+   "2024": {
+    "value": 4372,
+    "page": 53,
+    "rect": [
+     0.5962,
+     0.3147,
+     0.0451,
+     0.0191
+    ],
+    "label": "Consumer Products \u2014 revenue",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   },
+   "2023": {
+    "value": 4397,
+    "page": 53,
+    "rect": [
+     0.7285,
+     0.3147,
+     0.0451,
+     0.0191
+    ],
+    "label": "Consumer Products \u2014 revenue",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   }
+  },
+  "parksDOI": {
+   "2024": {
+    "value": 5878,
+    "page": 53,
+    "rect": [
+     0.5962,
+     0.3866,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks & Experiences Domestic \u2014 operating income",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   },
+   "2023": {
+    "value": 5876,
+    "page": 53,
+    "rect": [
+     0.7285,
+     0.3866,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks & Experiences Domestic \u2014 operating income",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   }
+  },
+  "parksIOI": {
+   "2024": {
+    "value": 1354,
+    "page": 53,
+    "rect": [
+     0.5962,
+     0.4056,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks & Experiences International \u2014 operating income",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   },
+   "2023": {
+    "value": 1104,
+    "page": 53,
+    "rect": [
+     0.7285,
+     0.4056,
+     0.0451,
+     0.0191
+    ],
+    "label": "Parks & Experiences International \u2014 operating income",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   }
+  },
+  "cpOI": {
+   "2024": {
+    "value": 2040,
+    "page": 53,
+    "rect": [
+     0.5962,
+     0.4245,
+     0.0451,
+     0.0191
+    ],
+    "label": "Consumer Products \u2014 operating income",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   },
+   "2023": {
+    "value": 1974,
+    "page": 53,
+    "rect": [
+     0.7285,
+     0.4245,
+     0.0451,
+     0.0191
+    ],
+    "label": "Consumer Products \u2014 operating income",
+    "table": "MD&A \u2014 Experiences supplemental detail (Parks / Consumer Products)"
+   }
+  },
+  "cfo": {
+   "2024": {
+    "value": 13971,
+    "page": 80,
+    "rect": [
+     0.5932,
+     0.3999,
+     0.0443,
+     0.0165
+    ],
+    "label": "Cash provided by operations - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 9866,
+    "page": 80,
+    "rect": [
+     0.737,
+     0.3999,
+     0.0377,
+     0.0165
+    ],
+    "label": "Cash provided by operations - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 6002,
+    "page": 80,
+    "rect": [
+     0.8742,
+     0.3999,
+     0.0377,
+     0.0165
+    ],
+    "label": "Cash provided by operations - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "cfi": {
+   "2024": {
+    "value": -6881,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.5012,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cash used in investing activities - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -4641,
+    "page": 80,
+    "rect": [
+     0.7326,
+     0.5012,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cash used in investing activities - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -5008,
+    "page": 80,
+    "rect": [
+     0.8699,
+     0.5012,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cash used in investing activities - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "cff": {
+   "2024": {
+    "value": -15288,
+    "page": 80,
+    "rect": [
+     0.5889,
+     0.6669,
+     0.053,
+     0.0165
+    ],
+    "label": "Cash used in financing activities - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -2724,
+    "page": 80,
+    "rect": [
+     0.7326,
+     0.6669,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cash used in financing activities - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -4729,
+    "page": 80,
+    "rect": [
+     0.8699,
+     0.6669,
+     0.0465,
+     0.0165
+    ],
+    "label": "Cash used in financing activities - continuing operations",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "cfDisc": {
+   "2024": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.6161,
+     0.7361,
+     0.0214,
+     0.0165
+    ],
+    "label": "Cash used in discontinued operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.7533,
+     0.7361,
+     0.0214,
+     0.0165
+    ],
+    "label": "Cash used in discontinued operations",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -4,
+    "page": 80,
+    "rect": [
+     0.8928,
+     0.7361,
+     0.0236,
+     0.0165
+    ],
+    "label": "Cash used in discontinued operations",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "capexCF": {
+   "2024": {
+    "value": -5412,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.4368,
+     0.0465,
+     0.0165
+    ],
+    "label": "Investments in parks, resorts and other property",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -4969,
+    "page": 80,
+    "rect": [
+     0.7326,
+     0.4368,
+     0.0465,
+     0.0165
+    ],
+    "label": "Investments in parks, resorts and other property",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -4943,
+    "page": 80,
+    "rect": [
+     0.8699,
+     0.4368,
+     0.0465,
+     0.0165
+    ],
+    "label": "Investments in parks, resorts and other property",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "proceedsInv": {
+   "2024": {
+    "value": 105,
+    "page": 80,
+    "rect": [
+     0.6095,
+     0.4529,
+     0.0279,
+     0.0165
+    ],
+    "label": "Proceeds from sales of investments",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 458,
+    "page": 80,
+    "rect": [
+     0.7468,
+     0.4529,
+     0.0279,
+     0.0165
+    ],
+    "label": "Proceeds from sales of investments",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 52,
+    "page": 80,
+    "rect": [
+     0.8906,
+     0.4529,
+     0.0214,
+     0.0165
+    ],
+    "label": "Proceeds from sales of investments",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "purchaseInv": {
+   "2024": {
+    "value": -1506,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.469,
+     0.0465,
+     0.0165
+    ],
+    "label": "Purchase of investments",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.7533,
+     0.469,
+     0.0214,
+     0.0165
+    ],
+    "label": "Purchase of investments",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.8906,
+     0.469,
+     0.0214,
+     0.0165
+    ],
+    "label": "Purchase of investments",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "othInv": {
+   "2024": {
+    "value": -68,
+    "page": 80,
+    "rect": [
+     0.6117,
+     0.4851,
+     0.0301,
+     0.0165
+    ],
+    "label": "Investing activities \u2014 Other, net",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -130,
+    "page": 80,
+    "rect": [
+     0.7424,
+     0.4851,
+     0.0367,
+     0.0165
+    ],
+    "label": "Investing activities \u2014 Other, net",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -117,
+    "page": 80,
+    "rect": [
+     0.8797,
+     0.4851,
+     0.0367,
+     0.0165
+    ],
+    "label": "Investing activities \u2014 Other, net",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "cpNet": {
+   "2024": {
+    "value": 1532,
+    "page": 80,
+    "rect": [
+     0.5997,
+     0.5381,
+     0.0377,
+     0.0165
+    ],
+    "label": "Commercial paper borrowings (payments), net",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -191,
+    "page": 80,
+    "rect": [
+     0.7424,
+     0.5381,
+     0.0367,
+     0.0165
+    ],
+    "label": "Commercial paper borrowings (payments), net",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -334,
+    "page": 80,
+    "rect": [
+     0.8797,
+     0.5381,
+     0.0367,
+     0.0165
+    ],
+    "label": "Commercial paper borrowings (payments), net",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "borrowings": {
+   "2024": {
+    "value": 132,
+    "page": 80,
+    "rect": [
+     0.6095,
+     0.5542,
+     0.0279,
+     0.0165
+    ],
+    "label": "Borrowings",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 83,
+    "page": 80,
+    "rect": [
+     0.7533,
+     0.5542,
+     0.0214,
+     0.0165
+    ],
+    "label": "Borrowings",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 333,
+    "page": 80,
+    "rect": [
+     0.884,
+     0.5542,
+     0.0279,
+     0.0165
+    ],
+    "label": "Borrowings",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "reduction": {
+   "2024": {
+    "value": -3064,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.5703,
+     0.0465,
+     0.0165
+    ],
+    "label": "Reduction of borrowings",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -1675,
+    "page": 80,
+    "rect": [
+     0.7326,
+     0.5703,
+     0.0465,
+     0.0165
+    ],
+    "label": "Reduction of borrowings",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -4016,
+    "page": 80,
+    "rect": [
+     0.8699,
+     0.5703,
+     0.0465,
+     0.0165
+    ],
+    "label": "Reduction of borrowings",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "dividendsCF": {
+   "2024": {
+    "value": -1366,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.5864,
+     0.0465,
+     0.0165
+    ],
+    "label": "Dividends",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.7533,
+     0.5864,
+     0.0214,
+     0.0165
+    ],
+    "label": "Dividends",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.8906,
+     0.5864,
+     0.0214,
+     0.0165
+    ],
+    "label": "Dividends",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "repurchasesCF": {
+   "2024": {
+    "value": -2992,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.6025,
+     0.0465,
+     0.0165
+    ],
+    "label": "Repurchases of common stock",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.7533,
+     0.6025,
+     0.0214,
+     0.0165
+    ],
+    "label": "Repurchases of common stock",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.8906,
+     0.6025,
+     0.0214,
+     0.0165
+    ],
+    "label": "Repurchases of common stock",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "contributions": {
+   "2024": {
+    "value": 9,
+    "page": 80,
+    "rect": [
+     0.6226,
+     0.6186,
+     0.0149,
+     0.0165
+    ],
+    "label": "Contributions from noncontrolling interests",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 735,
+    "page": 80,
+    "rect": [
+     0.7468,
+     0.6186,
+     0.0279,
+     0.0165
+    ],
+    "label": "Contributions from noncontrolling interests",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 74,
+    "page": 80,
+    "rect": [
+     0.8906,
+     0.6186,
+     0.0214,
+     0.0165
+    ],
+    "label": "Contributions from noncontrolling interests",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "acqRNCI": {
+   "2024": {
+    "value": -8610,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.6347,
+     0.0465,
+     0.0165
+    ],
+    "label": "Acquisition of redeemable noncontrolling interests",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -900,
+    "page": 80,
+    "rect": [
+     0.7424,
+     0.6347,
+     0.0367,
+     0.0165
+    ],
+    "label": "Acquisition of redeemable noncontrolling interests",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": 0,
+    "page": 80,
+    "rect": [
+     0.8906,
+     0.6347,
+     0.0214,
+     0.0165
+    ],
+    "label": "Acquisition of redeemable noncontrolling interests",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "othFin": {
+   "2024": {
+    "value": -929,
+    "page": 80,
+    "rect": [
+     0.6052,
+     0.6508,
+     0.0367,
+     0.0165
+    ],
+    "label": "Financing activities \u2014 Other, net",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": -776,
+    "page": 80,
+    "rect": [
+     0.7424,
+     0.6508,
+     0.0367,
+     0.0165
+    ],
+    "label": "Financing activities \u2014 Other, net",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -786,
+    "page": 80,
+    "rect": [
+     0.8797,
+     0.6508,
+     0.0367,
+     0.0165
+    ],
+    "label": "Financing activities \u2014 Other, net",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "fx": {
+   "2024": {
+    "value": 65,
+    "page": 80,
+    "rect": [
+     0.6161,
+     0.7569,
+     0.0214,
+     0.0165
+    ],
+    "label": "Impact of exchange rates on cash, cash equivalents and restricted cash",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 73,
+    "page": 80,
+    "rect": [
+     0.7533,
+     0.7569,
+     0.0214,
+     0.0165
+    ],
+    "label": "Impact of exchange rates on cash, cash equivalents and restricted cash",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -603,
+    "page": 80,
+    "rect": [
+     0.8797,
+     0.7569,
+     0.0367,
+     0.0165
+    ],
+    "label": "Impact of exchange rates on cash, cash equivalents and restricted cash",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "changeCash": {
+   "2024": {
+    "value": -8133,
+    "page": 80,
+    "rect": [
+     0.5954,
+     0.7777,
+     0.0465,
+     0.0165
+    ],
+    "label": "Change in cash, cash equivalents and restricted cash",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2023": {
+    "value": 2574,
+    "page": 80,
+    "rect": [
+     0.737,
+     0.7777,
+     0.0377,
+     0.0165
+    ],
+    "label": "Change in cash, cash equivalents and restricted cash",
+    "table": "Consolidated Statements of Cash Flows"
+   },
+   "2022": {
+    "value": -4342,
+    "page": 80,
+    "rect": [
+     0.8699,
+     0.7777,
+     0.0465,
+     0.0165
+    ],
+    "label": "Change in cash, cash equivalents and restricted cash",
+    "table": "Consolidated Statements of Cash Flows"
+   }
+  },
+  "licSpend": {
+   "2024": {
+    "value": 13619,
+    "page": 55,
+    "rect": [
+     0.722,
+     0.184,
+     0.0533,
+     0.0191
+    ],
+    "label": "Licensed programming and rights",
+    "table": "MD&A \u2014 production and programming activity (content spend)"
+   },
+   "2023": {
+    "value": 14851,
+    "page": 55,
+    "rect": [
+     0.8593,
+     0.184,
+     0.0533,
+     0.0191
+    ],
+    "label": "Licensed programming and rights",
+    "table": "MD&A \u2014 production and programming activity (content spend)"
+   }
+  },
+  "prodSpend": {
+   "2024": {
+    "value": 9816,
+    "page": 55,
+    "rect": [
+     0.7302,
+     0.2029,
+     0.0451,
+     0.0191
+    ],
+    "label": "Produced content",
+    "table": "MD&A \u2014 production and programming activity (content spend)"
+   },
+   "2023": {
+    "value": 12323,
+    "page": 55,
+    "rect": [
+     0.8593,
+     0.2029,
+     0.0533,
+     0.0191
+    ],
+    "label": "Produced content",
+    "table": "MD&A \u2014 production and programming activity (content spend)"
+   }
+  },
+  "cxE": {
+   "2024": {
+    "value": 977,
+    "page": 87,
+    "rect": [
+     0.6027,
+     0.0893,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2023": {
+    "value": 1032,
+    "page": 87,
+    "rect": [
+     0.7277,
+     0.0893,
+     0.0451,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2022": {
+    "value": 802,
+    "page": 87,
+    "rect": [
+     0.8772,
+     0.0893,
+     0.0328,
+     0.0191
+    ],
+    "label": "Entertainment \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   }
+  },
+  "cxS": {
+   "2024": {
+    "value": 10,
+    "page": 87,
+    "rect": [
+     0.6109,
+     0.1082,
+     0.0247,
+     0.0191
+    ],
+    "label": "Sports \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2023": {
+    "value": 15,
+    "page": 87,
+    "rect": [
+     0.7482,
+     0.1082,
+     0.0247,
+     0.0191
+    ],
+    "label": "Sports \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2022": {
+    "value": 8,
+    "page": 87,
+    "rect": [
+     0.8936,
+     0.1082,
+     0.0165,
+     0.0191
+    ],
+    "label": "Sports \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   }
+  },
+  "cxD": {
+   "2024": {
+    "value": 2710,
+    "page": 87,
+    "rect": [
+     0.5905,
+     0.1461,
+     0.0451,
+     0.0191
+    ],
+    "label": "Experiences Domestic \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2023": {
+    "value": 2203,
+    "page": 87,
+    "rect": [
+     0.7277,
+     0.1461,
+     0.0451,
+     0.0191
+    ],
+    "label": "Experiences Domestic \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2022": {
+    "value": 2680,
+    "page": 87,
+    "rect": [
+     0.865,
+     0.1461,
+     0.0451,
+     0.0191
+    ],
+    "label": "Experiences Domestic \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   }
+  },
+  "cxI": {
+   "2024": {
+    "value": 949,
+    "page": 87,
+    "rect": [
+     0.6027,
+     0.165,
+     0.0328,
+     0.0191
+    ],
+    "label": "Experiences International \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2023": {
+    "value": 822,
+    "page": 87,
+    "rect": [
+     0.74,
+     0.165,
+     0.0328,
+     0.0191
+    ],
+    "label": "Experiences International \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2022": {
+    "value": 767,
+    "page": 87,
+    "rect": [
+     0.8772,
+     0.165,
+     0.0328,
+     0.0191
+    ],
+    "label": "Experiences International \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   }
+  },
+  "cxC": {
+   "2024": {
+    "value": 766,
+    "page": 87,
+    "rect": [
+     0.6027,
+     0.184,
+     0.0328,
+     0.0191
+    ],
+    "label": "Corporate \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2023": {
+    "value": 897,
+    "page": 87,
+    "rect": [
+     0.74,
+     0.184,
+     0.0328,
+     0.0191
+    ],
+    "label": "Corporate \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2022": {
+    "value": 686,
+    "page": 87,
+    "rect": [
+     0.8772,
+     0.184,
+     0.0328,
+     0.0191
+    ],
+    "label": "Corporate \u2014 capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   }
+  },
+  "capexTotal": {
+   "2024": {
+    "value": 5412,
+    "page": 87,
+    "rect": [
+     0.5905,
+     0.2029,
+     0.0451,
+     0.0191
+    ],
+    "label": "Total capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2023": {
+    "value": 4969,
+    "page": 87,
+    "rect": [
+     0.7277,
+     0.2029,
+     0.0451,
+     0.0191
+    ],
+    "label": "Total capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   },
+   "2022": {
+    "value": 4943,
+    "page": 87,
+    "rect": [
+     0.865,
+     0.2029,
+     0.0451,
+     0.0191
+    ],
+    "label": "Total capital expenditures",
+    "table": "Segment note \u2014 capital expenditures by segment"
+   }
+  },
+  "reEnd": {
+   "2021": {
+    "value": 40429,
+    "page": 81,
+    "rect": [
+     0.4608,
+     0.1532,
+     0.0443,
+     0.0165
+    ],
+    "label": "Balance at October 2, 2021 \u2014 retained earnings",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   },
+   "2022": {
+    "value": 43636,
+    "page": 81,
+    "rect": [
+     0.4608,
+     0.2555,
+     0.0443,
+     0.0165
+    ],
+    "label": "Balance at October 1, 2022 \u2014 retained earnings",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   },
+   "2023": {
+    "value": 46093,
+    "page": 81,
+    "rect": [
+     0.4608,
+     0.3549,
+     0.0443,
+     0.0165
+    ],
+    "label": "Balance at September 30, 2023 \u2014 retained earnings",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   },
+   "2024": {
+    "value": 49722,
+    "page": 81,
+    "rect": [
+     0.4608,
+     0.4945,
+     0.0443,
+     0.0165
+    ],
+    "label": "Balance at September 28, 2024 \u2014 retained earnings",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   }
+  },
+  "reNI": {
+   "2022": {
+    "value": 3145,
+    "page": 81,
+    "rect": [
+     0.4674,
+     0.1731,
+     0.0377,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Comprehensive income"
+   },
+   "2023": {
+    "value": 2354,
+    "page": 81,
+    "rect": [
+     0.4674,
+     0.2754,
+     0.0377,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Comprehensive income"
+   },
+   "2024": {
+    "value": 4972,
+    "page": 81,
+    "rect": [
+     0.4674,
+     0.3748,
+     0.0377,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Comprehensive income"
+   }
+  },
+  "reDiv": {
+   "2024": {
+    "value": -1379,
+    "page": 81,
+    "rect": [
+     0.463,
+     0.4146,
+     0.0465,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Dividends"
+   }
+  },
+  "reOth": {
+   "2022": {
+    "value": 62,
+    "page": 81,
+    "rect": [
+     0.4837,
+     0.2356,
+     0.0214,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Distributions and other \u2014 retained earnings column"
+   },
+   "2023": {
+    "value": 103,
+    "page": 81,
+    "rect": [
+     0.4772,
+     0.335,
+     0.0279,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Distributions and other \u2014 retained earnings column"
+   },
+   "2024": {
+    "value": 36,
+    "page": 81,
+    "rect": [
+     0.4837,
+     0.4737,
+     0.0214,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Distributions and other \u2014 retained earnings column"
+   }
+  },
+  "tsEnd": {
+   "2021": {
+    "value": -907,
+    "page": 81,
+    "rect": [
+     0.6346,
+     0.1532,
+     0.0367,
+     0.0165
+    ],
+    "label": "Balance at October 2, 2021 \u2014 treasury stock",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   },
+   "2022": {
+    "value": -907,
+    "page": 81,
+    "rect": [
+     0.6346,
+     0.2555,
+     0.0367,
+     0.0165
+    ],
+    "label": "Balance at October 1, 2022 \u2014 treasury stock",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   },
+   "2023": {
+    "value": -907,
+    "page": 81,
+    "rect": [
+     0.6346,
+     0.3549,
+     0.0367,
+     0.0165
+    ],
+    "label": "Balance at September 30, 2023 \u2014 treasury stock",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   },
+   "2024": {
+    "value": -3919,
+    "page": 81,
+    "rect": [
+     0.6248,
+     0.4945,
+     0.0465,
+     0.0165
+    ],
+    "label": "Balance at September 28, 2024 \u2014 treasury stock",
+    "table": "Consolidated Statements of Shareholders\u2019 Equity"
+   }
+  },
+  "tsRep": {
+   "2024": {
+    "value": -2992,
+    "page": 81,
+    "rect": [
+     0.6248,
+     0.4345,
+     0.0465,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Common stock repurchases"
+   }
+  },
+  "tsOth": {
+   "2022": {
+    "value": 0,
+    "page": 81,
+    "rect": [
+     0.6455,
+     0.2356,
+     0.0214,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Distributions and other \u2014 treasury stock column"
+   },
+   "2023": {
+    "value": 0,
+    "page": 81,
+    "rect": [
+     0.6455,
+     0.335,
+     0.0214,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Distributions and other \u2014 treasury stock column"
+   },
+   "2024": {
+    "value": -20,
+    "page": 81,
+    "rect": [
+     0.6411,
+     0.4737,
+     0.0301,
+     0.0165
+    ],
+    "table": "Consolidated Statements of Shareholders\u2019 Equity",
+    "label": "Distributions and other \u2014 treasury stock column"
+   }
+  }
+ },
+ "pages": {
+  "43": {
+   "printed": 37,
+   "label": "MD&A \u00b7 Entertainment segment results",
+   "w": 600,
+   "h": 776
+  },
+  "48": {
+   "printed": 42,
+   "label": "MD&A \u00b7 Sports segment results",
+   "w": 600,
+   "h": 776
+  },
+  "50": {
+   "printed": 44,
+   "label": "Form 10-K",
+   "w": 600,
+   "h": 776
+  },
+  "51": {
+   "printed": 45,
+   "label": "MD&A \u00b7 Experiences segment results",
+   "w": 600,
+   "h": 776
+  },
+  "52": {
+   "printed": 46,
+   "label": "MD&A \u00b7 Experiences operating expenses",
+   "w": 600,
+   "h": 776
+  },
+  "53": {
+   "printed": 47,
+   "label": "MD&A \u00b7 Experiences supplemental revenue and operating income",
+   "w": 600,
+   "h": 776
+  },
+  "55": {
+   "printed": 49,
+   "label": "MD&A \u00b7 Liquidity: production and programming activity (content spend)",
+   "w": 600,
+   "h": 776
+  },
+  "77": {
+   "printed": 71,
+   "label": "Consolidated Statements of Income",
+   "w": 600,
+   "h": 776
+  },
+  "80": {
+   "printed": 74,
+   "label": "Consolidated Statements of Cash Flows",
+   "w": 600,
+   "h": 776
+  },
+  "81": {
+   "printed": 75,
+   "label": "Consolidated Statements of Equity",
+   "w": 600,
+   "h": 776
+  },
+  "85": {
+   "printed": 79,
+   "label": "Note 1 \u00b7 Segment revenues and operating income",
+   "w": 600,
+   "h": 776
+  },
+  "86": {
+   "printed": 80,
+   "label": "Note 1 \u00b7 Reconciliation of segment operating income to income before income taxes",
+   "w": 600,
+   "h": 776
+  },
+  "87": {
+   "printed": 81,
+   "label": "Note 1 \u00b7 Capital expenditures, depreciation and amortization by segment",
+   "w": 600,
+   "h": 776
+  },
+  "96": {
+   "printed": 90,
+   "label": "Note 3 \u00b7 Revenues by segment and major source",
+   "w": 600,
+   "h": 776
+  }
+ }
+}
