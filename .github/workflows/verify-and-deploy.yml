@@ -53,6 +53,12 @@ jobs:
           if ! cmp -s site/index.html index.html; then
             echo "::error::index.html at the repo root differs from the verified build — run 'make publish' and commit"; exit 1
           fi
+      - name: Show the reports on the run page
+        if: always()
+        run: |
+          for f in data/verify-report.md data/xbrl-report.md; do
+            [ -f "$f" ] && { cat "$f"; echo; } >> "$GITHUB_STEP_SUMMARY"
+          done
       - name: Keep the verification reports
         if: always()
         uses: actions/upload-artifact@v4
